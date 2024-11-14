@@ -1,37 +1,33 @@
+import './gesture-handler';
 import React from 'react';
 import {
   Platform,
   SafeAreaView,
   StatusBar,
-  StyleSheet,
-  Text,
   useWindowDimensions,
-  View,
 } from 'react-native';
+import Router from './src/routes';
+import {NavigationContainer} from '@react-navigation/native';
 
 const App = () => {
   const {width} = useWindowDimensions();
   return (
-    <SafeAreaView style={styles({width}).safeArea}>
-      <StatusBar barStyle={'default'} />
-      <View style={styles({width}).container}>
-        <Text>App modificada</Text>
-      </View>
-    </SafeAreaView>
+    <NavigationContainer>
+      <SafeAreaView style={styles({width}).safeArea}>
+        <StatusBar barStyle={'default'} />
+        <Router />
+        <StatusBar />
+      </SafeAreaView>
+    </NavigationContainer>
   );
 };
 
 export default App;
-const styles = ({width}: any) =>
-  StyleSheet.create({
-    safeArea: {
-      flex: 1,
-      width,
-      marginTop: Platform.OS !== 'android' ? 30 : 0,
-    },
-    container: {
-      // borderColor: 'red',
-      // borderWidth: 2,
-      flex: 1,
-    },
-  });
+
+const styles = ({width}: any) => ({
+  safeArea: {
+    flex: 1,
+    width: width,
+    marginTop: Platform.OS !== 'android' ? 30 : 0,
+  },
+});
