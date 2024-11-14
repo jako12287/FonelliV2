@@ -1,8 +1,9 @@
 export const Colors = {
   light_blue: '#24A4CC',
+  light_blue_botton: '#0A6CB7',
   light_green: '#7ED957',
   dark_green: '#138037',
-  dark_bllue: '#183E6F',
+  dark_blue: '#183E6F',
   error_color: '#FF1517',
   black: '#000',
   white: '#ffffff',

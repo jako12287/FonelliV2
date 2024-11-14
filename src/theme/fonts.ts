@@ -1,4 +1,4 @@
 export const fonts = {
   cormoram: 'CormorantGaramond-SemiBold',
-  gotham: 'Gotham Light',
+  gotham: 'Gotham_Light',
 };

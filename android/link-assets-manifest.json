@@ -1,0 +1,13 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/CormorantGaramond-SemiBold.ttf",
+      "sha1": "ecd02806cebb6fb55458fadc0521a8a5d041dc8f"
+    },
+    {
+      "path": "src/assets/fonts/Gotham_Light.otf",
+      "sha1": "6dbbd440f45d81e1145d16d2b39aea41e93a5e20"
+    }
+  ]
+}
