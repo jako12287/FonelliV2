@@ -14,6 +14,10 @@
       "sha1": "c1449b0beca98cdaf5fe63c5b154a0b96dc9f41c"
     },
     {
+      "path": "src/assets/fonts/Poppins-Bold.ttf",
+      "sha1": "875cf0cecd647bcf22e79d633d868c1b1ec98dfa"
+    },
+    {
       "path": "src/assets/fonts/Poppins-Medium.ttf",
       "sha1": "283f21b44efbdbf276ba802be2d949a36bbc4233"
     }

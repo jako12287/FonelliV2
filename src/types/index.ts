@@ -38,4 +38,6 @@ export enum StatusProps {
   DELETE = 'DELETE',
   DELIVERED = 'DELIVERED',
   CANCELLED = 'CANCELLED',
+  PENDING = 'PENDING',
+  DOWNLOAD = 'DOWNLOAD',
 }

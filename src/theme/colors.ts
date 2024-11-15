@@ -8,6 +8,8 @@ export const Colors = {
   black: '#000',
   white: '#ffffff',
   gray_shadow: '#CCCCCC',
+  gary_text: '#545454',
+  gray_table_bg: '#191919',
   pending_state: '#FFDE59',
   download_state: '#FFBD59',
   transparent: 'transparent',

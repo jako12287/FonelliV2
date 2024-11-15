@@ -19,6 +19,7 @@
 		03D23677C27B453CB33D4263 /* CormorantGaramond-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 30915119E1D64D34BF1112E7 /* CormorantGaramond-SemiBold.ttf */; };
 		D91817D9EDA44A71AA188910 /* MeieScript-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E29A3E7D9EA749B9BD213BF8 /* MeieScript-Regular.ttf */; };
 		C8B79BEAC67F4315A410E559 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A3DEFFB964BE4EB786FBBD4A /* Poppins-Medium.ttf */; };
+		4CE775B880934D43B4F7CCD3 /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 08B43E116ECB48708950F6FD /* Poppins-Bold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		30915119E1D64D34BF1112E7 /* CormorantGaramond-SemiBold.ttf */ = {isa = PBXFileReference; name = "CormorantGaramond-SemiBold.ttf"; path = "../src/assets/fonts/CormorantGaramond-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		E29A3E7D9EA749B9BD213BF8 /* MeieScript-Regular.ttf */ = {isa = PBXFileReference; name = "MeieScript-Regular.ttf"; path = "../src/assets/fonts/MeieScript-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		A3DEFFB964BE4EB786FBBD4A /* Poppins-Medium.ttf */ = {isa = PBXFileReference; name = "Poppins-Medium.ttf"; path = "../src/assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		08B43E116ECB48708950F6FD /* Poppins-Bold.ttf */ = {isa = PBXFileReference; name = "Poppins-Bold.ttf"; path = "../src/assets/fonts/Poppins-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +169,7 @@
 				30915119E1D64D34BF1112E7 /* CormorantGaramond-SemiBold.ttf */,
 				E29A3E7D9EA749B9BD213BF8 /* MeieScript-Regular.ttf */,
 				A3DEFFB964BE4EB786FBBD4A /* Poppins-Medium.ttf */,
+				08B43E116ECB48708950F6FD /* Poppins-Bold.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -272,6 +275,7 @@
 				03D23677C27B453CB33D4263 /* CormorantGaramond-SemiBold.ttf in Resources */,
 				D91817D9EDA44A71AA188910 /* MeieScript-Regular.ttf in Resources */,
 				C8B79BEAC67F4315A410E559 /* Poppins-Medium.ttf in Resources */,
+				4CE775B880934D43B4F7CCD3 /* Poppins-Bold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
