@@ -51,6 +51,8 @@
 	<array>
 		<string>Gotham_Light.otf</string>
 		<string>CormorantGaramond-SemiBold.ttf</string>
+		<string>MeieScript-Regular.ttf</string>
+		<string>Poppins-Medium.ttf</string>
 	</array>
 </dict>
 </plist>

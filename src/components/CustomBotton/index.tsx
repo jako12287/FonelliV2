@@ -5,13 +5,13 @@ import {Colors} from '../../theme/colors';
 import IconImage from '../../utils/iconImage';
 import {Icons} from '../../assets/icons';
 import {fonts} from '../../theme/fonts';
-import {useCustomNavigation} from '../../hooks/useCustomNavigation';
 
 interface CustomButtonProps {
   title: string;
   color?: string;
   colorBottonBG?: string;
   colorText?: string;
+  onClick?: () => void;
 }
 
 const CustomBotton: FC<CustomButtonProps> = ({
@@ -19,18 +19,22 @@ const CustomBotton: FC<CustomButtonProps> = ({
   colorBottonBG = Colors.dark_blue,
   title = 'Click',
   colorText = Colors.white,
+  onClick = () => {},
 }) => {
-  const navigation = useCustomNavigation();
   return (
-    <View style={{position: 'relative'}}>
+    <View style={styles(color, colorBottonBG, colorText).containerOut}>
       <Pressable
         style={styles(color, colorBottonBG, colorText).container}
-        onPress={() => navigation.navigate('Login')}>
-        <Text style={styles(color, colorBottonBG, colorText).text}>
-          {title}
-        </Text>
-        <View style={styles(color, colorBottonBG, colorText).containerBotton}>
-          <IconImage size={25} source={Icons.general.arrowRight} />
+        onPress={onClick}>
+        <View style={styles(color, colorBottonBG, colorText).containerText}>
+          <Text style={styles(color, colorBottonBG, colorText).text}>
+            {title}
+          </Text>
+        </View>
+        <View style={styles(color, colorBottonBG, colorText).containerOutBtn}>
+          <View style={styles(color, colorBottonBG, colorText).containerBotton}>
+            <IconImage size={25} source={Icons.general.arrowRight} />
+          </View>
         </View>
       </Pressable>
       <View style={styles(color, colorBottonBG, colorText).shadow} />
@@ -41,16 +45,28 @@ const CustomBotton: FC<CustomButtonProps> = ({
 export default CustomBotton;
 const styles = (color: string, colorBottonBG: string, colorText: string) =>
   StyleSheet.create({
+    containerOut: {
+      position: 'relative',
+    },
     container: {
       backgroundColor: color,
       minHeight: Responsive(70),
       minWidth: Responsive(300),
+      maxWidth: Responsive(300),
       borderRadius: Responsive(100),
       justifyContent: 'center',
       alignItems: 'center',
       flexDirection: 'row',
-      paddingHorizontal: Platform.OS === 'android' ? Responsive(10) : 0,
+      paddingHorizontal:
+        Platform.OS === 'android' ? Responsive(10) : Responsive(20),
       zIndex: 2,
+    },
+    containerText: {
+      width: '80%',
+      paddingLeft: Responsive(10),
+    },
+    containerOutBtn: {
+      width: '20%',
     },
     shadow: {
       backgroundColor: Colors.dark_blue,
@@ -71,8 +87,10 @@ const styles = (color: string, colorBottonBG: string, colorText: string) =>
       backgroundColor: colorBottonBG,
     },
     text: {
-      fontSize: Responsive(35),
+      fontSize: Responsive(25),
       color: colorText,
       fontFamily: fonts.gotham,
+      fontWeight: Platform.OS === 'android' ? '700' : '600',
+      flexShrink: 1,
     },
   });

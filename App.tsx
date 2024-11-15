@@ -8,17 +8,21 @@ import {
 } from 'react-native';
 import Router from './src/routes';
 import {NavigationContainer} from '@react-navigation/native';
+import {Provider} from 'react-redux';
+import store from './src/redux/store';
 
 const App = () => {
   const {width} = useWindowDimensions();
   return (
-    <NavigationContainer>
-      <SafeAreaView style={styles({width}).safeArea}>
-        <StatusBar barStyle={'default'} />
-        <Router />
-        <StatusBar />
-      </SafeAreaView>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <SafeAreaView style={styles({width}).safeArea}>
+          <StatusBar barStyle={'default'} />
+          <Router />
+          <StatusBar />
+        </SafeAreaView>
+      </NavigationContainer>
+    </Provider>
   );
 };
 

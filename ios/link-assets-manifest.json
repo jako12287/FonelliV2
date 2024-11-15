@@ -8,6 +8,14 @@
     {
       "path": "src/assets/fonts/Gotham_Light.otf",
       "sha1": "6dbbd440f45d81e1145d16d2b39aea41e93a5e20"
+    },
+    {
+      "path": "src/assets/fonts/MeieScript-Regular.ttf",
+      "sha1": "c1449b0beca98cdaf5fe63c5b154a0b96dc9f41c"
+    },
+    {
+      "path": "src/assets/fonts/Poppins-Medium.ttf",
+      "sha1": "283f21b44efbdbf276ba802be2d949a36bbc4233"
     }
   ]
 }

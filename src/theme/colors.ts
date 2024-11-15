@@ -7,6 +7,7 @@ export const Colors = {
   error_color: '#FF1517',
   black: '#000',
   white: '#ffffff',
+  gray_shadow: '#CCCCCC',
   pending_state: '#FFDE59',
   download_state: '#FFBD59',
   transparent: 'transparent',
