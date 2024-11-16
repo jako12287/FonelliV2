@@ -1,5 +1,5 @@
 import React from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Platform, Pressable, StyleSheet, Text, View} from 'react-native';
 import IconImage from '../../utils/iconImage';
 import {Icons} from '../../assets/icons';
 import {useCustomNavigation} from '../../hooks/useCustomNavigation';
@@ -32,6 +32,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal:
+      Platform.OS === 'android' ? Responsive(5) : Responsive(0),
   },
   containerText: {
     marginLeft: Responsive(20),

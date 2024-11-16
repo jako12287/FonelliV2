@@ -8,18 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* barberosTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* barberosTests.m */; };
+		03D23677C27B453CB33D4263 /* CormorantGaramond-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 30915119E1D64D34BF1112E7 /* CormorantGaramond-SemiBold.ttf */; };
 		0C80B921A6F3F58F76C31292 /* libPods-barberos.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-barberos.a */; };
 		1309CFC33636186821238CC0 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		7699B88040F8A987B510C191 /* libPods-barberos-barberosTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-barberos-barberosTests.a */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		7B89A2D0F60A4C30BBC6B029 /* Gotham_Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = AA265FA5492E48DD99C0DAE0 /* Gotham_Light.otf */; };
-		03D23677C27B453CB33D4263 /* CormorantGaramond-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 30915119E1D64D34BF1112E7 /* CormorantGaramond-SemiBold.ttf */; };
-		D91817D9EDA44A71AA188910 /* MeieScript-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E29A3E7D9EA749B9BD213BF8 /* MeieScript-Regular.ttf */; };
-		C8B79BEAC67F4315A410E559 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A3DEFFB964BE4EB786FBBD4A /* Poppins-Medium.ttf */; };
 		4CE775B880934D43B4F7CCD3 /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 08B43E116ECB48708950F6FD /* Poppins-Bold.ttf */; };
+		7699B88040F8A987B510C191 /* libPods-barberos-barberosTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-barberos-barberosTests.a */; };
+		7B89A2D0F60A4C30BBC6B029 /* Gotham_Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = AA265FA5492E48DD99C0DAE0 /* Gotham_Light.otf */; };
+		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		C8B79BEAC67F4315A410E559 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A3DEFFB964BE4EB786FBBD4A /* Poppins-Medium.ttf */; };
+		D91817D9EDA44A71AA188910 /* MeieScript-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E29A3E7D9EA749B9BD213BF8 /* MeieScript-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +36,7 @@
 		00E356EE1AD99517003FC87E /* barberosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = barberosTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* barberosTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = barberosTests.m; sourceTree = "<group>"; };
+		08B43E116ECB48708950F6FD /* Poppins-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Bold.ttf"; path = "../src/assets/fonts/Poppins-Bold.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* barberos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = barberos.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = barberos/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = barberos/AppDelegate.mm; sourceTree = "<group>"; };
@@ -44,18 +45,17 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = barberos/main.m; sourceTree = "<group>"; };
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = barberos/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-barberos-barberosTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-barberos-barberosTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		30915119E1D64D34BF1112E7 /* CormorantGaramond-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "CormorantGaramond-SemiBold.ttf"; path = "../src/assets/fonts/CormorantGaramond-SemiBold.ttf"; sourceTree = "<group>"; };
 		3B4392A12AC88292D35C810B /* Pods-barberos.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-barberos.debug.xcconfig"; path = "Target Support Files/Pods-barberos/Pods-barberos.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-barberos.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-barberos.release.xcconfig"; path = "Target Support Files/Pods-barberos/Pods-barberos.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-barberos-barberosTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-barberos-barberosTests.debug.xcconfig"; path = "Target Support Files/Pods-barberos-barberosTests/Pods-barberos-barberosTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-barberos.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-barberos.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = barberos/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-barberos-barberosTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-barberos-barberosTests.release.xcconfig"; path = "Target Support Files/Pods-barberos-barberosTests/Pods-barberos-barberosTests.release.xcconfig"; sourceTree = "<group>"; };
+		A3DEFFB964BE4EB786FBBD4A /* Poppins-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Medium.ttf"; path = "../src/assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; };
+		AA265FA5492E48DD99C0DAE0 /* Gotham_Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = Gotham_Light.otf; path = ../src/assets/fonts/Gotham_Light.otf; sourceTree = "<group>"; };
+		E29A3E7D9EA749B9BD213BF8 /* MeieScript-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "MeieScript-Regular.ttf"; path = "../src/assets/fonts/MeieScript-Regular.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		AA265FA5492E48DD99C0DAE0 /* Gotham_Light.otf */ = {isa = PBXFileReference; name = "Gotham_Light.otf"; path = "../src/assets/fonts/Gotham_Light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		30915119E1D64D34BF1112E7 /* CormorantGaramond-SemiBold.ttf */ = {isa = PBXFileReference; name = "CormorantGaramond-SemiBold.ttf"; path = "../src/assets/fonts/CormorantGaramond-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		E29A3E7D9EA749B9BD213BF8 /* MeieScript-Regular.ttf */ = {isa = PBXFileReference; name = "MeieScript-Regular.ttf"; path = "../src/assets/fonts/MeieScript-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		A3DEFFB964BE4EB786FBBD4A /* Poppins-Medium.ttf */ = {isa = PBXFileReference; name = "Poppins-Medium.ttf"; path = "../src/assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		08B43E116ECB48708950F6FD /* Poppins-Bold.ttf */ = {isa = PBXFileReference; name = "Poppins-Bold.ttf"; path = "../src/assets/fonts/Poppins-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +107,19 @@
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
 			);
 			name = barberos;
+			sourceTree = "<group>";
+		};
+		25C89B20BA1A47B881AB1B78 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				AA265FA5492E48DD99C0DAE0 /* Gotham_Light.otf */,
+				30915119E1D64D34BF1112E7 /* CormorantGaramond-SemiBold.ttf */,
+				E29A3E7D9EA749B9BD213BF8 /* MeieScript-Regular.ttf */,
+				A3DEFFB964BE4EB786FBBD4A /* Poppins-Medium.ttf */,
+				08B43E116ECB48708950F6FD /* Poppins-Bold.ttf */,
+			);
+			name = Resources;
+			path = "";
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
@@ -161,19 +174,6 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
-		};
-		25C89B20BA1A47B881AB1B78 /* Resources */ = {
-			isa = "PBXGroup";
-			children = (
-				AA265FA5492E48DD99C0DAE0 /* Gotham_Light.otf */,
-				30915119E1D64D34BF1112E7 /* CormorantGaramond-SemiBold.ttf */,
-				E29A3E7D9EA749B9BD213BF8 /* MeieScript-Regular.ttf */,
-				A3DEFFB964BE4EB786FBBD4A /* Poppins-Medium.ttf */,
-				08B43E116ECB48708950F6FD /* Poppins-Bold.ttf */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-			path = "";
 		};
 /* End PBXGroup section */
 
