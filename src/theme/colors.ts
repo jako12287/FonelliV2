@@ -5,6 +5,7 @@ export const Colors = {
   dark_green: '#138037',
   dark_blue: '#183E6F',
   error_color: '#FF1517',
+  title_color: '#01A3CB',
   black: '#000',
   white: '#ffffff',
   gray_shadow: '#CCCCCC',

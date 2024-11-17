@@ -6,12 +6,18 @@ import Responsive from '../../utils/responsive';
 import {fonts} from '../../theme/fonts';
 import {Colors} from '../../theme/colors';
 import InputControlOff from '../../components/InputControlOff';
+import CaratageSelect from '../../components/CaratageSelect';
+import ColorSelect from '../../components/ColorSelect';
+import RockSelect from '../../components/RockSelect';
 moment.locale('es');
 
 const NewOrder = () => {
   const formattedDate = moment(new Date()).format('DD-MMM-YYYY').toLowerCase();
 
   const [model, setModel] = useState<string>('');
+  const [caratage, setCaratage] = useState<string>('');
+  const [color, setColor] = useState<string>('');
+  const [rock, setRock] = useState<string[]>(['N/A']);
   return (
     <View style={styles.container}>
       <View style={styles.containerText}>
@@ -32,60 +38,12 @@ const NewOrder = () => {
           selectValueName={model}
           placeholder=""
         />
-        <InputControlOff
-          label="Kilataje"
-          onChangeName={setModel}
-          selectValueName={model}
-          placeholder=""
+        <CaratageSelect
+          handleOptionPress={setCaratage}
+          optionValue={caratage}
         />
-        <InputControlOff
-          label="Color"
-          onChangeName={setModel}
-          selectValueName={model}
-          placeholder=""
-        />
-        <InputControlOff
-          label="Piedra"
-          onChangeName={setModel}
-          selectValueName={model}
-          placeholder=""
-        />
-        <InputControlOff
-          label="Talla"
-          onChangeName={setModel}
-          selectValueName={model}
-          placeholder=""
-        />
-        <InputControlOff
-          label="Largo"
-          onChangeName={setModel}
-          selectValueName={model}
-          placeholder=""
-        />
-        <InputControlOff
-          label="Inicial"
-          onChangeName={setModel}
-          selectValueName={model}
-          placeholder=""
-        />
-        <InputControlOff
-          label="Nombres"
-          onChangeName={setModel}
-          selectValueName={model}
-          placeholder=""
-        />
-        <InputControlOff
-          label="TOTAL"
-          onChangeName={setModel}
-          selectValueName={model}
-          placeholder=""
-        />
-        <InputControlOff
-          label="Observaciones"
-          onChangeName={setModel}
-          selectValueName={model}
-          placeholder=""
-        />
+        <ColorSelect handleOptionPress={setColor} optionValue={color} />
+        <RockSelect handleOptionPress={setRock} optionValue={rock} />
       </View>
     </View>
   );

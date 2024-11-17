@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: '#000',
+    borderColor: Colors.black,
     padding: Responsive(12),
     fontSize: Responsive(16),
     width: Responsive(200),

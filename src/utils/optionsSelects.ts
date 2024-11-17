@@ -67,6 +67,9 @@ export const optionColor = [
   {label: 'Blanco', value: 'Blanco'},
   {label: 'Rosa', value: 'Rosa'},
   {label: 'Florentino', value: 'Florentino'},
+];
+
+export const optionColorMixed = [
   {label: 'Amarillo/Blanco', value: 'Amarillo/Blanco'},
   {label: 'Blanco/Rosa', value: 'Blanco/Rosa'},
   {label: 'Amarillo/Rosa', value: 'Amarillo/Rosa'},
@@ -79,7 +82,7 @@ export const optionsIniitals = [
   },
 ];
 
-export const optionsRocks = [
+export const optionsMainRocks = [
   {
     label: 'No aplica',
     value: 'N/A',
@@ -92,6 +95,9 @@ export const optionsRocks = [
     label: 'Diamante',
     value: 'Diamante',
   },
+];
+
+export const optionsPreciousRocks = [
   {
     label: 'Rubi',
     value: 'Rubi',
@@ -104,6 +110,9 @@ export const optionsRocks = [
     label: 'Esmeralda',
     value: 'Esmeralda',
   },
+];
+
+export const optionsSemiPreciousRocks = [
   {
     label: 'Topacio Azul',
     value: 'Topacio Azul',

@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   textDown: {
     fontSize: Responsive(18),
     fontFamily: fonts.poppins_medium,
-    color: Colors.dark_blue,
+    color: Colors.black,
     lineHeight: Responsive(40),
     textAlign: 'center',
   },
