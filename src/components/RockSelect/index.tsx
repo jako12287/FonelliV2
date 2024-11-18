@@ -78,17 +78,15 @@ const RockSelect: FC<PropsSelect> = ({
                       style={styles.boxSelect}
                       onPress={() => {
                         if (item.value === 'N/A') {
-                          // Si se selecciona "N/A", desmarcar todas las opciones y marcar solo "N/A"
                           handleOptionPress(['N/A']);
                         } else {
-                          // Si se selecciona una opción diferente de "N/A"
                           const isSelected = optionValue.includes(item.value);
                           const newOptions = isSelected
-                            ? optionValue.filter(value => value !== item.value) // Desmarcar si ya está seleccionado
+                            ? optionValue.filter(value => value !== item.value)
                             : [
                                 ...optionValue.filter(value => value !== 'N/A'),
                                 item.value,
-                              ]; // Agregar opción y quitar "N/A"
+                              ];
                           handleOptionPress(newOptions);
                         }
                       }}>
@@ -110,17 +108,15 @@ const RockSelect: FC<PropsSelect> = ({
                       style={styles.boxSelect}
                       onPress={() => {
                         if (item.value === 'N/A') {
-                          // Si se selecciona "N/A", desmarcar todas las opciones y marcar solo "N/A"
                           handleOptionPress(['N/A']);
                         } else {
-                          // Si se selecciona una opción diferente de "N/A"
                           const isSelected = optionValue.includes(item.value);
                           const newOptions = isSelected
-                            ? optionValue.filter(value => value !== item.value) // Desmarcar si ya está seleccionado
+                            ? optionValue.filter(value => value !== item.value)
                             : [
                                 ...optionValue.filter(value => value !== 'N/A'),
                                 item.value,
-                              ]; // Agregar opción y quitar "N/A"
+                              ];
                           handleOptionPress(newOptions);
                         }
                       }}>
@@ -143,17 +139,15 @@ const RockSelect: FC<PropsSelect> = ({
                       style={styles.boxSelect}
                       onPress={() => {
                         if (item.value === 'N/A') {
-                          // Si se selecciona "N/A", desmarcar todas las opciones y marcar solo "N/A"
                           handleOptionPress(['N/A']);
                         } else {
-                          // Si se selecciona una opción diferente de "N/A"
                           const isSelected = optionValue.includes(item.value);
                           const newOptions = isSelected
-                            ? optionValue.filter(value => value !== item.value) // Desmarcar si ya está seleccionado
+                            ? optionValue.filter(value => value !== item.value)
                             : [
                                 ...optionValue.filter(value => value !== 'N/A'),
                                 item.value,
-                              ]; // Agregar opción y quitar "N/A"
+                              ];
                           handleOptionPress(newOptions);
                         }
                       }}>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {Platform, Pressable, StyleSheet, Text, View} from 'react-native';
 import IconImage from '../../utils/iconImage';
 import {Icons} from '../../assets/icons';
@@ -7,7 +7,14 @@ import Responsive from '../../utils/responsive';
 import {Colors} from '../../theme/colors';
 import {fonts} from '../../theme/fonts';
 
-const AskAgain = () => {
+interface PropsComponet {
+  isComponentForAppreciation?: boolean;
+  setControlerView?: (data: number) => void;
+}
+const AskAgain: FC<PropsComponet> = ({
+  isComponentForAppreciation = false,
+  setControlerView = () => {},
+}) => {
   const navigation = useCustomNavigation();
   return (
     <View style={styles.container}>
@@ -15,7 +22,12 @@ const AskAgain = () => {
         <IconImage source={Icons.general.home} size={60} />
       </View>
       <View style={styles.containerText}>
-        <Pressable onPress={() => navigation.navigate('NewOrder')}>
+        <Pressable
+          onPress={() =>
+            isComponentForAppreciation
+              ? setControlerView(1)
+              : navigation.navigate('NewOrder')
+          }>
           <Text style={styles.textGoOrder}>¿Quieres hacer otro pedido?</Text>
         </Pressable>
         <Pressable onPress={() => navigation.navigate('Menu')}>

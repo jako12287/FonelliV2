@@ -12,6 +12,7 @@ interface CustomButtonProps {
   colorBottonBG?: string;
   colorText?: string;
   onClick?: () => void;
+  colorShadow?: string;
 }
 
 const CustomBotton: FC<CustomButtonProps> = ({
@@ -20,30 +21,45 @@ const CustomBotton: FC<CustomButtonProps> = ({
   title = 'Click',
   colorText = Colors.white,
   onClick = () => {},
+  colorShadow = Colors.dark_blue,
 }) => {
   return (
-    <View style={styles(color, colorBottonBG, colorText).containerOut}>
+    <View
+      style={styles(color, colorBottonBG, colorText, colorShadow).containerOut}>
       <Pressable
-        style={styles(color, colorBottonBG, colorText).container}
+        style={styles(color, colorBottonBG, colorText, colorShadow).container}
         onPress={onClick}>
-        <View style={styles(color, colorBottonBG, colorText).containerText}>
-          <Text style={styles(color, colorBottonBG, colorText).text}>
+        <View
+          style={
+            styles(color, colorBottonBG, colorText, colorShadow).containerText
+          }>
+          <Text
+            style={styles(color, colorBottonBG, colorText, colorShadow).text}>
             {title}
           </Text>
         </View>
-        <View style={styles(color, colorBottonBG, colorText).containerOutBtn}>
-          <View style={styles(color, colorBottonBG, colorText).containerBotton}>
+        <View
+          style={
+            styles(color, colorBottonBG, colorText, colorShadow).containerOutBtn
+          }>
+          <View
+            style={
+              styles(color, colorBottonBG, colorText, colorShadow)
+                .containerBotton
+            }>
             <IconImage size={25} source={Icons.general.arrowRight} />
           </View>
         </View>
       </Pressable>
-      <View style={styles(color, colorBottonBG, colorText).shadow} />
+      <View
+        style={styles(color, colorBottonBG, colorText, colorShadow).shadow}
+      />
     </View>
   );
 };
 
 export default CustomBotton;
-const styles = (color: string, colorBottonBG: string, colorText: string) =>
+const styles = (color: string, colorBottonBG: string, colorText: string, colorShadow:string) =>
   StyleSheet.create({
     containerOut: {
       position: 'relative',
@@ -69,7 +85,7 @@ const styles = (color: string, colorBottonBG: string, colorText: string) =>
       width: '20%',
     },
     shadow: {
-      backgroundColor: Colors.dark_blue,
+      backgroundColor: colorShadow,
       minHeight: Responsive(70),
       minWidth: Responsive(300),
       borderRadius: Responsive(100),
