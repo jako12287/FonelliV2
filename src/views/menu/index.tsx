@@ -12,7 +12,7 @@ const Menu = () => {
   const dispatch = useDispatch();
   const navigation = useCustomNavigation();
   const goCatalog = () => {
-    const url = 'https://fonelli.maldivasweb.com/';
+    const url = 'https://www.fonelli.com/';
 
     Linking.openURL(url).catch(err =>
       console.error('Error al abrir la URL:', err),

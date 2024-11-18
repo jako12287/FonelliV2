@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {Platform, StyleSheet, Text, TextInput, View} from 'react-native';
 import {Type} from '../../types';
 import Responsive from '../../utils/responsive';
 import {Colors} from '../../theme/colors';
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: Colors.black,
-    padding: Responsive(12),
+    padding: Platform.OS === 'android' ? Responsive(5) : Responsive(12),
     fontSize: Responsive(16),
     width: Responsive(200),
     height: Responsive(40),

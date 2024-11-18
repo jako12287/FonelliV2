@@ -241,7 +241,9 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: Responsive(16),
-    color: '#333',
+    color: Colors.black,
+    fontWeight: '500',
+
   },
   closeButton: {
     padding: Responsive(10),

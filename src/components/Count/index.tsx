@@ -55,10 +55,14 @@ const styles = StyleSheet.create({
     fontSize: Responsive(17),
     color: Colors.black,
     fontFamily: fonts.gotham,
+    fontWeight: '500',
+
   },
   textCount: {
     fontSize: Responsive(20),
     color: Colors.black,
     fontFamily: fonts.gotham,
+    fontWeight: '500',
+
   },
 });
