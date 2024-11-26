@@ -48,3 +48,9 @@ export enum RoutesApi {
   STATUS = '/testbd',
   CHANGE_PASSWORD = '/changePassword',
 }
+
+export enum userType {
+  CUSTOMER = 'CUSTOMER',
+  COLLABORATOR = 'COLLABORATOR',
+  ADMIN = 'ADMIN',
+}

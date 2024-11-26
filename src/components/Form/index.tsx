@@ -14,6 +14,7 @@ import {useCustomNavigation} from '../../hooks/useCustomNavigation';
 import {CustomAlert, CustomAlertGlobal} from '../../utils/alertError';
 import {loginApi} from '../../api';
 import Loader from '../Loader';
+import {userType} from '../../types';
 
 const Schema = yup.object().shape({
   email: yup.string().required('Ingresa el usuario').email('Correo  inválido'),
@@ -47,6 +48,13 @@ const Form = () => {
         result.message === 'Contraseña incorrecta.'
       ) {
         CustomAlertGlobal('Revisa las credenciales');
+        return;
+      }
+
+      if (result?.type !== userType.CUSTOMER) {
+        CustomAlertGlobal(
+          'Tu cuenta no tiene acceso al aplicativo. Si crees que esto es un error, por favor contacta a soporte',
+        );
         return;
       }
 
