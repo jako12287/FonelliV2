@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React, {FC, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 import CustomInput from '../InputNative';
 import * as yup from 'yup';
 import {useForm} from 'react-hook-form';
@@ -8,20 +8,26 @@ import CustomBotton from '../CustomBotton';
 import Responsive from '../../utils/responsive';
 import {fonts} from '../../theme/fonts';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {useDispatch} from 'react-redux';
-import {login} from '../../redux/slices/authReducer';
 import {useCustomNavigation} from '../../hooks/useCustomNavigation';
 import {CustomAlert, CustomAlertGlobal} from '../../utils/alertError';
-import {loginApi} from '../../api';
+import {changePassword} from '../../api';
 import Loader from '../Loader';
 
+interface PropsForm {
+  _id: string;
+}
 const Schema = yup.object().shape({
-  email: yup.string().required('Ingresa el usuario').email('Correo  inválido'),
-  password: yup.string().required('Ingresa la contraseña'),
+  password: yup
+    .string()
+    .required('Ingresa la contraseña')
+    .min(7, 'Al menos 7 caracteres'),
+  confirmPassword: yup
+    .string()
+    .required('Confirma tu contraseña')
+    .oneOf([yup.ref('password')], 'Contraseñas no coinciden'),
 });
 
-const Form = () => {
-  const dispatch = useDispatch();
+const FormChange: FC<PropsForm> = ({_id}) => {
   const navigation = useCustomNavigation();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -36,29 +42,21 @@ const Form = () => {
   const onsubmit = async (data: any) => {
     setIsLoading(true);
     const dataSend = {
-      email: data.email.toLowerCase(),
-      password: data.password,
+      _id,
+      newPassword: data.password,
     };
     try {
-      const result = await loginApi(dataSend);
-      console.log('desde la vista datos', result);
-      if (
-        result.message === 'Revisa las credenciales.' ||
-        result.message === 'Contraseña incorrecta.'
-      ) {
-        CustomAlertGlobal('Revisa las credenciales');
-        return;
-      }
-
-      if (result?.token) {
-        dispatch(login(result) as never);
-        if (!result?.user?.verify && result?.user?._id) {
-          reset();
-          navigation.navigate('ChangePassword', {_id: result?.user?._id});
-          return;
-        }
+      const result = await changePassword(dataSend);
+      console.log('desde la vista datos form change', result);
+      if (result?.message === 'Contraseña actualizada correctamente.') {
+        reset();
         navigation.navigate('Menu');
+      } else {
+        CustomAlertGlobal(
+          result?.message || 'Error desconocido. Intenta nuevamente.',
+        );
       }
+      return;
     } catch (error) {
       CustomAlert();
       console.error('Error on login:', error);
@@ -71,16 +69,17 @@ const Form = () => {
       <View style={styles.containerForm}>
         <CustomInput
           control={control}
-          label="Cliente"
-          name="email"
+          label="Contraseña"
+          name="password"
           placeholder=""
           errors={errors}
           defaultValue={''}
+          secureTextEntry
         />
         <CustomInput
           control={control}
           label="Contraseña"
-          name="password"
+          name="confirmPassword"
           placeholder=""
           errors={errors}
           defaultValue={''}
@@ -90,18 +89,13 @@ const Form = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <CustomBotton title="Ingresar" onClick={handleSubmit(onsubmit)} />
+        <CustomBotton title="Enviar" onClick={handleSubmit(onsubmit)} />
       )}
-      <View style={styles.containerTextDown}>
-        <Text style={styles.textDown}>
-          *Solicita con atención al cliente tus accesos o cambios de contraseña.
-        </Text>
-      </View>
     </View>
   );
 };
 
-export default Form;
+export default FormChange;
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',

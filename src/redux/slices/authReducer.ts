@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const initialState = {
@@ -28,13 +28,13 @@ const authSlice = createSlice({
   },
 });
 
-export const { setToken, setUser, setLoading, logoutSuccess } = authSlice.actions;
+export const {setToken, setUser, setLoading, logoutSuccess} = authSlice.actions;
 
 export const login = (result: any) => async (dispatch: any) => {
+  console.log('DATOS DE USER', result);
   try {
-    const token =
-      result?.data?.RegisterUser?.accessToken || result?.data?.loginWithPin?.accessToken;
-    const user = JSON.stringify(result?.data?.RegisterUser || result?.data?.loginWithPin);
+    const token = result?.token;
+    const user = JSON.stringify(result?.user);
     await AsyncStorage.setItem('@TOKEN', token);
     await AsyncStorage.setItem('@USER', user);
     dispatch(setToken(token));
@@ -49,22 +49,32 @@ export const logout = () => async (dispatch: any) => {
     await AsyncStorage.removeItem('@TOKEN');
     await AsyncStorage.removeItem('@USER');
     dispatch(logoutSuccess());
+    console.log('Logout exitoso');
   } catch (error) {
     console.error('Error during logout:', error);
   }
 };
 
 export const loadUserData = () => async (dispatch: any) => {
+  dispatch(setLoading(true));
+
   try {
     const token = await AsyncStorage.getItem('@TOKEN');
     const user = await AsyncStorage.getItem('@USER');
+
     if (token && user) {
       dispatch(setToken(token));
       dispatch(setUser(JSON.parse(user)));
     } else {
+      console.warn(
+        'No se encontraron datos de usuario o token en AsyncStorage',
+      );
     }
   } catch (error) {
-    console.error('Error loading user data:', error);
+    console.error(
+      'Error al cargar los datos del usuario desde AsyncStorage:',
+      error,
+    );
   } finally {
     dispatch(setLoading(false));
   }

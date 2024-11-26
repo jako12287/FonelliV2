@@ -36,7 +36,6 @@ const CustomInput = ({
     defaultValue,
   });
 
-  console.log('eerrr', errors);
 
   return (
     <>

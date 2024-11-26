@@ -6,6 +6,7 @@ import SplahsScreen from '../views/splash';
 import CourtesyScreen from '../views/courtesy';
 import LoginScreen from '../views/login';
 import MenuScreen from '../views/menu';
+import ChangePassword from '../views/chagePassword';
 import NewOrderScreen from '../views/newOrder';
 import OrderHistoryScreen from '../views/orderHistory';
 import CatalogScreen from '../views/catalog';
@@ -26,6 +27,7 @@ const Router = () => {
       <Stack.Screen name="Courtesy" component={CourtesyScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Menu" component={MenuScreen} />
+      <Stack.Screen name="ChangePassword" component={ChangePassword} />
       <Stack.Screen name="NewOrder" component={NewOrderScreen} />
       <Stack.Screen name="OrderHistory" component={OrderHistoryScreen} />
       <Stack.Screen name="Catalog" component={CatalogScreen} />

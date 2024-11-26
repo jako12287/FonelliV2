@@ -7,10 +7,11 @@ export interface RootTabsProps {
 }
 
 export interface RootStackProps extends ParamListBase {
-  Splahs: undefined
+  Splahs: undefined;
   Courtesy: undefined;
   Login: undefined;
   Menu: undefined;
+  ChangePassword: {_id: string};
   NewOrder: undefined;
   OrderHistory: undefined;
   Catalog: undefined;
@@ -40,4 +41,10 @@ export enum StatusProps {
   CANCELLED = 'CANCELLED',
   PENDING = 'PENDING',
   DOWNLOAD = 'DOWNLOAD',
+}
+
+export enum RoutesApi {
+  LOGIN = '/login',
+  STATUS = '/testbd',
+  CHANGE_PASSWORD = '/changePassword',
 }

@@ -4,22 +4,42 @@ import Responsive from '../../utils/responsive';
 import {fonts} from '../../theme/fonts';
 import {Colors} from '../../theme/colors';
 import {useCustomNavigation} from '../../hooks/useCustomNavigation';
+import {useDispatch} from 'react-redux';
+import {loadUserData} from '../../redux/slices/authReducer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getVerifyStatusServer } from '../../utils/statusServer';
 
 const Splash = () => {
   const scaleValue = useRef(new Animated.Value(1)).current;
   const navigation = useCustomNavigation();
+  const dispatch = useDispatch();
+
+  // const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    setTimeout(async () => {
-      // const userToken = await AsyncStorage.getItem('userToken');
-      // if (!userToken) {
-      //   navigation.navigate('Welcome');
-      // } else {
-      //   navigation.navigate('Dashboard');
-      // }
-      navigation.navigate('Courtesy');
-    }, 3000);
-  }, [navigation]);
+    getVerifyStatusServer();
+  }, []);
+
+  const loaderToken = async () => {
+    try {
+      const tokenLocal = await AsyncStorage.getItem('@TOKEN');
+      setTimeout(async () => {
+        if (tokenLocal) {
+          await dispatch(loadUserData() as never);
+          navigation.navigate('Menu');
+        } else {
+          navigation.navigate('Courtesy');
+        }
+      }, 3000);
+    } catch (error) {
+      console.log('error a acceder al token', error);
+    }
+  };
+
+  useEffect(() => {
+    loaderToken();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const animatePulse = () => {

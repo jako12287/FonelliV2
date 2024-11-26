@@ -14,8 +14,25 @@ export const CustomAlert = () => {
   );
 };
 
+export const CustomAlertGlobal = (message: string) => {
+  return Alert.alert(
+    'Alerta',
+    message,
+    [
+      {
+        text: 'OK',
+        onPress: () => console.log('Alerta cerrada'),
+      },
+    ],
+    {cancelable: true},
+  );
+};
 
-export const CustomAlertLogOut = (dispatch: any, logout: any, navigation: any) => {
+export const CustomAlertLogOut = (
+  dispatch: any,
+  logout: any,
+  navigation: any,
+) => {
   return Alert.alert(
     'Cerrar sesión',
     '¿Estás seguro de que deseas cerrar sesión?',
