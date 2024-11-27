@@ -51,7 +51,7 @@ const Form = () => {
         return;
       }
 
-      if (result?.type !== userType.CUSTOMER) {
+      if (result?.user?.type !== userType.CUSTOMER) {
         CustomAlertGlobal(
           'Tu cuenta no tiene acceso al aplicativo. Si crees que esto es un error, por favor contacta a soporte',
         );
