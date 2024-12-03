@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import IconImage from '../utils/iconImage';
 import {Icons} from '../assets/icons';
@@ -6,11 +6,32 @@ import Responsive from '../utils/responsive';
 import {fonts} from '../theme/fonts';
 import {Colors} from '../theme/colors';
 import CustomBotton from './CustomBotton';
+import Loader from './Loader';
 
 interface PropsComponenet {
   setControlerView: (data: number) => void;
+  dataSend: any;
 }
-const SumaryOrder: FC<PropsComponenet> = ({setControlerView}) => {
+const SumaryOrder: FC<PropsComponenet> = ({setControlerView, dataSend}) => {
+  console.log('TCL: dataSend sumary', dataSend);
+
+  const [loadind, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 800);
+  }, [dataSend]);
+
+  console.log('asi se ve talla', dataSend);
+
+  if (loadind) {
+    return (
+      <View style={[styles.container, styles.containerExtension]}>
+        <Loader />
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <View style={styles.containerHeader}>
@@ -22,29 +43,43 @@ const SumaryOrder: FC<PropsComponenet> = ({setControlerView}) => {
       <View>
         <View style={styles.containerData}>
           <Text style={styles.textLabel}>Modelo</Text>
-          <Text style={styles.textData}>AR14-203966</Text>
+          <Text style={styles.textData}>{dataSend?.model}</Text>
         </View>
 
         <View style={styles.containerData}>
           <Text style={styles.textLabel}>Kilataje</Text>
-          <Text style={styles.textData}>14 KILATES</Text>
+          <Text style={styles.textData}>{dataSend?.caratage} KILATES</Text>
         </View>
 
         <View style={styles.containerData}>
           <Text style={styles.textLabel}>Color</Text>
-          <Text style={styles.textData}>Amarillo</Text>
+          <Text style={styles.textData}>{dataSend?.color}</Text>
         </View>
 
         <View style={styles.containerData}>
           <Text style={styles.textLabel}>Piedra</Text>
-          <Text style={styles.textData}>NO APLICA</Text>
+          <Text style={styles.textData}>{dataSend?.rock}</Text>
         </View>
 
         <View style={styles.containerData}>
           <Text style={styles.textLabel}>Talla</Text>
-          <View>
-            <Text style={styles.textData}>8 1/2 2 piezas</Text>
-            <Text style={styles.textData}>9 1/2 3 piezas</Text>
+          <View style={[styles.containerSize]}>
+            <Text style={styles.textData}>
+              {!dataSend?.size ||
+                (!dataSend?.size.filter((el: any) => el?.count).length &&
+                  'NO APLICA')}
+            </Text>
+            {dataSend?.size
+              .filter((el: any) => el.count)
+              .map((item: any) => (
+                <View style={styles.containerSizeText}>
+                  <Text style={[styles.textData]}>{item.name}</Text>
+                  <Text style={[styles.textData]}>{item.count}</Text>
+                  <Text style={[styles.textData]}>piezas</Text>
+                </View>
+              ))}
+            {/*
+            <Text style={styles.textData}>9 1/2 3 piezas</Text> */}
           </View>
         </View>
 
@@ -142,5 +177,17 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  containerExtension: {height: Responsive(600), justifyContent: 'center'},
+  containerSize: {
+    width: Responsive(300),
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    gap: Responsive(5),
+  },
+  containerSizeText: {
+    flexDirection: 'row',
+    gap: Responsive(20),
+    paddingEnd: Responsive(40),
   },
 });

@@ -25,7 +25,6 @@ const CaratageSelect: FC<PropsSelect> = ({
 }) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
 
-  console.log('optionValue', optionValue);
   return (
     <>
       <View style={styles.container}>

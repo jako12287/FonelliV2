@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {Modal, Platform, Pressable, StyleSheet, Text, View} from 'react-native';
 import Responsive from '../../utils/responsive';
 import {Colors} from '../../theme/colors';
@@ -8,21 +8,66 @@ import {fonts} from '../../theme/fonts';
 import CustomBotton from '../CustomBotton';
 import {TextInput} from 'react-native-gesture-handler';
 import Count from '../Count';
+// import Count from '../Count';
 
 interface PropsSelect {
   handleOptionPress?: (data: string[]) => void;
   optionValue: string[];
 }
 
-const NameSelect: FC<PropsSelect> = ({optionValue = []}) => {
+const NameSelect: FC<PropsSelect> = ({
+  optionValue = [],
+  handleOptionPress = () => {},
+}) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
   const [isNa, setIsNa] = useState<boolean>(false);
 
   const [name1, setname1] = useState<string>('');
-  const [name2, setname2] = useState<string>('');
-  const [name3, setname3] = useState<string>('');
+  const [totalPieces, setTotalPieces] = useState<any[]>([]);
+  const [labelPieces, setLabelPieces] = useState<number>(0);
+  const [disabled, setDisabled] = useState<boolean>(false);
 
-  console.log('optionValue', optionValue);
+  const handleSaveData = (data: any) => {
+    // Verificar si el nombre ya existe en la lista
+    setTotalPieces(prevState => {
+      const index = prevState.findIndex(item => item.name === data.name);
+      if (index !== -1) {
+        // Si ya existe, actualizamos la cantidad
+        const updatedList = [...prevState];
+        updatedList[index].count = data.count;
+        return updatedList;
+      } else {
+        // Si no existe, agregamos un nuevo elemento
+        return [...prevState, data];
+      }
+    });
+  };
+
+  const handleTotalPiece = () => {
+    const pieces = totalPieces?.map((el: any) => {
+      let total: number = 0;
+      if (el.count > 0) {
+        total += el.count;
+      }
+      return total;
+    });
+    setLabelPieces(
+      pieces.reduce((a, b) => {
+        return a + b;
+      }, 0),
+    );
+  };
+
+  useEffect(() => {
+    handleTotalPiece();
+    if (disabled) {
+      handleOptionPress(['N/A']);
+    } else {
+      handleOptionPress(totalPieces);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [totalPieces]);
+
   return (
     <>
       <View style={styles.container}>
@@ -60,7 +105,10 @@ const NameSelect: FC<PropsSelect> = ({optionValue = []}) => {
                 <Text style={styles.optionText}>{'No Apllica'}</Text>
                 <Pressable
                   style={styles.boxSelect}
-                  onPress={() => setIsNa(!isNa)}>
+                  onPress={() => {
+                    setIsNa(!isNa);
+                    setDisabled(!isNa);
+                  }}>
                   {isNa && <IconImage size={30} source={Icons.general.check} />}
                 </Pressable>
               </View>
@@ -72,33 +120,18 @@ const NameSelect: FC<PropsSelect> = ({optionValue = []}) => {
                   keyboardType={'default'}
                   placeholder={''}
                 />
-                <Count />
-              </View>
-              <View style={styles.containerInputInt}>
-                <TextInput
-                  style={styles.input}
-                  value={name2}
-                  onChangeText={value => setname2(value)}
-                  keyboardType={'default'}
-                  placeholder={''}
+                <Count
+                  name={'name1'}
+                  handleSaveData={handleSaveData}
+                  disable={disabled}
+                  setDisabled={setDisabled}
                 />
-                <Count />
-              </View>
-              <View style={styles.containerInputInt}>
-                <TextInput
-                  style={styles.input}
-                  value={name3}
-                  onChangeText={value => setname3(value)}
-                  keyboardType={'default'}
-                  placeholder={''}
-                />
-                <Count />
               </View>
             </View>
             <View style={styles.containerTextDown}>
               <Text style={styles.textDown}>TOTAL</Text>
               <View style={styles.totalBox}>
-                <Text style={styles.textDown}>2 piezas</Text>
+                <Text style={styles.textDown}>{labelPieces} piezas</Text>
               </View>
             </View>
             <View style={styles.btnContainer}>

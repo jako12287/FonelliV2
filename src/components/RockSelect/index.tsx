@@ -21,13 +21,13 @@ import {
 import {fonts} from '../../theme/fonts';
 
 interface PropsSelect {
-  handleOptionPress: (data: string[]) => void;
-  optionValue: string[];
+  handleOptionPress: (data: string) => void;
+  optionValue: string;
 }
 
 const RockSelect: FC<PropsSelect> = ({
   handleOptionPress = () => {},
-  optionValue = [],
+  optionValue = '',
 }) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
 
@@ -43,9 +43,7 @@ const RockSelect: FC<PropsSelect> = ({
           onPress={() => setIsActiveModal(!isActiveModal)}>
           <View style={styles.input}>
             <Text style={styles.textValue}>
-              {optionValue.length > 1
-                ? `${optionValue.slice(0, 1).join(', ')} ...`
-                : optionValue.join(', ')}
+              {optionValue || 'Seleccione una opción'}
             </Text>
             <View style={styles.arrowContainer}>
               <IconImage size={15} source={Icons.general.arrowDown} />
@@ -63,9 +61,9 @@ const RockSelect: FC<PropsSelect> = ({
           <View style={styles.modalContainer}>
             <View style={styles.containerBtnUp}>
               <Text style={styles.textTitle}>Piedra</Text>
-              <Pressable onPress={() => setIsActiveModal(!isActiveModal)}>
+              {/* <Pressable onPress={() => setIsActiveModal(!isActiveModal)}>
                 <Text style={styles.textTitle}>Guardar</Text>
-              </Pressable>
+              </Pressable> */}
             </View>
             <View>
               <FlatList
@@ -73,24 +71,16 @@ const RockSelect: FC<PropsSelect> = ({
                 keyExtractor={item => item.value}
                 renderItem={({item}) => (
                   <View style={styles.option}>
-                    <Text style={styles.optionText}>{`${item.label}`}</Text>
+                    <Text style={styles.optionText}>{item.label}</Text>
                     <Pressable
                       style={styles.boxSelect}
                       onPress={() => {
-                        if (item.value === 'N/A') {
-                          handleOptionPress(['N/A']);
-                        } else {
-                          const isSelected = optionValue.includes(item.value);
-                          const newOptions = isSelected
-                            ? optionValue.filter(value => value !== item.value)
-                            : [
-                                ...optionValue.filter(value => value !== 'N/A'),
-                                item.value,
-                              ];
-                          handleOptionPress(newOptions);
-                        }
+                        const newValue =
+                          item.value === 'N/A' ? 'N/A' : item.value;
+                        handleOptionPress(newValue);
+                        setIsActiveModal(!isActiveModal);
                       }}>
-                      {optionValue.includes(item.value) && (
+                      {optionValue === item.value && (
                         <IconImage size={30} source={Icons.general.check} />
                       )}
                     </Pressable>
@@ -103,24 +93,16 @@ const RockSelect: FC<PropsSelect> = ({
                 keyExtractor={item => item.value}
                 renderItem={({item}) => (
                   <TouchableOpacity style={styles.optionDown}>
-                    <Text style={styles.optionText}>{`${item.label}`}</Text>
+                    <Text style={styles.optionText}>{item.label}</Text>
                     <Pressable
                       style={styles.boxSelect}
                       onPress={() => {
-                        if (item.value === 'N/A') {
-                          handleOptionPress(['N/A']);
-                        } else {
-                          const isSelected = optionValue.includes(item.value);
-                          const newOptions = isSelected
-                            ? optionValue.filter(value => value !== item.value)
-                            : [
-                                ...optionValue.filter(value => value !== 'N/A'),
-                                item.value,
-                              ];
-                          handleOptionPress(newOptions);
-                        }
+                        const newValue =
+                          item.value === 'N/A' ? 'N/A' : item.value;
+                        handleOptionPress(newValue);
+                        setIsActiveModal(!isActiveModal);
                       }}>
-                      {optionValue.includes(item.value) && (
+                      {optionValue === item.value && (
                         <IconImage size={30} source={Icons.general.check} />
                       )}
                     </Pressable>
@@ -134,24 +116,16 @@ const RockSelect: FC<PropsSelect> = ({
                 style={styles.contentFlatList}
                 renderItem={({item}) => (
                   <TouchableOpacity style={styles.optionDown}>
-                    <Text style={styles.optionText}>{`${item.label}`}</Text>
+                    <Text style={styles.optionText}>{item.label}</Text>
                     <Pressable
                       style={styles.boxSelect}
                       onPress={() => {
-                        if (item.value === 'N/A') {
-                          handleOptionPress(['N/A']);
-                        } else {
-                          const isSelected = optionValue.includes(item.value);
-                          const newOptions = isSelected
-                            ? optionValue.filter(value => value !== item.value)
-                            : [
-                                ...optionValue.filter(value => value !== 'N/A'),
-                                item.value,
-                              ];
-                          handleOptionPress(newOptions);
-                        }
+                        const newValue =
+                          item.value === 'N/A' ? 'N/A' : item.value;
+                        handleOptionPress(newValue);
+                        setIsActiveModal(!isActiveModal);
                       }}>
-                      {optionValue.includes(item.value) && (
+                      {optionValue === item.value && (
                         <IconImage size={30} source={Icons.general.check} />
                       )}
                     </Pressable>
@@ -161,8 +135,7 @@ const RockSelect: FC<PropsSelect> = ({
             </View>
             <View style={styles.containerTextDown}>
               <Text style={styles.textDown}>
-                *Seleccionar la o las piedras que requiere para el modelo
-                elegido.
+                *Seleccione solo una piedra para el modelo elegido.
               </Text>
             </View>
           </View>
@@ -243,7 +216,6 @@ const styles = StyleSheet.create({
     fontSize: Responsive(16),
     color: Colors.black,
     fontWeight: '500',
-
   },
   closeButton: {
     padding: Responsive(10),

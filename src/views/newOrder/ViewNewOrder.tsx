@@ -22,21 +22,62 @@ moment.locale('es');
 
 interface PropsComponenet {
   setControlerView: (data: number) => void;
+  userEmail: string;
+  setModel: (data: string) => void;
+  model: string;
+  setCaratage: (data: string) => void;
+  caratage: string;
+  setColor: (data: string) => void;
+  color: string;
+  setRock: (data: string) => void;
+  rock: string;
+  setSize: (data: string[]) => void;
+  size: string[];
+  setLong: (data: string[]) => void;
+  long: string[];
+  setInitialName: (data: string[]) => void;
+  initialName: string[];
+  setTotalPieces: (data: string) => void;
+  totalPieces: string;
+  setName: (data: string[]) => void;
+  name: string[];
+  setObservations: (data: string) => void;
+  observations: string;
 }
-const ViewNewOrder: FC<PropsComponenet> = ({setControlerView}) => {
+const ViewNewOrder: FC<PropsComponenet> = ({
+  setControlerView,
+  userEmail,
+  setModel,
+  model,
+  setCaratage,
+  caratage,
+  setColor,
+  color,
+  setRock,
+  rock,
+  setSize,
+  size,
+  setLong,
+  long,
+  setInitialName,
+  initialName,
+  setTotalPieces,
+  totalPieces,
+  setName,
+  name,
+  setObservations,
+  observations,
+}) => {
   const navigation = useCustomNavigation();
   const formattedDate = moment(new Date()).format('DD-MMM-YYYY').toLowerCase();
 
-  const [model, setModel] = useState<string>('');
-  const [caratage, setCaratage] = useState<string>('');
-  const [color, setColor] = useState<string>('');
-  const [rock, setRock] = useState<string[]>(['N/A']);
-  const [size, setSize] = useState<string[]>(['N/A']);
-  const [long, setLong] = useState<string[]>(['N/A']);
-  const [initialName, setInitialName] = useState<string[]>(['N/A']);
-  const [name, setName] = useState<string[]>(['N/A']);
-  const [totalPieces, setTotalPieces] = useState<string>('12');
-  const [observations, setObservations] = useState<string>('');
+  const [showLong, setShowLong] = useState<boolean>(false);
+  const [showInitialName, setShowInitialName] = useState<boolean>(false);
+  const [showName, setShowName] = useState<boolean>(false);
+
+  // console.log('TCL: [userEmail', userEmail);
+
+  const [estadoTest, setEstadoTest] = useState<any[]>([{count: 0, name: '4'}]);
 
   const handleDelete = () => {
     return Alert.alert(
@@ -62,6 +103,7 @@ const ViewNewOrder: FC<PropsComponenet> = ({setControlerView}) => {
       {cancelable: false},
     );
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.containerText}>
@@ -71,7 +113,7 @@ const ViewNewOrder: FC<PropsComponenet> = ({setControlerView}) => {
         </View>
         <View style={styles.containerLabel}>
           <Text style={styles.labelText}>Cliente</Text>
-          <Text style={styles.textTitle}>556478</Text>
+          <Text style={styles.textTitle}>{userEmail}</Text>
         </View>
       </View>
 
@@ -88,13 +130,36 @@ const ViewNewOrder: FC<PropsComponenet> = ({setControlerView}) => {
         />
         <ColorSelect handleOptionPress={setColor} optionValue={color} />
         <RockSelect handleOptionPress={setRock} optionValue={rock} />
-        <SizeSelect handleOptionPress={setSize} optionValue={size} />
-        <LongSelect handleOptionPress={setLong} optionValue={long} />
-        <InitialNameSelect
-          handleOptionPress={setInitialName}
-          optionValue={initialName}
+        <SizeSelect
+          estadoTest={estadoTest}
+          setEstadoTest={setEstadoTest}
+          handleOptionPress={setSize}
+          optionValue={size}
+          setShowLong={setShowLong}
         />
-        <NameSelect handleOptionPress={setName} optionValue={name} />
+        {!showLong ? (
+          <></>
+        ) : (
+          <LongSelect
+            handleOptionPress={setLong}
+            optionValue={long}
+            setShowInitialName={setShowInitialName}
+          />
+        )}
+        {!showInitialName && showLong ? (
+          <></>
+        ) : (
+          <InitialNameSelect
+            handleOptionPress={setInitialName}
+            optionValue={initialName}
+            setShowName={setShowName}
+          />
+        )}
+        {!showName ? (
+          <></>
+        ) : (
+          <NameSelect handleOptionPress={setName} optionValue={name} />
+        )}
         <OnllyItem
           label="Piezas totales"
           onChangeText={setTotalPieces}

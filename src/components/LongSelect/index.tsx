@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {
   FlatList,
   Modal,
@@ -20,16 +20,62 @@ import CustomBotton from '../CustomBotton';
 interface PropsSelect {
   handleOptionPress?: (data: string[]) => void;
   optionValue: string[];
+  setShowInitialName: (value:boolean) => void;
 }
 
 const LongSelect: FC<PropsSelect> = ({
   //   handleOptionPress = () => {},
-  optionValue = [],
+  // optionValue = [],
+  setShowInitialName
 }) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
   const [isNa, setIsNa] = useState<boolean>(false);
+  const [totalPieces, setTotalPieces] = useState<any[]>([]);
+  const [labelPieces, setLabelPieces] = useState<number>(0);
+  const [disabled, setDisabled] = useState<boolean>(false);
 
-  console.log('optionValue', optionValue);
+
+  const handleSaveData = (data: any) => {
+    // Verificar si el nombre ya existe en la lista
+    setTotalPieces(prevState => {
+      const index = prevState.findIndex(item => item.name === data.name);
+      if (index !== -1) {
+        // Si ya existe, actualizamos la cantidad
+        const updatedList = [...prevState];
+        updatedList[index].count = data.count;
+        return updatedList;
+      } else {
+        // Si no existe, agregamos un nuevo elemento
+        return [...prevState, data];
+      }
+    });
+  };
+
+  const handleTotalPiece = () => {
+    const pieces = totalPieces?.map((el: any) => {
+      let total: number = 0;
+      if (el.count > 0) {
+        total += el.count;
+      }
+      return total;
+    });
+    setLabelPieces(
+      pieces.reduce((a, b) => {
+        return a + b;
+      }, 0),
+    );
+  };
+
+  useEffect(() => {
+    handleTotalPiece();
+    // if (disabled) {
+    //   handleOptionPress(['N/A']);
+    // } else {
+    //   handleOptionPress(totalPieces);
+    // }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [totalPieces]);
+
   return (
     <>
       <View style={styles.container}>
@@ -41,9 +87,7 @@ const LongSelect: FC<PropsSelect> = ({
           onPress={() => setIsActiveModal(!isActiveModal)}>
           <View style={styles.input}>
             <Text style={styles.textValue}>
-              {optionValue.length > 1
-                ? `${optionValue.slice(0, 1).join(', ')} ...`
-                : optionValue.join(', ')}
+            {disabled ? 'N/A' : ''}
             </Text>
             <View style={styles.arrowContainer}>
               <IconImage size={15} source={Icons.general.arrowDown} />
@@ -67,7 +111,11 @@ const LongSelect: FC<PropsSelect> = ({
                 <Text style={styles.optionText}>{'No Apllica'}</Text>
                 <Pressable
                   style={styles.boxSelect}
-                  onPress={() => setIsNa(!isNa)}>
+                  onPress={() => {
+                    setIsNa(!isNa);
+                    setDisabled(!isNa);
+                    setShowInitialName(!isNa);
+                  }}>
                   {isNa && <IconImage size={30} source={Icons.general.check} />}
                 </Pressable>
               </View>
@@ -78,8 +126,15 @@ const LongSelect: FC<PropsSelect> = ({
                 renderItem={({item}) => (
                   <View style={styles.option}>
                     <Text
-                      style={styles.optionText}>{`Largo ${item.label} cm`}</Text>
-                    <Count />
+                      style={
+                        styles.optionText
+                      }>{`Largo ${item.label} cm`}</Text>
+                    <Count
+                      name={item.label}
+                      handleSaveData={handleSaveData}
+                      disable={disabled}
+                      setDisabled={setDisabled}
+                    />
                   </View>
                 )}
               />
@@ -87,7 +142,7 @@ const LongSelect: FC<PropsSelect> = ({
             <View style={styles.containerTextDown}>
               <Text style={styles.textDown}>TOTAL</Text>
               <View style={styles.totalBox}>
-                <Text style={styles.textDown}>7 piezas</Text>
+                <Text style={styles.textDown}>{labelPieces} piezas</Text>
               </View>
             </View>
             <View style={styles.btnContainer}>
@@ -174,7 +229,6 @@ const styles = StyleSheet.create({
     fontSize: Responsive(16),
     color: Colors.black,
     fontWeight: '500',
-
   },
   closeButton: {
     padding: Responsive(10),
