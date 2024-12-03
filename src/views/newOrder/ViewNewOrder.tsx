@@ -43,6 +43,8 @@ interface PropsComponenet {
   name: string[];
   setObservations: (data: string) => void;
   observations: string;
+  setTotalPiecesInSize: (data: number) => void;
+  totalPiecesInSize: number;
 }
 const ViewNewOrder: FC<PropsComponenet> = ({
   setControlerView,
@@ -67,6 +69,8 @@ const ViewNewOrder: FC<PropsComponenet> = ({
   name,
   setObservations,
   observations,
+  setTotalPiecesInSize,
+  totalPiecesInSize,
 }) => {
   const navigation = useCustomNavigation();
   const formattedDate = moment(new Date()).format('DD-MMM-YYYY').toLowerCase();
@@ -77,7 +81,9 @@ const ViewNewOrder: FC<PropsComponenet> = ({
 
   // console.log('TCL: [userEmail', userEmail);
 
-  const [estadoTest, setEstadoTest] = useState<any[]>([{count: 0, name: '4'}]);
+  const [stateGlobalSize, setStateGlobalSize] = useState<any[]>([{count: 0, name: '4'}]);
+  const [stateGlobalInitial, setStateGlobalInitial] = useState<any[]>([{count: 0, name: 'A'}]);
+  const [stateGlobalLong, setStateGlobalLong] = useState<any[]>([{count: 0, name: '18'}]);
 
   const handleDelete = () => {
     return Alert.alert(
@@ -131,8 +137,10 @@ const ViewNewOrder: FC<PropsComponenet> = ({
         <ColorSelect handleOptionPress={setColor} optionValue={color} />
         <RockSelect handleOptionPress={setRock} optionValue={rock} />
         <SizeSelect
-          estadoTest={estadoTest}
-          setEstadoTest={setEstadoTest}
+        setTotalPiecesInSize={setTotalPiecesInSize}
+        totalPiecesInSize={totalPiecesInSize}
+          stateGlobalSize={stateGlobalSize}
+          setStateGlobalSize={setStateGlobalSize}
           handleOptionPress={setSize}
           optionValue={size}
           setShowLong={setShowLong}
@@ -141,6 +149,8 @@ const ViewNewOrder: FC<PropsComponenet> = ({
           <></>
         ) : (
           <LongSelect
+          stateGlobalLong={stateGlobalLong}
+          setStateGlobalLong={setStateGlobalLong}
             handleOptionPress={setLong}
             optionValue={long}
             setShowInitialName={setShowInitialName}
@@ -150,9 +160,12 @@ const ViewNewOrder: FC<PropsComponenet> = ({
           <></>
         ) : (
           <InitialNameSelect
+          setStateGlobalInitial={setStateGlobalInitial}
+          stateGlobalInitial={stateGlobalInitial}
             handleOptionPress={setInitialName}
             optionValue={initialName}
             setShowName={setShowName}
+            totalPiecesInSize={totalPiecesInSize}
           />
         )}
         {!showName ? (

@@ -21,83 +21,42 @@ interface PropsSelect {
   handleOptionPress?: (data: string[]) => void;
   optionValue: string[];
   setShowLong: (value: boolean) => void;
-  setEstadoTest: any;
-  estadoTest: any;
+  setStateGlobalSize: any;
+  stateGlobalSize: any;
+  setTotalPiecesInSize: (data: number) => void;
+  totalPiecesInSize: number;
 }
 
 const SizeSelect: FC<PropsSelect> = ({
   // handleOptionPress = () => {},
   setShowLong,
-  setEstadoTest,
-  estadoTest,
+  setStateGlobalSize,
+  stateGlobalSize,
+  setTotalPiecesInSize,
+  totalPiecesInSize,
   // optionValue = [],
 }) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
   const [isNa, setIsNa] = useState<boolean>(false);
-
-  // const [totalPieces, setTotalPieces] = useState<any[]>([]);
-  // const [labelPieces, setLabelPieces] = useState<number>(0);
   const [disabled, setDisabled] = useState<boolean>(false);
 
   const handleSaveData = (data: any) => {
-    setEstadoTest((prev: any) => {
-      // Mapeamos sobre el estado anterior y actualizamos el item correspondiente
+    setStateGlobalSize((prev: any) => {
       const updatedState = prev.map((item: any) =>
         item.name === data.name ? {...item, count: data.count} : item,
       );
-      // Si no encontramos un item con el nombre especificado, lo agregamos
       if (!updatedState.some((item: any) => item.name === data.name)) {
         updatedState.push(data);
       }
+
+      const totalCount: any = updatedState?.reduce((sum: any, item: any) => {
+        return item.count > 0 ? sum + item.count : sum;
+      }, 0);
+      setTotalPiecesInSize(totalCount);
       return updatedState;
     });
   };
 
-  // const handleSaveData = (data: any) => {
-  // console.log('data en la funcion de giuardar', data);
-  // setEstadoTest([data]);
-  //   // Verificar si el nombre ya existe en la lista
-  //   setTotalPieces(prevState => {
-  //     const index = prevState.findIndex(item => item.name === data.name);
-  //     if (index !== -1) {
-  //       // Si ya existe, actualizamos la cantidad
-  //       const updatedList = [...prevState];
-  //       updatedList[index].count = data.count;
-  //       return updatedList;
-  //     } else {
-  //       // Si no existe, agregamos un nuevo elemento
-
-  //       return [...prevState, data];
-  //     }
-  //   });
-  // };
-
-  // const handleTotalPiece = () => {
-  //   const pieces = totalPieces?.map((el: any) => {
-  //     let total: number = 0;
-  //     if (el.count > 0) {
-  //       total += el.count;
-  //     }
-  //     return total;
-  //   });
-  //   setLabelPieces(
-  //     pieces.reduce((a, b) => {
-  //       return a + b;
-  //     }, 0),
-  //   );
-  // };
-
-  // useEffect(() => {
-  //   setEstadoTest(totalPieces);
-
-  //   handleTotalPiece();
-  //   if (disabled) {
-  //     handleOptionPress(['N/A']);
-  //   } else {
-  //     handleOptionPress(totalPieces);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [totalPieces]);
   return (
     <>
       <View style={styles.container}>
@@ -153,7 +112,7 @@ const SizeSelect: FC<PropsSelect> = ({
                       handleSaveData={handleSaveData}
                       disable={disabled}
                       setDisabled={setDisabled}
-                      estadoTest={estadoTest}
+                      stateGlobal={stateGlobalSize}
                     />
                   </View>
                 )}
@@ -177,8 +136,7 @@ const SizeSelect: FC<PropsSelect> = ({
                     styles.textDown,
                     disabled && {color: Colors.gray_shadow},
                   ]}>
-                  {/* {labelPieces} piezas */}
-                  piezas
+                  {totalPiecesInSize} piezas
                 </Text>
               </View>
             </View>
@@ -276,7 +234,7 @@ const styles = StyleSheet.create({
   },
   closeButtonText: {
     fontSize: Responsive(16),
-    color: '#fff',
+    color: Colors.white,
   },
   textValue: {
     fontSize: Responsive(14),

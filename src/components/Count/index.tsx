@@ -9,7 +9,7 @@ interface PropsCount {
   handleSaveData(data: any): void;
   disable?: boolean;
   setDisabled: (data: boolean) => void;
-  estadoTest?: string[];
+  stateGlobal?: string[];
 }
 
 const Count: FC<PropsCount> = ({
@@ -17,15 +17,15 @@ const Count: FC<PropsCount> = ({
   handleSaveData,
   disable = false,
   setDisabled,
-  estadoTest,
+  stateGlobal,
 }) => {
   const [initialCount, setInitialCount] = useState<number>(0);
   const prevCountRef = useRef<number>(0); // Referencia para almacenar el valor anterior
 
-  // useEffect para manejar el estado inicial solo si cambia el estadoTest
+  // useEffect para manejar el estado inicial solo si cambia el stateGlobalSize
   useEffect(() => {
-    if (estadoTest) {
-      const filterObj: any = estadoTest.find((el: any) => el.name === name);
+    if (stateGlobal) {
+      const filterObj: any = stateGlobal.find((el: any) => el.name === name);
       if (
         filterObj &&
         filterObj.count !== undefined &&
@@ -35,7 +35,7 @@ const Count: FC<PropsCount> = ({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [estadoTest, name]); // Solo depende de estadoTest y name, no de initialCount
+  }, [stateGlobal, name]); // Solo depende de stateGlobalSize y name, no de initialCount
 
   // Maneja los incrementos y decrementos
   const handleCount = (_id: number) => {

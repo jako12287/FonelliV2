@@ -23,6 +23,7 @@ const NewOrder = () => {
   const [userEmail, setUserEmail] = useState<string>('');
 
   //main state size componen
+  const [totalPiecesInSize, setTotalPiecesInSize] = useState<number>(0);
 
   const orderCurrent = {
     userId,
@@ -58,6 +59,8 @@ const NewOrder = () => {
     <View style={styles.container}>
       {controlerView === 1 && (
         <ViewNewOrder
+          setTotalPiecesInSize={setTotalPiecesInSize}
+          totalPiecesInSize={totalPiecesInSize}
           setControlerView={setControlerView}
           userEmail={userEmail}
           setCaratage={setCaratage}

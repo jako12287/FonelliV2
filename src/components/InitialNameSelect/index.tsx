@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useState} from 'react';
 import {
   FlatList,
   Modal,
@@ -21,61 +21,42 @@ interface PropsSelect {
   handleOptionPress?: (data: string[]) => void;
   optionValue: string[];
   setShowName: (value: boolean) => void;
+  setStateGlobalInitial: any;
+  stateGlobalInitial: any;
+  totalPiecesInSize: number;
 }
 
 const InitialNameSelect: FC<PropsSelect> = ({
-  handleOptionPress = () => {},
+  // handleOptionPress = () => {},
+  setStateGlobalInitial,
+  stateGlobalInitial,
+  totalPiecesInSize,
   // optionValue = [],
   setShowName,
 }) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
   const [isNa, setIsNa] = useState<boolean>(false);
-
-  const [totalPieces, setTotalPieces] = useState<any[]>([]);
-  const [labelPieces, setLabelPieces] = useState<number>(0);
   const [disabled, setDisabled] = useState<boolean>(false);
-
+  const [totalPiecesInLocal, setTotalPiecesInLocal] = useState<any>(0);
 
   const handleSaveData = (data: any) => {
-    // Verificar si el nombre ya existe en la lista
-    setTotalPieces(prevState => {
-      const index = prevState.findIndex(item => item.name === data.name);
-      if (index !== -1) {
-        // Si ya existe, actualizamos la cantidad
-        const updatedList = [...prevState];
-        updatedList[index].count = data.count;
-        return updatedList;
-      } else {
-        // Si no existe, agregamos un nuevo elemento
-        return [...prevState, data];
+    setStateGlobalInitial((prev: any) => {
+      const updatedState = prev.map((item: any) =>
+        item.name === data.name ? {...item, count: data.count} : item,
+      );
+      if (!updatedState.some((item: any) => item.name === data.name)) {
+        updatedState.push(data);
       }
+
+      const totalCount: any = updatedState?.reduce((sum: any, item: any) => {
+        return item.count > 0 ? sum + item.count : sum;
+      }, 0);
+      console.log(' la info del total en initial es =>', totalCount);
+      console.log(' la info del total en size es =>', totalPiecesInSize);
+      setTotalPiecesInLocal(totalCount);
+      return updatedState;
     });
   };
-
-  const handleTotalPiece = () => {
-    const pieces = totalPieces?.map((el: any) => {
-      let total: number = 0;
-      if (el.count > 0) {
-        total += el.count;
-      }
-      return total;
-    });
-    setLabelPieces(
-      pieces.reduce((a, b) => {
-        return a + b;
-      }, 0),
-    );
-  };
-
-  useEffect(() => {
-    handleTotalPiece();
-    if (disabled) {
-      handleOptionPress(['N/A']);
-    } else {
-      handleOptionPress(totalPieces);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [totalPieces]);
 
   return (
     <>
@@ -87,9 +68,7 @@ const InitialNameSelect: FC<PropsSelect> = ({
           style={styles.containerInput}
           onPress={() => setIsActiveModal(!isActiveModal)}>
           <View style={styles.input}>
-            <Text style={styles.textValue}>
-            {disabled ? 'N/A' : ''}
-            </Text>
+            <Text style={styles.textValue}>{disabled ? 'N/A' : ''}</Text>
             <View style={styles.arrowContainer}>
               <IconImage size={15} source={Icons.general.arrowDown} />
             </View>
@@ -128,26 +107,65 @@ const InitialNameSelect: FC<PropsSelect> = ({
                   <View style={styles.option}>
                     <Text style={styles.optionText}>{`${item.label}`}</Text>
                     <Count
+                      key={item.label}
                       name={item.label}
                       handleSaveData={handleSaveData}
                       disable={disabled}
                       setDisabled={setDisabled}
+                      stateGlobal={stateGlobalInitial}
                     />
                   </View>
                 )}
               />
             </View>
             <View style={styles.containerTextDown}>
-              <Text style={styles.textDown}>TOTAL</Text>
-              <View style={styles.totalBox}>
-                <Text style={styles.textDown}>{labelPieces} piezas</Text>
+              <Text
+                style={[
+                  styles.textDown,
+                  disabled && {color: Colors.gray_shadow},
+                ]}>
+                TOTAL
+              </Text>
+              <View
+                style={[
+                  styles.totalBox,
+                  disabled && {borderColor: Colors.gray_shadow},
+                ]}>
+                <Text
+                  style={[
+                    styles.textDown,
+                    disabled && {color: Colors.gray_shadow},
+                    !disabled &&
+                      totalPiecesInLocal !== totalPiecesInSize && {
+                        color: Colors.error_color,
+                      },
+                  ]}>
+                  {totalPiecesInLocal} piezas
+                </Text>
               </View>
+              {totalPiecesInLocal !== totalPiecesInSize && !disabled && (
+                <View style={styles.textErrorContainer}>
+                  <Text style={styles.textError}>
+                    Las cantidades deben coincidir por talla {totalPiecesInSize}
+                  </Text>
+                </View>
+              )}
             </View>
             <View style={styles.btnContainer}>
-              <CustomBotton
-                title="Guardar"
-                onClick={() => setIsActiveModal(false)}
-              />
+              {!disabled && totalPiecesInLocal !== totalPiecesInSize ? (
+                <CustomBotton
+                  title="Guardar"
+                  onClick={() => {}}
+                  color={Colors.gray_shadow}
+                  colorBottonBG={Colors.gary_text}
+                  colorShadow={Colors.gary_text}
+                />
+              ) : (
+                <CustomBotton
+                  title="Guardar"
+                  onClick={() => setIsActiveModal(false)}
+                />
+              )}
             </View>
           </View>
         </View>
@@ -270,6 +288,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: Responsive(30),
     gap: Responsive(10),
+    position: 'relative',
   },
   boxSelect: {
     borderWidth: 1,
@@ -304,5 +323,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-end',
     marginBottom: Responsive(20),
+  },
+  textErrorContainer: {
+    position: 'absolute',
+    bottom: Responsive(-20),
+  },
+  textError: {
+    fontFamily: fonts.poppins_medium,
+    color: Colors.error_color,
+    fontSize: Responsive(12),
   },
 });

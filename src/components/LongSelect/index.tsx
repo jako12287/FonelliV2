@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useState} from 'react';
 import {
   FlatList,
   Modal,
@@ -20,61 +20,39 @@ import CustomBotton from '../CustomBotton';
 interface PropsSelect {
   handleOptionPress?: (data: string[]) => void;
   optionValue: string[];
-  setShowInitialName: (value:boolean) => void;
+  setShowInitialName: (value: boolean) => void;
+  stateGlobalLong: any;
+  setStateGlobalLong: any;
 }
 
 const LongSelect: FC<PropsSelect> = ({
   //   handleOptionPress = () => {},
   // optionValue = [],
-  setShowInitialName
+  setShowInitialName,
+  setStateGlobalLong,
+  stateGlobalLong,
 }) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
   const [isNa, setIsNa] = useState<boolean>(false);
-  const [totalPieces, setTotalPieces] = useState<any[]>([]);
-  const [labelPieces, setLabelPieces] = useState<number>(0);
   const [disabled, setDisabled] = useState<boolean>(false);
 
-
   const handleSaveData = (data: any) => {
-    // Verificar si el nombre ya existe en la lista
-    setTotalPieces(prevState => {
-      const index = prevState.findIndex(item => item.name === data.name);
-      if (index !== -1) {
-        // Si ya existe, actualizamos la cantidad
-        const updatedList = [...prevState];
-        updatedList[index].count = data.count;
-        return updatedList;
-      } else {
-        // Si no existe, agregamos un nuevo elemento
-        return [...prevState, data];
+    setStateGlobalLong((prev: any) => {
+      const updatedState = prev.map((item: any) =>
+        item.name === data.name ? {...item, count: data.count} : item,
+      );
+      if (!updatedState.some((item: any) => item.name === data.name)) {
+        updatedState.push(data);
       }
+
+      console.log('en el long', stateGlobalLong);
+      // const totalCount: any = updatedState?.reduce((sum: any, item: any) => {
+      //   return item.count > 0 ? sum + item.count : sum;
+      // }, 0);
+      // setStateGlobalLong(totalCount);
+      return updatedState;
     });
   };
-
-  const handleTotalPiece = () => {
-    const pieces = totalPieces?.map((el: any) => {
-      let total: number = 0;
-      if (el.count > 0) {
-        total += el.count;
-      }
-      return total;
-    });
-    setLabelPieces(
-      pieces.reduce((a, b) => {
-        return a + b;
-      }, 0),
-    );
-  };
-
-  useEffect(() => {
-    handleTotalPiece();
-    // if (disabled) {
-    //   handleOptionPress(['N/A']);
-    // } else {
-    //   handleOptionPress(totalPieces);
-    // }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [totalPieces]);
 
   return (
     <>
@@ -86,9 +64,7 @@ const LongSelect: FC<PropsSelect> = ({
           style={styles.containerInput}
           onPress={() => setIsActiveModal(!isActiveModal)}>
           <View style={styles.input}>
-            <Text style={styles.textValue}>
-            {disabled ? 'N/A' : ''}
-            </Text>
+            <Text style={styles.textValue}>{disabled ? 'N/A' : ''}</Text>
             <View style={styles.arrowContainer}>
               <IconImage size={15} source={Icons.general.arrowDown} />
             </View>
@@ -130,10 +106,12 @@ const LongSelect: FC<PropsSelect> = ({
                         styles.optionText
                       }>{`Largo ${item.label} cm`}</Text>
                     <Count
+                      key={item.label}
                       name={item.label}
                       handleSaveData={handleSaveData}
                       disable={disabled}
                       setDisabled={setDisabled}
+                      stateGlobal={stateGlobalLong}
                     />
                   </View>
                 )}
@@ -142,7 +120,10 @@ const LongSelect: FC<PropsSelect> = ({
             <View style={styles.containerTextDown}>
               <Text style={styles.textDown}>TOTAL</Text>
               <View style={styles.totalBox}>
-                <Text style={styles.textDown}>{labelPieces} piezas</Text>
+                <Text style={styles.textDown}>
+                  {/* {labelPieces} piezas */}
+                  piezas
+                </Text>
               </View>
             </View>
             <View style={styles.btnContainer}>
