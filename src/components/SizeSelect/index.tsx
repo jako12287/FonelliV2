@@ -18,8 +18,6 @@ import Count from '../Count';
 import CustomBotton from '../CustomBotton';
 
 interface PropsSelect {
-  handleOptionPress?: (data: string[]) => void;
-  optionValue: string[];
   setShowLong: (value: boolean) => void;
   setStateGlobalSize: any;
   stateGlobalSize: any;
@@ -28,13 +26,11 @@ interface PropsSelect {
 }
 
 const SizeSelect: FC<PropsSelect> = ({
-  // handleOptionPress = () => {},
   setShowLong,
   setStateGlobalSize,
   stateGlobalSize,
   setTotalPiecesInSize,
   totalPiecesInSize,
-  // optionValue = [],
 }) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
   const [isNa, setIsNa] = useState<boolean>(false);
@@ -67,7 +63,7 @@ const SizeSelect: FC<PropsSelect> = ({
           style={styles.containerInput}
           onPress={() => setIsActiveModal(!isActiveModal)}>
           <View style={styles.input}>
-            <Text style={styles.textValue}>{disabled ? 'N/A' : ''}</Text>
+            <Text style={styles.textValue}>{disabled ? 'N/A' : 'Seleccionado'}</Text>
             <View style={styles.arrowContainer}>
               <IconImage size={15} source={Icons.general.arrowDown} />
             </View>

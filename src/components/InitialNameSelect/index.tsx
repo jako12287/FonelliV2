@@ -18,21 +18,19 @@ import Count from '../Count';
 import CustomBotton from '../CustomBotton';
 
 interface PropsSelect {
-  handleOptionPress?: (data: string[]) => void;
-  optionValue: string[];
   setShowName: (value: boolean) => void;
   setStateGlobalInitial: any;
   stateGlobalInitial: any;
   totalPiecesInSize: number;
+  showLong: boolean;
 }
 
 const InitialNameSelect: FC<PropsSelect> = ({
-  // handleOptionPress = () => {},
   setStateGlobalInitial,
   stateGlobalInitial,
   totalPiecesInSize,
-  // optionValue = [],
   setShowName,
+  showLong,
 }) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
   const [isNa, setIsNa] = useState<boolean>(false);
@@ -51,8 +49,6 @@ const InitialNameSelect: FC<PropsSelect> = ({
       const totalCount: any = updatedState?.reduce((sum: any, item: any) => {
         return item.count > 0 ? sum + item.count : sum;
       }, 0);
-      console.log(' la info del total en initial es =>', totalCount);
-      console.log(' la info del total en size es =>', totalPiecesInSize);
       setTotalPiecesInLocal(totalCount);
       return updatedState;
     });
@@ -68,7 +64,7 @@ const InitialNameSelect: FC<PropsSelect> = ({
           style={styles.containerInput}
           onPress={() => setIsActiveModal(!isActiveModal)}>
           <View style={styles.input}>
-            <Text style={styles.textValue}>{disabled ? 'N/A' : ''}</Text>
+            <Text style={styles.textValue}>{disabled ? 'N/A' : 'Seleccionado'}</Text>
             <View style={styles.arrowContainer}>
               <IconImage size={15} source={Icons.general.arrowDown} />
             </View>
@@ -135,7 +131,8 @@ const InitialNameSelect: FC<PropsSelect> = ({
                   style={[
                     styles.textDown,
                     disabled && {color: Colors.gray_shadow},
-                    !disabled &&
+                    !showLong &&
+                      !disabled &&
                       totalPiecesInLocal !== totalPiecesInSize && {
                         color: Colors.error_color,
                       },
@@ -143,16 +140,21 @@ const InitialNameSelect: FC<PropsSelect> = ({
                   {totalPiecesInLocal} piezas
                 </Text>
               </View>
-              {totalPiecesInLocal !== totalPiecesInSize && !disabled && (
-                <View style={styles.textErrorContainer}>
-                  <Text style={styles.textError}>
-                    Las cantidades deben coincidir por talla {totalPiecesInSize}
-                  </Text>
-                </View>
-              )}
+              {!showLong &&
+                totalPiecesInLocal !== totalPiecesInSize &&
+                !disabled && (
+                  <View style={styles.textErrorContainer}>
+                    <Text style={styles.textError}>
+                      Las cantidades deben coincidir por talla{' '}
+                      {totalPiecesInSize}
+                    </Text>
+                  </View>
+                )}
             </View>
             <View style={styles.btnContainer}>
-              {!disabled && totalPiecesInLocal !== totalPiecesInSize ? (
+              {!showLong &&
+              !disabled &&
+              totalPiecesInLocal !== totalPiecesInSize ? (
                 <CustomBotton
                   title="Guardar"
                   onClick={() => {}}

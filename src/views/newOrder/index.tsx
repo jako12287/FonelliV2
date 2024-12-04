@@ -13,10 +13,6 @@ const NewOrder = () => {
   const [caratage, setCaratage] = useState<string>('');
   const [color, setColor] = useState<string>('');
   const [rock, setRock] = useState<string>('');
-  const [size, setSize] = useState<string[]>(['N/A']);
-  const [long, setLong] = useState<string[]>(['N/A']);
-  const [initialName, setInitialName] = useState<string[]>(['N/A']);
-  const [name, setName] = useState<string[]>(['N/A']);
   const [totalPieces, setTotalPieces] = useState<string>('12');
   const [observations, setObservations] = useState<string>('');
   const [userId, setUserId] = useState<string>('');
@@ -24,24 +20,27 @@ const NewOrder = () => {
 
   //main state size componen
   const [totalPiecesInSize, setTotalPiecesInSize] = useState<number>(0);
+  const [totalPiecesInLong, setTotalPiecesInLong] = useState<number>(0);
+  const [totalPiecesInName, setTotalPiecesInName] = useState<any>(0);
 
-  const orderCurrent = {
-    userId,
-    model,
-    caratage,
-    color,
-    rock,
-    size,
-    long,
-    initialName,
-    name,
-    totalPieces,
-    observations,
-  };
+  //state globlas
+  const [stateGlobalSize, setStateGlobalSize] = useState<any[]>([
+    {count: 0, name: '4'},
+  ]);
+  const [stateGlobalInitial, setStateGlobalInitial] = useState<any[]>([
+    {count: 0, name: 'A'},
+  ]);
+  const [stateGlobalLong, setStateGlobalLong] = useState<any[]>([
+    {count: 0, name: '18'},
+  ]);
+  const [stateGlobalName, setStateGlobalName] = useState([
+    {name: 'name1', value: '', count: 0},
+  ]);
 
-  useEffect(() => {
-    console.log('esto es size desde neworder', size);
-  }, [size]);
+  //states show
+  const [showLong, setShowLong] = useState<boolean>(false);
+  const [showInitialName, setShowInitialName] = useState<boolean>(false);
+  const [showName, setShowName] = useState<boolean>(false);
 
   useEffect(() => {
     const getUser = async () => {
@@ -55,32 +54,56 @@ const NewOrder = () => {
     getUser();
   }, []);
 
+  const orderCurrent: any = {
+    userId,
+    model,
+    caratage,
+    color,
+    rock,
+  };
+  if (!showLong) {
+    orderCurrent.size = stateGlobalSize;
+  }
+  if (!showName) {
+    orderCurrent.initialName = stateGlobalInitial;
+  }
+
   return (
     <View style={styles.container}>
       {controlerView === 1 && (
         <ViewNewOrder
+          setTotalPiecesInName={setTotalPiecesInName}
+          totalPiecesInName={totalPiecesInName}
+          setStateGlobalName={setStateGlobalName}
+          stateGlobalName={stateGlobalName}
+          setShowInitialName={setShowInitialName}
+          setShowLong={setShowLong}
+          setShowName={setShowName}
+          showInitialName={showInitialName}
+          showLong={showLong}
+          showName={showName}
+          setStateGlobalInitial={setStateGlobalInitial}
+          setStateGlobalLong={setStateGlobalLong}
+          setStateGlobalSize={setStateGlobalSize}
+          stateGlobalInitial={stateGlobalInitial}
+          stateGlobalLong={stateGlobalLong}
+          stateGlobalSize={stateGlobalSize}
+          setTotalPiecesInLong={setTotalPiecesInLong}
+          totalPiecesInLong={totalPiecesInLong}
           setTotalPiecesInSize={setTotalPiecesInSize}
           totalPiecesInSize={totalPiecesInSize}
           setControlerView={setControlerView}
           userEmail={userEmail}
           setCaratage={setCaratage}
           caratage={caratage}
-          setInitialName={setInitialName}
-          initialName={initialName}
           setColor={setColor}
           color={color}
-          setLong={setLong}
-          long={long}
           setModel={setModel}
           model={model}
-          setName={setName}
-          name={name}
           setObservations={setObservations}
           observations={observations}
           setRock={setRock}
           rock={rock}
-          setSize={setSize}
-          size={size}
           setTotalPieces={setTotalPieces}
           totalPieces={totalPieces}
         />

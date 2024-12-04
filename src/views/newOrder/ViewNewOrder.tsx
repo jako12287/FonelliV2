@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC} from 'react';
 import {Alert, Pressable, StyleSheet, Text, View} from 'react-native';
 import InputControlOff from '../../components/InputControlOff';
 import CaratageSelect from '../../components/CaratageSelect';
@@ -31,20 +31,30 @@ interface PropsComponenet {
   color: string;
   setRock: (data: string) => void;
   rock: string;
-  setSize: (data: string[]) => void;
-  size: string[];
-  setLong: (data: string[]) => void;
-  long: string[];
-  setInitialName: (data: string[]) => void;
-  initialName: string[];
   setTotalPieces: (data: string) => void;
   totalPieces: string;
-  setName: (data: string[]) => void;
-  name: string[];
   setObservations: (data: string) => void;
   observations: string;
   setTotalPiecesInSize: (data: number) => void;
   totalPiecesInSize: number;
+  setTotalPiecesInLong: (data: number) => void;
+  totalPiecesInLong: number;
+  stateGlobalLong: any;
+  setStateGlobalSize: any;
+  stateGlobalSize: any;
+  setStateGlobalLong: any;
+  setStateGlobalInitial: any;
+  stateGlobalInitial: any;
+  setShowLong: (data: boolean) => void;
+  showLong: boolean;
+  setShowInitialName: (data: boolean) => void;
+  showInitialName: boolean;
+  setShowName: (data: boolean) => void;
+  showName: boolean;
+  setStateGlobalName: any;
+  stateGlobalName: any;
+  setTotalPiecesInName: any;
+  totalPiecesInName: any;
 }
 const ViewNewOrder: FC<PropsComponenet> = ({
   setControlerView,
@@ -57,33 +67,33 @@ const ViewNewOrder: FC<PropsComponenet> = ({
   color,
   setRock,
   rock,
-  setSize,
-  size,
-  setLong,
-  long,
-  setInitialName,
-  initialName,
   setTotalPieces,
   totalPieces,
-  setName,
-  name,
   setObservations,
   observations,
   setTotalPiecesInSize,
   totalPiecesInSize,
+  setTotalPiecesInLong,
+  totalPiecesInLong,
+  stateGlobalSize,
+  stateGlobalLong,
+  setStateGlobalSize,
+  setStateGlobalLong,
+  setStateGlobalInitial,
+  stateGlobalInitial,
+  setShowLong,
+  showLong,
+  setShowInitialName,
+  showInitialName,
+  setShowName,
+  showName,
+  setStateGlobalName,
+  stateGlobalName,
+  setTotalPiecesInName,
+  totalPiecesInName,
 }) => {
   const navigation = useCustomNavigation();
   const formattedDate = moment(new Date()).format('DD-MMM-YYYY').toLowerCase();
-
-  const [showLong, setShowLong] = useState<boolean>(false);
-  const [showInitialName, setShowInitialName] = useState<boolean>(false);
-  const [showName, setShowName] = useState<boolean>(false);
-
-  // console.log('TCL: [userEmail', userEmail);
-
-  const [stateGlobalSize, setStateGlobalSize] = useState<any[]>([{count: 0, name: '4'}]);
-  const [stateGlobalInitial, setStateGlobalInitial] = useState<any[]>([{count: 0, name: 'A'}]);
-  const [stateGlobalLong, setStateGlobalLong] = useState<any[]>([{count: 0, name: '18'}]);
 
   const handleDelete = () => {
     return Alert.alert(
@@ -137,42 +147,64 @@ const ViewNewOrder: FC<PropsComponenet> = ({
         <ColorSelect handleOptionPress={setColor} optionValue={color} />
         <RockSelect handleOptionPress={setRock} optionValue={rock} />
         <SizeSelect
-        setTotalPiecesInSize={setTotalPiecesInSize}
-        totalPiecesInSize={totalPiecesInSize}
+          setTotalPiecesInSize={setTotalPiecesInSize}
+          totalPiecesInSize={totalPiecesInSize}
           stateGlobalSize={stateGlobalSize}
           setStateGlobalSize={setStateGlobalSize}
-          handleOptionPress={setSize}
-          optionValue={size}
           setShowLong={setShowLong}
         />
-        {!showLong ? (
-          <></>
-        ) : (
+
+        {showLong && (
           <LongSelect
-          stateGlobalLong={stateGlobalLong}
-          setStateGlobalLong={setStateGlobalLong}
-            handleOptionPress={setLong}
-            optionValue={long}
+            setTotalPiecesInLong={setTotalPiecesInLong}
+            totalPiecesInLong={totalPiecesInLong}
+            stateGlobalLong={stateGlobalLong}
+            setStateGlobalLong={setStateGlobalLong}
             setShowInitialName={setShowInitialName}
           />
         )}
-        {!showInitialName && showLong ? (
-          <></>
-        ) : (
+
+        {!showLong && (
           <InitialNameSelect
-          setStateGlobalInitial={setStateGlobalInitial}
-          stateGlobalInitial={stateGlobalInitial}
-            handleOptionPress={setInitialName}
-            optionValue={initialName}
+            showLong={showLong}
+            setStateGlobalInitial={setStateGlobalInitial}
+            stateGlobalInitial={stateGlobalInitial}
             setShowName={setShowName}
             totalPiecesInSize={totalPiecesInSize}
           />
         )}
-        {!showName ? (
-          <></>
-        ) : (
-          <NameSelect handleOptionPress={setName} optionValue={name} />
+        {showLong && showInitialName && (
+          <InitialNameSelect
+            showLong={showLong}
+            setStateGlobalInitial={setStateGlobalInitial}
+            stateGlobalInitial={stateGlobalInitial}
+            setShowName={setShowName}
+            totalPiecesInSize={totalPiecesInSize}
+          />
         )}
+
+        {!showLong && showName && (
+          <NameSelect
+            setStateGlobalName={setStateGlobalName}
+            stateGlobalName={stateGlobalName}
+            setTotalPiecesInName={setTotalPiecesInName}
+            totalPiecesInName={totalPiecesInName}
+            showLong={showLong}
+            totalPiecesInSize={totalPiecesInSize}
+          />
+        )}
+
+        {showLong && showName && showInitialName && (
+          <NameSelect
+            setStateGlobalName={setStateGlobalName}
+            stateGlobalName={stateGlobalName}
+            setTotalPiecesInName={setTotalPiecesInName}
+            totalPiecesInName={totalPiecesInName}
+            showLong={showLong}
+            totalPiecesInSize={totalPiecesInSize}
+          />
+        )}
+
         <OnllyItem
           label="Piezas totales"
           onChangeText={setTotalPieces}

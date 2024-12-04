@@ -7,7 +7,6 @@ export const CustomAlert = () => {
     [
       {
         text: 'OK',
-        onPress: () => console.log('Alerta cerrada'),
       },
     ],
     {cancelable: true},
@@ -21,7 +20,6 @@ export const CustomAlertGlobal = (message: string) => {
     [
       {
         text: 'OK',
-        onPress: () => console.log('Alerta cerrada'),
       },
     ],
     {cancelable: true},

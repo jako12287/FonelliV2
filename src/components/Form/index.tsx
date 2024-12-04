@@ -42,7 +42,6 @@ const Form = () => {
     };
     try {
       const result = await loginApi(dataSend);
-      console.log('desde la vista datos', result);
       if (
         result.message === 'Revisa las credenciales.' ||
         result.message === 'Contraseña incorrecta.'

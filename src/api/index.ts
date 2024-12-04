@@ -24,7 +24,6 @@ export const loginApi = async ({email, password}: PropsCredential) => {
         },
       },
     );
-    console.log('Respuesta de la API:', response.data);
 
     return response.data;
   } catch (error: any) {
@@ -47,7 +46,6 @@ export const changePassword = async ({_id, newPassword}: PropsChangePass) => {
         },
       },
     );
-    console.log('Respuesta de la API change:', response.data);
     return response.data;
   } catch (error: any) {
     console.error(

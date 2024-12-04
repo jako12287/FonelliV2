@@ -8,7 +8,7 @@ interface PropsCount {
   name: string;
   handleSaveData(data: any): void;
   disable?: boolean;
-  setDisabled: (data: boolean) => void;
+  setDisabled?: (data: boolean) => void;
   stateGlobal?: string[];
 }
 
@@ -16,7 +16,7 @@ const Count: FC<PropsCount> = ({
   name,
   handleSaveData,
   disable = false,
-  setDisabled,
+  setDisabled = () => {},
   stateGlobal,
 }) => {
   const [initialCount, setInitialCount] = useState<number>(0);

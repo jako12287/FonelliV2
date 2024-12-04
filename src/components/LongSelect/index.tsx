@@ -18,19 +18,19 @@ import Count from '../Count';
 import CustomBotton from '../CustomBotton';
 
 interface PropsSelect {
-  handleOptionPress?: (data: string[]) => void;
-  optionValue: string[];
   setShowInitialName: (value: boolean) => void;
   stateGlobalLong: any;
   setStateGlobalLong: any;
+  setTotalPiecesInLong: (data: number) => void;
+  totalPiecesInLong: number;
 }
 
 const LongSelect: FC<PropsSelect> = ({
-  //   handleOptionPress = () => {},
-  // optionValue = [],
   setShowInitialName,
   setStateGlobalLong,
   stateGlobalLong,
+  setTotalPiecesInLong,
+  totalPiecesInLong,
 }) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
   const [isNa, setIsNa] = useState<boolean>(false);
@@ -45,11 +45,10 @@ const LongSelect: FC<PropsSelect> = ({
         updatedState.push(data);
       }
 
-      console.log('en el long', stateGlobalLong);
-      // const totalCount: any = updatedState?.reduce((sum: any, item: any) => {
-      //   return item.count > 0 ? sum + item.count : sum;
-      // }, 0);
-      // setStateGlobalLong(totalCount);
+      const totalCount: any = updatedState?.reduce((sum: any, item: any) => {
+        return item.count > 0 ? sum + item.count : sum;
+      }, 0);
+      setTotalPiecesInLong(totalCount);
       return updatedState;
     });
   };
@@ -64,7 +63,9 @@ const LongSelect: FC<PropsSelect> = ({
           style={styles.containerInput}
           onPress={() => setIsActiveModal(!isActiveModal)}>
           <View style={styles.input}>
-            <Text style={styles.textValue}>{disabled ? 'N/A' : ''}</Text>
+            <Text style={styles.textValue}>
+              {disabled ? 'N/A' : 'Seleccionado'}
+            </Text>
             <View style={styles.arrowContainer}>
               <IconImage size={15} source={Icons.general.arrowDown} />
             </View>
@@ -118,11 +119,24 @@ const LongSelect: FC<PropsSelect> = ({
               />
             </View>
             <View style={styles.containerTextDown}>
-              <Text style={styles.textDown}>TOTAL</Text>
-              <View style={styles.totalBox}>
-                <Text style={styles.textDown}>
-                  {/* {labelPieces} piezas */}
-                  piezas
+              <Text
+                style={[
+                  styles.textDown,
+                  disabled && {color: Colors.gray_shadow},
+                ]}>
+                TOTAL
+              </Text>
+              <View
+                style={[
+                  styles.totalBox,
+                  disabled && {borderColor: Colors.gray_shadow},
+                ]}>
+                <Text
+                  style={[
+                    styles.textDown,
+                    disabled && {color: Colors.gray_shadow},
+                  ]}>
+                  {totalPiecesInLong} piezas
                 </Text>
               </View>
             </View>

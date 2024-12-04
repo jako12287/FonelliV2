@@ -47,7 +47,6 @@ const FormChange: FC<PropsForm> = ({_id}) => {
     };
     try {
       const result = await changePassword(dataSend);
-      console.log('desde la vista datos form change', result);
       if (result?.message === 'Contraseña actualizada correctamente.') {
         reset();
         navigation.navigate('Menu');

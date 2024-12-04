@@ -13,6 +13,24 @@ export const optionsNumber = [
   {label: '12', value: '12'},
 ];
 
+export const optionName = [
+  {
+    label: 'name1',
+    value: 'name1',
+    count: 0,
+  },
+  {
+    label: 'name2',
+    value: 'name2',
+    count: 0,
+  },
+  {
+    label: 'name3',
+    value: 'name3',
+    count: 0,
+  },
+];
+
 export const optionSize = [
   {
     label: '4',

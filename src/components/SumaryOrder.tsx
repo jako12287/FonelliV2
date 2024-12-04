@@ -13,8 +13,6 @@ interface PropsComponenet {
   dataSend: any;
 }
 const SumaryOrder: FC<PropsComponenet> = ({setControlerView, dataSend}) => {
-  console.log('TCL: dataSend sumary', dataSend);
-
   const [loadind, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -22,8 +20,6 @@ const SumaryOrder: FC<PropsComponenet> = ({setControlerView, dataSend}) => {
       setLoading(false);
     }, 800);
   }, [dataSend]);
-
-  console.log('asi se ve talla', dataSend);
 
   if (loadind) {
     return (

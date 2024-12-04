@@ -1,72 +1,111 @@
 import React, {FC, useEffect, useState} from 'react';
-import {Modal, Platform, Pressable, StyleSheet, Text, View} from 'react-native';
+import {
+  Modal,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Platform,
+  ScrollView,
+  Alert,
+} from 'react-native';
 import Responsive from '../../utils/responsive';
 import {Colors} from '../../theme/colors';
 import IconImage from '../../utils/iconImage';
 import {Icons} from '../../assets/icons';
 import {fonts} from '../../theme/fonts';
 import CustomBotton from '../CustomBotton';
-import {TextInput} from 'react-native-gesture-handler';
 import Count from '../Count';
-// import Count from '../Count';
 
 interface PropsSelect {
-  handleOptionPress?: (data: string[]) => void;
-  optionValue: string[];
+  setStateGlobalName: any;
+  stateGlobalName: any;
+  setTotalPiecesInName: any;
+  totalPiecesInName: any;
+  showLong: boolean;
+  totalPiecesInSize: any;
 }
 
 const NameSelect: FC<PropsSelect> = ({
-  optionValue = [],
-  handleOptionPress = () => {},
+  // optionValue = [],
+  setStateGlobalName,
+  stateGlobalName,
+  setTotalPiecesInName,
+  totalPiecesInName,
+  showLong,
+  totalPiecesInSize,
 }) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
   const [isNa, setIsNa] = useState<boolean>(false);
-
-  const [name1, setname1] = useState<string>('');
-  const [totalPieces, setTotalPieces] = useState<any[]>([]);
-  const [labelPieces, setLabelPieces] = useState<number>(0);
   const [disabled, setDisabled] = useState<boolean>(false);
 
-  const handleSaveData = (data: any) => {
-    // Verificar si el nombre ya existe en la lista
-    setTotalPieces(prevState => {
-      const index = prevState.findIndex(item => item.name === data.name);
-      if (index !== -1) {
-        // Si ya existe, actualizamos la cantidad
-        const updatedList = [...prevState];
-        updatedList[index].count = data.count;
-        return updatedList;
-      } else {
-        // Si no existe, agregamos un nuevo elemento
-        return [...prevState, data];
-      }
-    });
-  };
+  useEffect(() => {
+    const totalCount: any = stateGlobalName?.reduce((sum: any, item: any) => {
+      return item.count > 0 ? sum + item.count : sum;
+    }, 0);
+    setTotalPiecesInName(totalCount);
 
-  const handleTotalPiece = () => {
-    const pieces = totalPieces?.map((el: any) => {
-      let total: number = 0;
-      if (el.count > 0) {
-        total += el.count;
-      }
-      return total;
-    });
-    setLabelPieces(
-      pieces.reduce((a, b) => {
-        return a + b;
-      }, 0),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stateGlobalName]);
+  const onChangeInput = (name: string, text: string) => {
+    setStateGlobalName((prev: any) =>
+      prev.map((item: any) =>
+        item.name === name ? {...item, value: text} : item,
+      ),
     );
   };
 
-  useEffect(() => {
-    handleTotalPiece();
-    if (disabled) {
-      handleOptionPress(['N/A']);
-    } else {
-      handleOptionPress(totalPieces);
+  const onChangeCounter = (name: string, newCount: number) => {
+    setStateGlobalName((prev: any) =>
+      prev.map((item: any) =>
+        item.name === name ? {...item, count: newCount} : item,
+      ),
+    );
+  };
+
+  const addNewRow = () => {
+    setStateGlobalName((prev: any) => [
+      ...prev,
+      {name: `name${prev.length + 1}`, value: '', count: 0},
+    ]);
+  };
+
+  const removeRow = (name: string) => {
+    setStateGlobalName((prev: any) =>
+      prev.filter((item: any) => item.name !== name),
+    );
+  };
+
+  const handleSave = () => {
+    if (!disabled) {
+      let hasError = false;
+
+      stateGlobalName.forEach((inputData: any) => {
+        if (inputData.count > 0 && !inputData.value) {
+          hasError = true;
+          Alert.alert('Falta insertar nombre en algún campo');
+        }
+
+        if (inputData.count === 0 && inputData.value === '') {
+          hasError = true;
+          Alert.alert('Debes escribir un nombre');
+        }
+
+        if (inputData.value && inputData.count === 0) {
+          hasError = true;
+
+          Alert.alert('Selecciona el número de piezas para ese nombre');
+        }
+      });
+
+      if (!hasError) {
+        setIsActiveModal(false);
+      }
+    } else if (disabled) {
+      setIsActiveModal(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [totalPieces]);
+  };
 
   return (
     <>
@@ -79,9 +118,7 @@ const NameSelect: FC<PropsSelect> = ({
           onPress={() => setIsActiveModal(!isActiveModal)}>
           <View style={styles.input}>
             <Text style={styles.textValue}>
-              {optionValue.length > 1
-                ? `${optionValue.slice(0, 1).join(', ')} ...`
-                : optionValue.join(', ')}
+              {disabled ? 'N/A' : 'Seleccionado'}
             </Text>
             <View style={styles.arrowContainer}>
               <IconImage size={15} source={Icons.general.arrowDown} />
@@ -100,57 +137,133 @@ const NameSelect: FC<PropsSelect> = ({
             <View style={styles.containerBtnUp}>
               <Text style={styles.textTitle}>Nombre</Text>
             </View>
-            <View>
-              <View style={styles.option}>
-                <Text style={styles.optionText}>{'No Apllica'}</Text>
-                <Pressable
-                  style={styles.boxSelect}
-                  onPress={() => {
-                    setIsNa(!isNa);
-                    setDisabled(!isNa);
-                  }}>
-                  {isNa && <IconImage size={30} source={Icons.general.check} />}
-                </Pressable>
+            <ScrollView>
+              <View>
+                <View style={styles.option}>
+                  <Text style={styles.optionText}>{'No Aplica'}</Text>
+                  <Pressable
+                    style={styles.boxSelect}
+                    onPress={() => {
+                      setIsNa(!isNa);
+                      setDisabled(!isNa);
+                      setDisabled(!isNa);
+                    }}>
+                    {isNa && (
+                      <IconImage size={30} source={Icons.general.check} />
+                    )}
+                  </Pressable>
+                </View>
+
+                <View
+                  style={[
+                    styles.containerInputInt,
+                    styles.extendContainerInputInt,
+                  ]}>
+                  {stateGlobalName.map((inputData: any) => (
+                    <View style={styles.containerInputInt} key={inputData.name}>
+                      <Pressable
+                        style={[
+                          styles.removeButton,
+                          disabled && {backgroundColor: Colors.gray_shadow},
+                        ]}
+                        onPress={() => removeRow(inputData.name)}>
+                        <Text style={styles.removeButtonText}>Eliminar</Text>
+                      </Pressable>
+                      <TextInput
+                        style={[
+                          styles.input,
+                          disabled && {
+                            backgroundColor: Colors.gray_shadow,
+                            borderColor: Colors.gray_shadow,
+                            color: Colors.white,
+                          },
+                        ]}
+                        value={inputData.value}
+                        onChangeText={value =>
+                          onChangeInput(inputData.name, value)
+                        }
+                        keyboardType="default"
+                        placeholder="Escribe aquí"
+                        editable={!disabled}
+                      />
+                      <Count
+                        key={inputData.name}
+                        name={inputData.name}
+                        handleSaveData={data =>
+                          onChangeCounter(inputData.name, data.count)
+                        }
+                        disable={disabled}
+                        setDisabled={setDisabled}
+                        stateGlobal={stateGlobalName}
+                      />
+                    </View>
+                  ))}
+                </View>
+                <View style={styles.containerBtnAdd}>
+                  <Pressable
+                    onPress={disabled ? null : addNewRow}
+                    style={[
+                      styles.addButton,
+                      disabled && {backgroundColor: Colors.gray_shadow},
+                    ]}>
+                    <Text style={styles.addButtonText}>Añadir Campo</Text>
+                  </Pressable>
+                </View>
               </View>
-              <View style={styles.containerInputInt}>
-                <TextInput
-                  style={styles.input}
-                  value={name1}
-                  onChangeText={value => setname1(value)}
-                  keyboardType={'default'}
-                  placeholder={''}
-                />
-                <Count
-                  name={'name1'}
-                  handleSaveData={handleSaveData}
-                  disable={disabled}
-                  setDisabled={setDisabled}
-                />
+
+              <View style={styles.containerTextDown}>
+                <Text
+                  style={[
+                    styles.textDown,
+                    disabled && {color: Colors.gray_shadow},
+                  ]}>
+                  TOTAL
+                </Text>
+                <View
+                  style={[
+                    styles.totalBox,
+                    disabled && {borderColor: Colors.gray_shadow},
+                  ]}>
+                  <Text
+                    style={[
+                      styles.textDown,
+                      disabled && {color: Colors.gray_shadow},
+                      !disabled &&
+                        totalPiecesInName !== totalPiecesInSize && {
+                          color: Colors.error_color,
+                        },
+                    ]}>
+                    {totalPiecesInName} piezas
+                  </Text>
+                </View>
+                {!showLong &&
+                  totalPiecesInName !== totalPiecesInSize &&
+                  !disabled && (
+                    <View style={styles.textErrorContainer}>
+                      <Text style={styles.textError}>
+                        Las cantidades deben coincidir por talla{' '}
+                        {totalPiecesInSize}
+                      </Text>
+                    </View>
+                  )}
               </View>
-            </View>
-            <View style={styles.containerTextDown}>
-              <Text style={styles.textDown}>TOTAL</Text>
-              <View style={styles.totalBox}>
-                <Text style={styles.textDown}>{labelPieces} piezas</Text>
+
+              <View style={styles.btnContainer}>
+                <CustomBotton title="Guardar" onClick={handleSave} />
               </View>
-            </View>
-            <View style={styles.btnContainer}>
-              <CustomBotton
-                title="Guardar"
-                onClick={() => setIsActiveModal(false)}
-              />
-            </View>
-            <View>
-              <Text style={styles.textDown}>
-                Escribir Nombre, tal cual quiere que se realice, incluyendo
-                Mayúsculas o minúsculas
-              </Text>
-              <Text style={styles.textDown}>Ejemplo:</Text>
-              <Text style={styles.textNameExample}>Alana Pérez</Text>
-              <Text style={styles.textCaution}>
-                *Máximo 3 palabras x nombre
-              </Text>
-            </View>
+
+              <View>
+                <Text style={styles.textDown}>
+                  Escribir Nombre, tal cual quiere que se realice, incluyendo
+                  Mayúsculas o minúsculas
+                </Text>
+                <Text style={styles.textDown}>Ejemplo:</Text>
+                <Text style={styles.textNameExample}>Alana Pérez</Text>
+                <Text style={styles.textCaution}>
+                  *Máximo 3 palabras x nombre
+                </Text>
+              </View>
+            </ScrollView>
           </View>
         </View>
       </Modal>
@@ -159,6 +272,7 @@ const NameSelect: FC<PropsSelect> = ({
 };
 
 export default NameSelect;
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -177,7 +291,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   containerInput: {
-    // marginTop: Responsive(20),
     width: '60%',
     position: 'relative',
     flexDirection: 'row',
@@ -190,6 +303,7 @@ const styles = StyleSheet.create({
     fontSize: Responsive(16),
     width: Responsive(200),
     height: Responsive(40),
+    marginRight: Responsive(25),
   },
   arrowContainer: {
     position: 'absolute',
@@ -206,10 +320,9 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'white',
     borderRadius: Responsive(10),
-    padding: Responsive(20),
+    padding: Responsive(12),
     height: '100%',
     gap: Responsive(25),
-
     paddingTop: Platform.OS === 'ios' ? Responsive(50) : Responsive(10),
   },
   option: {
@@ -220,61 +333,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingRight: Responsive(70),
   },
-  optionDown: {
-    padding: Responsive(5),
-    marginLeft: Responsive(20),
-    marginBottom: Responsive(15),
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingRight: Responsive(40),
-  },
   optionText: {
     fontSize: Responsive(16),
     color: '#333',
-  },
-  closeButton: {
-    padding: Responsive(10),
-    alignItems: 'center',
-    marginTop: Responsive(10),
-    backgroundColor: '#1E3A8A',
-    borderRadius: Responsive(5),
-  },
-  closeButtonText: {
-    fontSize: Responsive(16),
-    color: '#fff',
-  },
-  textValue: {
-    fontSize: Responsive(14),
-    color: Colors.black,
-  },
-  textTitle: {
-    fontSize: Responsive(24),
-    fontFamily: fonts.poppins_bold,
-    fontWeight: '900',
-    color: Colors.title_color,
-  },
-  subTitle: {
-    fontSize: Responsive(16),
-    fontFamily: fonts.poppins_medium,
-    fontWeight: '500',
-    color: Colors.black,
-    marginTop: Responsive(10),
-    marginBottom: Responsive(10),
-    marginLeft: Responsive(10),
-  },
-  textDown: {
-    fontSize: Responsive(16),
-    fontFamily: fonts.poppins_medium,
-    color: Colors.black,
-    lineHeight: Responsive(30),
-  },
-  containerTextDown: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: Responsive(30),
-    gap: Responsive(10),
   },
   boxSelect: {
     borderWidth: 1,
@@ -283,15 +344,30 @@ const styles = StyleSheet.create({
     height: Responsive(30),
     marginRight: Responsive(10),
   },
-  contentFlatList: {maxHeight: 200},
+  containerInputInt: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingRight: Responsive(65),
+    marginTop: Responsive(20),
+  },
   containerBtnUp: {
     flexDirection: 'row',
     alignContent: 'center',
     justifyContent: 'space-between',
     width: '90%',
   },
-  flatList: {
-    height: Responsive(500),
+  btnContainer: {
+    marginTop: Responsive(0),
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    marginBottom: Responsive(20),
+  },
+  textDown: {
+    fontSize: Responsive(16),
+    fontFamily: fonts.poppins_medium,
+    color: Colors.black,
+    lineHeight: Responsive(30),
   },
   totalBox: {
     borderLeftWidth: 3,
@@ -303,14 +379,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: Responsive(20),
   },
-  btnContainer: {
-    marginTop: Responsive(0),
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    marginBottom: Responsive(20),
-  },
-
   textNameExample: {
     fontSize: Responsive(16),
     fontFamily: fonts.poppins_medium,
@@ -328,10 +396,64 @@ const styles = StyleSheet.create({
     marginLeft: Responsive(10),
     lineHeight: Responsive(25),
   },
-  containerInputInt: {
+  textValue: {
+    fontSize: Responsive(14),
+    color: Colors.black,
+  },
+  containerTextDown: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: Responsive(30),
+    gap: Responsive(10),
+    marginBottom: Responsive(20),
+  },
+  textTitle: {
+    fontSize: Responsive(24),
+    fontFamily: fonts.poppins_bold,
+    fontWeight: '900',
+    color: Colors.title_color,
+  },
+  extendContainerInputInt: {
+    flexDirection: 'column',
+    gap: Responsive(10),
+  },
+  addButton: {
+    backgroundColor: Colors.light_blue_botton,
+    padding: Responsive(10),
+    borderRadius: Responsive(50),
+    alignItems: 'center',
+    marginTop: Responsive(10),
+  },
+  addButtonText: {
+    color: Colors.white,
+    fontWeight: 'bold',
+  },
+  containerBtnAdd: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingRight: Responsive(65),
-    marginTop: Responsive(20),
+    alignItems: 'center',
+    paddingVertical: Responsive(20),
+  },
+  removeButton: {
+    backgroundColor: Colors.light_blue_botton,
+    borderRadius: Responsive(50),
+    width: Responsive(70),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: Responsive(5),
+  },
+  removeButtonText: {
+    color: Colors.white,
+    fontWeight: 'bold',
+  },
+  textErrorContainer: {
+    position: 'absolute',
+    bottom: Responsive(-20),
+  },
+  textError: {
+    fontFamily: fonts.poppins_medium,
+    color: Colors.error_color,
+    fontSize: Responsive(12),
   },
 });
