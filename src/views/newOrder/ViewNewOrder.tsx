@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {Alert, Pressable, StyleSheet, Text, View} from 'react-native';
 import InputControlOff from '../../components/InputControlOff';
 import CaratageSelect from '../../components/CaratageSelect';
@@ -55,6 +55,10 @@ interface PropsComponenet {
   stateGlobalName: any;
   setTotalPiecesInName: any;
   totalPiecesInName: any;
+  setTotalPiecesInInitial: any;
+  totalPiecesInInitial: any;
+  setShowPieceTotal: any;
+  showPieceTotal: any;
 }
 const ViewNewOrder: FC<PropsComponenet> = ({
   setControlerView,
@@ -91,9 +95,14 @@ const ViewNewOrder: FC<PropsComponenet> = ({
   stateGlobalName,
   setTotalPiecesInName,
   totalPiecesInName,
+  setTotalPiecesInInitial,
+  totalPiecesInInitial,
+  setShowPieceTotal,
+  showPieceTotal,
 }) => {
   const navigation = useCustomNavigation();
   const formattedDate = moment(new Date()).format('DD-MMM-YYYY').toLowerCase();
+  const [editableTotalPiece, setEditableTotalPiece] = useState<boolean>(false);
 
   const handleDelete = () => {
     return Alert.alert(
@@ -118,6 +127,40 @@ const ViewNewOrder: FC<PropsComponenet> = ({
       ],
       {cancelable: false},
     );
+  };
+
+  useEffect(() => {
+    if (showLong && showInitialName && showName && showPieceTotal) {
+      setEditableTotalPiece(true);
+    } else {
+      setEditableTotalPiece(false);
+    }
+  }, [showLong, showInitialName, showName, showPieceTotal]);
+
+  const determineTotalPieces = () => {
+    if (showLong) {
+      if (showInitialName && showName && showPieceTotal) {
+        return totalPieces;
+      }
+      if (showInitialName && showName) {
+        return totalPiecesInName.toString();
+      }
+      if (showInitialName) {
+        return totalPiecesInInitial.toString();
+      }
+      return totalPiecesInLong.toString();
+    } else {
+      if (showName && showPieceTotal) {
+        return totalPiecesInSize.toString();
+      }
+      if (showName) {
+        return totalPiecesInSize.toString();
+      }
+      if (showInitialName) {
+        return totalPiecesInSize.toString();
+      }
+      return totalPiecesInSize.toString();
+    }
   };
 
   return (
@@ -163,7 +206,6 @@ const ViewNewOrder: FC<PropsComponenet> = ({
             setShowInitialName={setShowInitialName}
           />
         )}
-
         {!showLong && (
           <InitialNameSelect
             showLong={showLong}
@@ -171,15 +213,20 @@ const ViewNewOrder: FC<PropsComponenet> = ({
             stateGlobalInitial={stateGlobalInitial}
             setShowName={setShowName}
             totalPiecesInSize={totalPiecesInSize}
+            setTotalPiecesInInitial={setTotalPiecesInInitial}
+            totalPiecesInInitial={totalPiecesInInitial}
           />
         )}
-        {showLong && showInitialName && (
+
+        {showLong && showInitialName && !showName && (
           <InitialNameSelect
             showLong={showLong}
             setStateGlobalInitial={setStateGlobalInitial}
             stateGlobalInitial={stateGlobalInitial}
             setShowName={setShowName}
             totalPiecesInSize={totalPiecesInSize}
+            setTotalPiecesInInitial={setTotalPiecesInInitial}
+            totalPiecesInInitial={totalPiecesInInitial}
           />
         )}
 
@@ -191,6 +238,7 @@ const ViewNewOrder: FC<PropsComponenet> = ({
             totalPiecesInName={totalPiecesInName}
             showLong={showLong}
             totalPiecesInSize={totalPiecesInSize}
+            setShowPieceTotal={setShowPieceTotal}
           />
         )}
 
@@ -202,14 +250,16 @@ const ViewNewOrder: FC<PropsComponenet> = ({
             totalPiecesInName={totalPiecesInName}
             showLong={showLong}
             totalPiecesInSize={totalPiecesInSize}
+            setShowPieceTotal={setShowPieceTotal}
           />
         )}
 
         <OnllyItem
           label="Piezas totales"
           onChangeText={setTotalPieces}
-          valueText={totalPieces}
-          editable={false}
+          valueText={determineTotalPieces()}
+          editable={editableTotalPiece}
+          keyboardTypeCustom="number-pad"
         />
         <OnllyItem
           label="Observaciones"

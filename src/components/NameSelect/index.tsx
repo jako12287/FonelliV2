@@ -25,16 +25,17 @@ interface PropsSelect {
   totalPiecesInName: any;
   showLong: boolean;
   totalPiecesInSize: any;
+  setShowPieceTotal: any;
 }
 
 const NameSelect: FC<PropsSelect> = ({
-  // optionValue = [],
   setStateGlobalName,
   stateGlobalName,
   setTotalPiecesInName,
   totalPiecesInName,
   showLong,
   totalPiecesInSize,
+  setShowPieceTotal,
 }) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
   const [isNa, setIsNa] = useState<boolean>(false);
@@ -146,7 +147,7 @@ const NameSelect: FC<PropsSelect> = ({
                     onPress={() => {
                       setIsNa(!isNa);
                       setDisabled(!isNa);
-                      setDisabled(!isNa);
+                      setShowPieceTotal(!isNa);
                     }}>
                     {isNa && (
                       <IconImage size={30} source={Icons.general.check} />

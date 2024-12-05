@@ -23,6 +23,8 @@ interface PropsSelect {
   stateGlobalInitial: any;
   totalPiecesInSize: number;
   showLong: boolean;
+  setTotalPiecesInInitial: any;
+  totalPiecesInInitial: any;
 }
 
 const InitialNameSelect: FC<PropsSelect> = ({
@@ -31,11 +33,12 @@ const InitialNameSelect: FC<PropsSelect> = ({
   totalPiecesInSize,
   setShowName,
   showLong,
+  setTotalPiecesInInitial,
+  totalPiecesInInitial,
 }) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
   const [isNa, setIsNa] = useState<boolean>(false);
   const [disabled, setDisabled] = useState<boolean>(false);
-  const [totalPiecesInLocal, setTotalPiecesInLocal] = useState<any>(0);
 
   const handleSaveData = (data: any) => {
     setStateGlobalInitial((prev: any) => {
@@ -49,7 +52,7 @@ const InitialNameSelect: FC<PropsSelect> = ({
       const totalCount: any = updatedState?.reduce((sum: any, item: any) => {
         return item.count > 0 ? sum + item.count : sum;
       }, 0);
-      setTotalPiecesInLocal(totalCount);
+      setTotalPiecesInInitial(totalCount);
       return updatedState;
     });
   };
@@ -64,7 +67,9 @@ const InitialNameSelect: FC<PropsSelect> = ({
           style={styles.containerInput}
           onPress={() => setIsActiveModal(!isActiveModal)}>
           <View style={styles.input}>
-            <Text style={styles.textValue}>{disabled ? 'N/A' : 'Seleccionado'}</Text>
+            <Text style={styles.textValue}>
+              {disabled ? 'N/A' : 'Seleccionado'}
+            </Text>
             <View style={styles.arrowContainer}>
               <IconImage size={15} source={Icons.general.arrowDown} />
             </View>
@@ -133,15 +138,15 @@ const InitialNameSelect: FC<PropsSelect> = ({
                     disabled && {color: Colors.gray_shadow},
                     !showLong &&
                       !disabled &&
-                      totalPiecesInLocal !== totalPiecesInSize && {
+                      totalPiecesInInitial !== totalPiecesInSize && {
                         color: Colors.error_color,
                       },
                   ]}>
-                  {totalPiecesInLocal} piezas
+                  {totalPiecesInInitial} piezas
                 </Text>
               </View>
               {!showLong &&
-                totalPiecesInLocal !== totalPiecesInSize &&
+                totalPiecesInInitial !== totalPiecesInSize &&
                 !disabled && (
                   <View style={styles.textErrorContainer}>
                     <Text style={styles.textError}>
@@ -154,7 +159,7 @@ const InitialNameSelect: FC<PropsSelect> = ({
             <View style={styles.btnContainer}>
               {!showLong &&
               !disabled &&
-              totalPiecesInLocal !== totalPiecesInSize ? (
+              totalPiecesInInitial !== totalPiecesInSize ? (
                 <CustomBotton
                   title="Guardar"
                   onClick={() => {}}

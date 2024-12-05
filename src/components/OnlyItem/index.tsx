@@ -1,5 +1,11 @@
 import React, {FC} from 'react';
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  KeyboardTypeOptions,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import {Colors} from '../../theme/colors';
 import Responsive from '../../utils/responsive';
 
@@ -8,12 +14,14 @@ interface PropsComponet {
   valueText: string;
   onChangeText: (value: string) => void;
   editable: boolean;
+  keyboardTypeCustom?: KeyboardTypeOptions;
 }
 const OnllyItem: FC<PropsComponet> = ({
   label,
   onChangeText,
   valueText,
   editable = true,
+  keyboardTypeCustom = 'default',
 }) => {
   return (
     <View style={styles.containerTotalPieces}>
@@ -22,7 +30,7 @@ const OnllyItem: FC<PropsComponet> = ({
         style={styles.input}
         value={valueText}
         onChangeText={value => onChangeText(value)}
-        keyboardType={'default'}
+        keyboardType={keyboardTypeCustom}
         placeholder={''}
         editable={editable}
       />

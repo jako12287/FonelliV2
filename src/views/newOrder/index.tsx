@@ -13,7 +13,7 @@ const NewOrder = () => {
   const [caratage, setCaratage] = useState<string>('');
   const [color, setColor] = useState<string>('');
   const [rock, setRock] = useState<string>('');
-  const [totalPieces, setTotalPieces] = useState<string>('12');
+  const [totalPieces, setTotalPieces] = useState<string>('0');
   const [observations, setObservations] = useState<string>('');
   const [userId, setUserId] = useState<string>('');
   const [userEmail, setUserEmail] = useState<string>('');
@@ -22,6 +22,7 @@ const NewOrder = () => {
   const [totalPiecesInSize, setTotalPiecesInSize] = useState<number>(0);
   const [totalPiecesInLong, setTotalPiecesInLong] = useState<number>(0);
   const [totalPiecesInName, setTotalPiecesInName] = useState<any>(0);
+  const [totalPiecesInInitial, setTotalPiecesInInitial] = useState<any>(0);
 
   //state globlas
   const [stateGlobalSize, setStateGlobalSize] = useState<any[]>([
@@ -41,7 +42,7 @@ const NewOrder = () => {
   const [showLong, setShowLong] = useState<boolean>(false);
   const [showInitialName, setShowInitialName] = useState<boolean>(false);
   const [showName, setShowName] = useState<boolean>(false);
-
+  const [showPieceTotal, setShowPieceTotal] = useState<boolean>(false);
   useEffect(() => {
     const getUser = async () => {
       const response = await AsyncStorage.getItem('@USER');
@@ -54,24 +55,68 @@ const NewOrder = () => {
     getUser();
   }, []);
 
+  const handleDataUpdate = () => {
+    setModel('');
+    setCaratage('');
+    setColor('');
+    setRock('');
+    setTotalPieces('0');
+    setObservations('');
+    setUserId('');
+    setUserEmail('');
+    setTotalPiecesInSize(0);
+    setTotalPiecesInLong(0);
+    setTotalPiecesInName(0);
+    setTotalPiecesInInitial(0);
+
+    setStateGlobalSize([{count: 0, name: '4'}]);
+    setStateGlobalInitial([{count: 0, name: 'A'}]);
+    setStateGlobalLong([{count: 0, name: '18'}]);
+    setStateGlobalName([{name: 'name1', value: '', count: 0}]);
+
+    //states show
+    setShowLong(false);
+    setShowInitialName(false);
+    setShowName(false);
+    setShowPieceTotal(false);
+  };
+
   const orderCurrent: any = {
     userId,
     model,
     caratage,
     color,
     rock,
+    observations,
   };
   if (!showLong) {
     orderCurrent.size = stateGlobalSize;
   }
+  if (showLong) {
+    orderCurrent.long = stateGlobalLong;
+  }
+  if (!showInitialName) {
+    orderCurrent.initialName = stateGlobalInitial;
+  }
   if (!showName) {
     orderCurrent.initialName = stateGlobalInitial;
   }
+  if (showName) {
+    orderCurrent.name = stateGlobalName;
+  }
+  if (showPieceTotal) {
+    orderCurrent.totalPieces = totalPieces;
+  }
 
+  // console.log('orderCurrent', orderCurrent);
   return (
     <View style={styles.container}>
       {controlerView === 1 && (
         <ViewNewOrder
+          showPieceTotal={showPieceTotal}
+          setShowPieceTotal={setShowPieceTotal}
+          setTotalPiecesInInitial={setTotalPiecesInInitial}
+          totalPiecesInInitial={totalPiecesInInitial}
           setTotalPiecesInName={setTotalPiecesInName}
           totalPiecesInName={totalPiecesInName}
           setStateGlobalName={setStateGlobalName}
@@ -110,6 +155,10 @@ const NewOrder = () => {
       )}
       {controlerView === 2 && (
         <SumaryOrder
+        handleDataUpdate={handleDataUpdate}
+          showInitialName={showInitialName}
+          showName={showName}
+          showLong={showLong}
           setControlerView={setControlerView}
           dataSend={orderCurrent}
         />
