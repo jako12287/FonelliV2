@@ -25,7 +25,7 @@ const Count: FC<PropsCount> = ({
   // useEffect para manejar el estado inicial solo si cambia el stateGlobalSize
   useEffect(() => {
     if (stateGlobal) {
-      const filterObj: any = stateGlobal.find((el: any) => el.name === name);
+      const filterObj: any = stateGlobal?.find((el: any) => el.name === name);
       if (
         filterObj &&
         filterObj.count !== undefined &&

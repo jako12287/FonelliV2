@@ -8,6 +8,7 @@ import {Colors} from '../theme/colors';
 import CustomBotton from './CustomBotton';
 import Loader from './Loader';
 import {ScrollView} from 'react-native-gesture-handler';
+import {createOrder, editOrder} from '../api';
 
 interface PropsComponenet {
   setControlerView: (data: number) => void;
@@ -16,6 +17,7 @@ interface PropsComponenet {
   showInitialName: boolean;
   showName: boolean;
   handleDataUpdate: () => void;
+  orderId: string;
 }
 const SumaryOrder: FC<PropsComponenet> = ({
   setControlerView,
@@ -24,6 +26,7 @@ const SumaryOrder: FC<PropsComponenet> = ({
   showInitialName,
   showName,
   handleDataUpdate,
+  orderId,
 }) => {
   const [loadind, setLoading] = useState<boolean>(true);
 
@@ -63,14 +66,37 @@ const SumaryOrder: FC<PropsComponenet> = ({
     }, 800);
   }, [dataSend]);
 
-  const onSubmit = () => {
+  const createOrEdit = async (data: any) => {
+    try {
+      if (orderId !== '') {
+        console.log('Editando orden con ID:', orderId);
+        return await editOrder(orderId, data);
+      } else {
+        console.log('Creando nueva orden');
+        return await createOrder(data);
+      }
+    } catch (error: any) {
+      console.error('Error en createOrEdit:', error.message || error);
+      throw error; // Vuelve a lanzar el error para manejarlo en `onSubmit`
+    }
+  };
+
+  const onSubmit = async () => {
+    setLoading(true);
     const data = {
       totalPieces: dataSend?.totalPieces || totalPiecesCalc(),
       ...dataSend,
     };
     console.log('data', data);
-    handleDataUpdate();
-    setControlerView(3);
+    try {
+      await createOrEdit(data);
+      handleDataUpdate();
+      setControlerView(3);
+    } catch (error) {
+      console.log('Error al crear la orden:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (loadind) {

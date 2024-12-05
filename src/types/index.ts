@@ -12,14 +12,15 @@ export interface RootStackProps extends ParamListBase {
   Login: undefined;
   Menu: undefined;
   ChangePassword: {_id: string};
-  NewOrder: undefined;
   OrderHistory: undefined;
   Catalog: undefined;
   Success: undefined;
-
-  // NewOrder: {
-  //   orderId?: string;
-  // };
+  // NewOrder: undefined;
+  NewOrder:
+    | {
+        orderId?: string;
+      }
+    | undefined;
 }
 
 export interface IconImageProps {
@@ -47,10 +48,20 @@ export enum RoutesApi {
   LOGIN = '/login',
   STATUS = '/testbd',
   CHANGE_PASSWORD = '/changePassword',
+  CREATE_ORDER = '/create_order',
+  GET_ORDER_BY_ID = '/orders/user',
+  GET_ORDER_BY_ID_NO_USER = '/orders',
+  EDIT_ORDER = '/orders',
+  DELETE_ORDER = '/orders',
 }
 
 export enum userType {
   CUSTOMER = 'CUSTOMER',
   COLLABORATOR = 'COLLABORATOR',
   ADMIN = 'ADMIN',
+}
+
+export enum stateType {
+  PENDING = 'PENDING',
+  CAUGHT = 'CAUGHT',
 }

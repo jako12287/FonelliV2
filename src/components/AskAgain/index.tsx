@@ -10,10 +10,12 @@ import {fonts} from '../../theme/fonts';
 interface PropsComponet {
   isComponentForAppreciation?: boolean;
   setControlerView?: (data: number) => void;
+  setCount?: any;
 }
 const AskAgain: FC<PropsComponet> = ({
   isComponentForAppreciation = false,
   setControlerView = () => {},
+  setCount = ()=>{},
 }) => {
   const navigation = useCustomNavigation();
   return (
@@ -23,11 +25,14 @@ const AskAgain: FC<PropsComponet> = ({
       </View>
       <View style={styles.containerText}>
         <Pressable
-          onPress={() =>
-            isComponentForAppreciation
-              ? setControlerView(1)
-              : navigation.navigate('NewOrder')
-          }>
+          onPress={() => {
+            if (isComponentForAppreciation) {
+              setControlerView(1);
+              setCount((prevCount: any) => prevCount + 1);
+            } else {
+              navigation.navigate('NewOrder');
+            }
+          }}>
           <Text style={styles.textGoOrder}>¿Quieres hacer otro pedido?</Text>
         </Pressable>
         <Pressable onPress={() => navigation.navigate('Menu')}>

@@ -15,6 +15,7 @@ import {CustomAlert, CustomAlertGlobal} from '../../utils/alertError';
 import {loginApi} from '../../api';
 import Loader from '../Loader';
 import {userType} from '../../types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Schema = yup.object().shape({
   email: yup.string().required('Ingresa el usuario').email('Correo  inválido'),
@@ -50,6 +51,9 @@ const Form = () => {
         return;
       }
 
+      if (result?.user) {
+        await AsyncStorage.setItem('@USER', JSON.stringify(result.user));
+      }
       if (result?.user?.type !== userType.CUSTOMER) {
         CustomAlertGlobal(
           'Tu cuenta no tiene acceso al aplicativo. Si crees que esto es un error, por favor contacta a soporte',

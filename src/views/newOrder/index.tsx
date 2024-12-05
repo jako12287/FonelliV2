@@ -5,8 +5,36 @@ import {StyleSheet, View} from 'react-native';
 import SumaryOrder from '../../components/SumaryOrder';
 import AppreciationView from './AppreciationView';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {RootStackProps} from '../../types';
+import {RouteProp} from '@react-navigation/native';
+import {setOrderById} from '../../api';
 
-const NewOrder = () => {
+type NewOrderScreenRouteProp = RouteProp<RootStackProps, 'NewOrder'>;
+
+interface NewOrderProps {
+  route: NewOrderScreenRouteProp;
+}
+const NewOrder = ({route}: NewOrderProps) => {
+  const orderId = route.params?.orderId;
+
+  // const getDataEdit = async () => {
+  //   if (orderId) {
+  //     try {
+  //       const response = await setOrderById(orderId);
+  //       console.log('TCL: getDataEdit -> response', response);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  // };
+
+  console.log('orderId: orderId -> orderId', orderId);
+  useEffect(() => {
+    if (orderId) {
+      getDataEdit();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderId]);
   const [controlerView, setControlerView] = useState<number>(1);
 
   const [model, setModel] = useState<string>('');
@@ -43,6 +71,16 @@ const NewOrder = () => {
   const [showInitialName, setShowInitialName] = useState<boolean>(false);
   const [showName, setShowName] = useState<boolean>(false);
   const [showPieceTotal, setShowPieceTotal] = useState<boolean>(false);
+  const [_, setCount] = useState(0);
+
+  const reloadView = () => {
+    setCount(prevCount => prevCount + 1);
+  };
+
+  useEffect(() => {
+    reloadView();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     const getUser = async () => {
       const response = await AsyncStorage.getItem('@USER');
@@ -54,32 +92,6 @@ const NewOrder = () => {
     };
     getUser();
   }, []);
-
-  const handleDataUpdate = () => {
-    setModel('');
-    setCaratage('');
-    setColor('');
-    setRock('');
-    setTotalPieces('0');
-    setObservations('');
-    setUserId('');
-    setUserEmail('');
-    setTotalPiecesInSize(0);
-    setTotalPiecesInLong(0);
-    setTotalPiecesInName(0);
-    setTotalPiecesInInitial(0);
-
-    setStateGlobalSize([{count: 0, name: '4'}]);
-    setStateGlobalInitial([{count: 0, name: 'A'}]);
-    setStateGlobalLong([{count: 0, name: '18'}]);
-    setStateGlobalName([{name: 'name1', value: '', count: 0}]);
-
-    //states show
-    setShowLong(false);
-    setShowInitialName(false);
-    setShowName(false);
-    setShowPieceTotal(false);
-  };
 
   const orderCurrent: any = {
     userId,
@@ -108,11 +120,58 @@ const NewOrder = () => {
     orderCurrent.totalPieces = totalPieces;
   }
 
+  const getDataEdit = async () => {
+    if (orderId) {
+      try {
+        const response = await setOrderById(orderId);
+
+        if (response?.order) {
+          setModel(response?.order?.model || '');
+          setCaratage(response?.order?.caratage?.slice(0, 2) || '');
+          setColor(response?.order?.color);
+          setRock(response?.order?.rock);
+          if (Array.isArray(response?.order?.size)) {
+            setStateGlobalSize(response.order.size);
+          } else {
+            console.error('El campo size no es un array válido.');
+            setStateGlobalSize([]);
+          }
+          if (Array.isArray(response?.order?.initialName)) {
+            setStateGlobalInitial(response?.order?.initialName);
+          } else {
+            console.error('El campo size no es un array válido.');
+            setStateGlobalInitial([]);
+          }
+          if (Array.isArray(response?.order?.long)) {
+            setStateGlobalLong(response?.order?.long);
+          } else {
+            console.error('El campo size no es un array válido.');
+            setStateGlobalLong([]);
+          }
+          if (Array.isArray(response?.order?.name)) {
+            setStateGlobalName(response?.order?.name);
+          } else {
+            console.error('El campo size no es un array válido.');
+            setStateGlobalName([]);
+          }
+          if (response?.order?.totalPieces) {
+            setTotalPieces(response?.order?.totalPieces?.toString() || '0');
+          } else {
+            setTotalPieces('0');
+          }
+          setObservations(response?.order?.observations || '');
+        }
+      } catch (error) {
+        console.log('Error fetching order data:', error);
+      }
+    }
+  };
   // console.log('orderCurrent', orderCurrent);
   return (
     <View style={styles.container}>
       {controlerView === 1 && (
         <ViewNewOrder
+          orderId={orderId}
           showPieceTotal={showPieceTotal}
           setShowPieceTotal={setShowPieceTotal}
           setTotalPiecesInInitial={setTotalPiecesInInitial}
@@ -155,16 +214,20 @@ const NewOrder = () => {
       )}
       {controlerView === 2 && (
         <SumaryOrder
-        handleDataUpdate={handleDataUpdate}
+          handleDataUpdate={reloadView}
           showInitialName={showInitialName}
           showName={showName}
           showLong={showLong}
           setControlerView={setControlerView}
           dataSend={orderCurrent}
+          orderId={orderId || ''}
         />
       )}
       {controlerView === 3 && (
-        <AppreciationView setControlerView={setControlerView} />
+        <AppreciationView
+          setControlerView={setControlerView}
+          setCount={setCount}
+        />
       )}
     </View>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Platform,
   Pressable,
@@ -7,102 +7,127 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-import {StatusProps} from '../../types';
+// import {StatusProps} from '../../types';
 import {Colors} from '../../theme/colors';
 import Responsive from '../../utils/responsive';
 import {fonts} from '../../theme/fonts';
 import {useCustomNavigation} from '../../hooks/useCustomNavigation';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getOrdersByUserId} from '../../api';
+import moment from 'moment';
+import 'moment/locale/es';
+import {ScrollView} from 'react-native-gesture-handler';
+import { stateType } from '../../types';
+moment.locale('es');
 
-interface fakeDataProps {
-  _id: string;
-  date: string;
-  piezas: number;
-  status: StatusProps;
-  folio: null | string;
-}
-
-const fakeData: fakeDataProps[] = [
-  {
-    _id: '001',
-    date: '20-10-2024',
-    piezas: 10,
-    status: StatusProps.PENDING,
-    folio: null,
-  },
-  {
-    _id: '002',
-    date: '20-10-2024',
-    piezas: 3,
-    status: StatusProps.PENDING,
-    folio: null,
-  },
-  {
-    _id: '003',
-    date: '15-10-2024',
-    piezas: 7,
-    status: StatusProps.CAUTGHT,
-    folio: '134864',
-  },
-];
 
 const TableData = () => {
+  const formattedDate = (date: any) => {
+    return moment(date).format('DD-MMM-YYYY').toLowerCase();
+  };
   const {width} = useWindowDimensions();
   const widthCell = width / 4 - Responsive(2.5);
   const navigation = useCustomNavigation();
+
+  const [userId, setUserId] = useState<string>('');
+  const [Data, setData] = useState<any>([]);
+
+  const getUserID = async () => {
+    try {
+      const getuser = await AsyncStorage.getItem('@USER');
+      if (getuser) {
+        const parsedUser = JSON.parse(getuser);
+        setUserId(parsedUser?._id);
+      } else {
+        console.log('No se encontró el usuario en AsyncStorage');
+      }
+    } catch (error) {
+      console.log('Error al obtener el usuario:', error);
+    }
+  };
+
+  const getData = async () => {
+    try {
+      const dataOrderUser = await getOrdersByUserId(userId);
+      console.log('TCL: getData -> dataOrderUser', dataOrderUser[0]);
+      setData(dataOrderUser);
+    } catch (error) {
+      console.log('Error al obtener las órdenes:', error);
+    }
+  };
+
+  useEffect(() => {
+    getUserID();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (userId) {
+      getData();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View style={[styles.containerTitle, {width: widthCell}]}>
-          <Text style={styles.textTitle}>Fecha</Text>
+      <ScrollView>
+        {/* Header */}
+        <View style={styles.header}>
+          <View style={[styles.containerTitle, {width: widthCell}]}>
+            <Text style={styles.textTitle}>Fecha</Text>
+          </View>
+          <View style={[styles.containerTitle, {width: widthCell}]}>
+            <Text style={styles.textTitle}>Piezas</Text>
+          </View>
+          <View style={[styles.containerTitle, {width: widthCell}]}>
+            <Text style={styles.textTitle}>Estatus</Text>
+          </View>
+          <View style={[styles.containerTitle, {width: widthCell}]}>
+            <Text style={styles.textTitle}>Folio</Text>
+          </View>
         </View>
-        <View style={[styles.containerTitle, {width: widthCell}]}>
-          <Text style={styles.textTitle}>Piezas</Text>
-        </View>
-        <View style={[styles.containerTitle, {width: widthCell}]}>
-          <Text style={styles.textTitle}>Estatus</Text>
-        </View>
-        <View style={[styles.containerTitle, {width: widthCell}]}>
-          <Text style={styles.textTitle}>Folio</Text>
-        </View>
-      </View>
 
-      {/* Rows */}
-      {fakeData.map(item => (
-        <View key={item._id} style={styles.containerBodyTable}>
-          <View style={[styles.containerItem, {width: widthCell}]}>
-            <Text style={styles.textCell}>{item.date}</Text>
-          </View>
-          <View style={[styles.containerItem, {width: widthCell}]}>
-            <Text style={styles.textCell}>{item.piezas} piezas</Text>
-          </View>
-          <View
-            style={[
-              styles.containerItem,
-              {
-                width: widthCell,
+        {/* Rows */}
+        {Data.map((item: any) => (
+          <View key={item._id} style={styles.containerBodyTable}>
+            <View style={[styles.containerItem, {width: widthCell}]}>
+              <Text style={styles.textCell}>
+                {formattedDate(item?.createdAt)}
+              </Text>
+            </View>
+            <View style={[styles.containerItem, {width: widthCell}]}>
+              <Text style={styles.textCell}>{item?.totalPieces} piezas</Text>
+            </View>
+            <View
+              style={[
+                styles.containerItem,
+                {
+                  width: widthCell,
 
-                backgroundColor:
-                  item?.status === 'PENDING'
-                    ? Colors.pending_state
-                    : Colors.light_green,
-              },
-            ]}>
-            <Text style={[styles.textCell]}>
-              {item?.status === 'PENDING' ? 'PENDIENTE' : 'CAPTURADO'}
-            </Text>
+                  backgroundColor:
+                    item?.status === stateType.PENDING
+                      ? Colors.pending_state
+                      : Colors.light_green,
+                },
+              ]}>
+              <Text style={[styles.textCell]}>
+                {item?.status === stateType.PENDING ? 'PENDIENTE' : 'CAPTURADO'}
+              </Text>
+            </View>
+            <View style={[styles.containerItem, {width: widthCell}]}>
+              {item?.folio ? (
+                <Text style={styles.textCell}>{item?.folio || 'N/A'}</Text>
+              ) : (
+                <Pressable
+                  onPress={() =>
+                    navigation.navigate('NewOrder', {orderId: item?.id})
+                  }>
+                  <Text style={styles.textCell}>Modificar Eliminar</Text>
+                </Pressable>
+              )}
+            </View>
           </View>
-          <View style={[styles.containerItem, {width: widthCell}]}>
-            {item?.folio ? (
-              <Text style={styles.textCell}>{item?.folio}</Text>
-            ) : (
-              <Pressable onPress={() => navigation.navigate('NewOrder')}>
-                <Text style={styles.textCell}>Modificar Eliminar</Text>
-              </Pressable>
-            )}
-          </View>
-        </View>
-      ))}
+        ))}
+      </ScrollView>
     </View>
   );
 };

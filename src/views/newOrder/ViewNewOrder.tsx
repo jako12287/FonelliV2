@@ -18,6 +18,7 @@ import Responsive from '../../utils/responsive';
 import {fonts} from '../../theme/fonts';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import 'moment/locale/es';
+import {deleteOrder} from '../../api';
 moment.locale('es');
 
 interface PropsComponenet {
@@ -59,6 +60,7 @@ interface PropsComponenet {
   totalPiecesInInitial: any;
   setShowPieceTotal: any;
   showPieceTotal: any;
+  orderId: any;
 }
 const ViewNewOrder: FC<PropsComponenet> = ({
   setControlerView,
@@ -99,6 +101,7 @@ const ViewNewOrder: FC<PropsComponenet> = ({
   totalPiecesInInitial,
   setShowPieceTotal,
   showPieceTotal,
+  orderId,
 }) => {
   const navigation = useCustomNavigation();
   const formattedDate = moment(new Date()).format('DD-MMM-YYYY').toLowerCase();
@@ -112,16 +115,14 @@ const ViewNewOrder: FC<PropsComponenet> = ({
         {text: 'Cancelar', style: 'cancel'},
         {
           text: 'Eliminar',
-          onPress: () => navigation.navigate('Menu'),
-          // onPress: async () => {
-          //   try {
-          //     await dispatch(logout() as never);
-          //     // Redirige al usuario a la pantalla de login
-          //     navigation.navigate('Courtesy');
-          //   } catch (error) {
-          //     console.error('Error al cerrar sesión:', error);
-          //   }
-          // },
+          onPress: async () => {
+            try {
+              await deleteOrder(orderId);
+              navigation.navigate('Menu');
+            } catch (error) {
+              console.error('Error al cerrar sesión:', error);
+            }
+          },
           style: 'destructive',
         },
       ],
@@ -268,9 +269,11 @@ const ViewNewOrder: FC<PropsComponenet> = ({
           editable={true}
         />
         <View style={styles.containerBtnActions}>
-          <Pressable onPress={handleDelete}>
-            <IconImage size={60} source={Icons.general.trash} />
-          </Pressable>
+          {orderId && (
+            <Pressable onPress={handleDelete}>
+              <IconImage size={60} source={Icons.general.trash} />
+            </Pressable>
+          )}
           <CustomBotton
             title="Ver resumen"
             onClick={() => {
