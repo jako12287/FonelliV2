@@ -110,7 +110,7 @@ const TableData = () => {
                 },
               ]}>
               <Text style={[styles.textCell]}>
-                {item?.status === stateType.PENDING ? 'PENDIENTE' : 'CAPTURADO'}
+                {item?.status === stateType.PENDING ? 'SOLICITADO' : 'CAPTURADO'}
               </Text>
             </View>
             <View style={[styles.containerItem, {width: widthCell}]}>
