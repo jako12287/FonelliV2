@@ -63,7 +63,9 @@ const SizeSelect: FC<PropsSelect> = ({
           style={styles.containerInput}
           onPress={() => setIsActiveModal(!isActiveModal)}>
           <View style={styles.input}>
-            <Text style={styles.textValue}>{disabled ? 'N/A' : 'Seleccionado'}</Text>
+            <Text style={styles.textValue}>
+              {disabled ? 'N/A' : 'Seleccionado'}
+            </Text>
             <View style={styles.arrowContainer}>
               <IconImage size={15} source={Icons.general.arrowDown} />
             </View>

@@ -19,6 +19,7 @@ import CustomBotton from '../CustomBotton';
 
 interface PropsSelect {
   setShowName: (value: boolean) => void;
+  showName:boolean;
   setStateGlobalInitial: any;
   stateGlobalInitial: any;
   totalPiecesInSize: number;
@@ -32,6 +33,7 @@ const InitialNameSelect: FC<PropsSelect> = ({
   stateGlobalInitial,
   totalPiecesInSize,
   setShowName,
+  showName,
   showLong,
   setTotalPiecesInInitial,
   totalPiecesInInitial,
@@ -95,7 +97,7 @@ const InitialNameSelect: FC<PropsSelect> = ({
                   onPress={() => {
                     setIsNa(!isNa);
                     setDisabled(!isNa);
-                    setShowName(!isNa);
+                    setShowName(!showName);
                   }}>
                   {isNa && <IconImage size={30} source={Icons.general.check} />}
                 </Pressable>

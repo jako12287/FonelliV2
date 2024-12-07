@@ -41,7 +41,7 @@ const NewOrder = ({route}: NewOrderProps) => {
   const [caratage, setCaratage] = useState<string>('');
   const [color, setColor] = useState<string>('');
   const [rock, setRock] = useState<string>('');
-  const [totalPieces, setTotalPieces] = useState<string>('0');
+  const [totalPieces, setTotalPieces] = useState<string>('1');
   const [observations, setObservations] = useState<string>('');
   const [userId, setUserId] = useState<string>('');
   const [userEmail, setUserEmail] = useState<string>('');
@@ -71,6 +71,7 @@ const NewOrder = ({route}: NewOrderProps) => {
   const [showInitialName, setShowInitialName] = useState<boolean>(false);
   const [showName, setShowName] = useState<boolean>(false);
   const [showPieceTotal, setShowPieceTotal] = useState<boolean>(false);
+
   const [_, setCount] = useState(0);
 
   const reloadView = () => {
@@ -155,7 +156,7 @@ const NewOrder = ({route}: NewOrderProps) => {
             setStateGlobalName([]);
           }
           if (response?.order?.totalPieces) {
-            setTotalPieces(response?.order?.totalPieces?.toString() || '0');
+            setTotalPieces(response?.order?.totalPieces?.toString() || '1');
           } else {
             setTotalPieces('0');
           }
@@ -166,7 +167,16 @@ const NewOrder = ({route}: NewOrderProps) => {
       }
     }
   };
-  // console.log('orderCurrent', orderCurrent);
+  console.log('orderCurrent', orderCurrent);
+  useEffect(() => {
+    if (!showLong) {
+      setShowInitialName(false);
+      setShowName(false);
+    }
+  }, [showLong]);
+  console.log('sholong', showLong);
+  console.log('shoinitial', showInitialName);
+  console.log('showName', showName);
   return (
     <View style={styles.container}>
       {controlerView === 1 && (

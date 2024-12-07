@@ -23,6 +23,7 @@ interface PropsSelect {
   setStateGlobalLong: any;
   setTotalPiecesInLong: (data: number) => void;
   totalPiecesInLong: number;
+  showInitialName: boolean;
 }
 
 const LongSelect: FC<PropsSelect> = ({
@@ -31,6 +32,7 @@ const LongSelect: FC<PropsSelect> = ({
   stateGlobalLong,
   setTotalPiecesInLong,
   totalPiecesInLong,
+  showInitialName,
 }) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
   const [isNa, setIsNa] = useState<boolean>(false);
@@ -91,7 +93,7 @@ const LongSelect: FC<PropsSelect> = ({
                   onPress={() => {
                     setIsNa(!isNa);
                     setDisabled(!isNa);
-                    setShowInitialName(!isNa);
+                    setShowInitialName(!showInitialName);
                   }}>
                   {isNa && <IconImage size={30} source={Icons.general.check} />}
                 </Pressable>

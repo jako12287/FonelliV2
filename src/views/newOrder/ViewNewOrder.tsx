@@ -200,6 +200,7 @@ const ViewNewOrder: FC<PropsComponenet> = ({
 
         {showLong && (
           <LongSelect
+            showInitialName={showInitialName}
             setTotalPiecesInLong={setTotalPiecesInLong}
             totalPiecesInLong={totalPiecesInLong}
             stateGlobalLong={stateGlobalLong}
@@ -207,8 +208,10 @@ const ViewNewOrder: FC<PropsComponenet> = ({
             setShowInitialName={setShowInitialName}
           />
         )}
-        {!showLong && (
+
+        {showInitialName && (
           <InitialNameSelect
+          showName={showName}
             showLong={showLong}
             setStateGlobalInitial={setStateGlobalInitial}
             stateGlobalInitial={stateGlobalInitial}
@@ -219,31 +222,7 @@ const ViewNewOrder: FC<PropsComponenet> = ({
           />
         )}
 
-        {showLong && showInitialName && !showName && (
-          <InitialNameSelect
-            showLong={showLong}
-            setStateGlobalInitial={setStateGlobalInitial}
-            stateGlobalInitial={stateGlobalInitial}
-            setShowName={setShowName}
-            totalPiecesInSize={totalPiecesInSize}
-            setTotalPiecesInInitial={setTotalPiecesInInitial}
-            totalPiecesInInitial={totalPiecesInInitial}
-          />
-        )}
-
-        {!showLong && showName && (
-          <NameSelect
-            setStateGlobalName={setStateGlobalName}
-            stateGlobalName={stateGlobalName}
-            setTotalPiecesInName={setTotalPiecesInName}
-            totalPiecesInName={totalPiecesInName}
-            showLong={showLong}
-            totalPiecesInSize={totalPiecesInSize}
-            setShowPieceTotal={setShowPieceTotal}
-          />
-        )}
-
-        {showLong && showName && showInitialName && (
+        {showName && (
           <NameSelect
             setStateGlobalName={setStateGlobalName}
             stateGlobalName={stateGlobalName}
