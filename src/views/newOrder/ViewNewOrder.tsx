@@ -19,6 +19,7 @@ import {fonts} from '../../theme/fonts';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import 'moment/locale/es';
 import {deleteOrder} from '../../api';
+import {CustomAlert} from '../../utils/alertError';
 moment.locale('es');
 
 interface PropsComponenet {
@@ -33,7 +34,7 @@ interface PropsComponenet {
   setRock: (data: string) => void;
   rock: string;
   setTotalPieces: (data: string) => void;
-  totalPieces: string;
+  // totalPieces: string;
   setObservations: (data: string) => void;
   observations: string;
   setTotalPiecesInSize: (data: number) => void;
@@ -61,6 +62,10 @@ interface PropsComponenet {
   setShowPieceTotal: any;
   showPieceTotal: any;
   orderId: any;
+  setShowNameNA: (data: boolean) => void;
+  showNameNA: boolean;
+  determineTotalPieces: any;
+  dataSend: any;
 }
 const ViewNewOrder: FC<PropsComponenet> = ({
   setControlerView,
@@ -74,7 +79,7 @@ const ViewNewOrder: FC<PropsComponenet> = ({
   setRock,
   rock,
   setTotalPieces,
-  totalPieces,
+  // totalPieces,
   setObservations,
   observations,
   setTotalPiecesInSize,
@@ -102,6 +107,10 @@ const ViewNewOrder: FC<PropsComponenet> = ({
   setShowPieceTotal,
   showPieceTotal,
   orderId,
+  setShowNameNA,
+  showNameNA,
+  determineTotalPieces,
+  dataSend,
 }) => {
   const navigation = useCustomNavigation();
   const formattedDate = moment(new Date()).format('DD-MMM-YYYY').toLowerCase();
@@ -138,30 +147,75 @@ const ViewNewOrder: FC<PropsComponenet> = ({
     }
   }, [showLong, showInitialName, showName, showPieceTotal]);
 
-  const determineTotalPieces = () => {
-    if (showLong) {
-      if (showInitialName && showName && showPieceTotal) {
-        return totalPieces;
-      }
-      if (showInitialName && showName) {
-        return totalPiecesInName.toString();
-      }
-      if (showInitialName) {
-        return totalPiecesInInitial.toString();
-      }
-      return totalPiecesInLong.toString();
-    } else {
-      if (showName && showPieceTotal) {
-        return totalPiecesInSize.toString();
-      }
-      if (showName) {
-        return totalPiecesInSize.toString();
-      }
-      if (showInitialName) {
-        return totalPiecesInSize.toString();
-      }
-      return totalPiecesInSize.toString();
+  const handlePrevSubmit = () => {
+    if (dataSend.model === '') {
+      CustomAlert({
+        message1: 'Espera ...',
+        message2: 'Debes ingresar el modelo',
+      });
+      return;
     }
+
+    if (dataSend.caratage === '') {
+      CustomAlert({
+        message1: 'Espera ...',
+        message2: 'Debes elegir el kilataje',
+      });
+      return;
+    }
+
+    if (dataSend.color === '') {
+      CustomAlert({
+        message1: 'Espera ...',
+        message2: 'Debes elegir el color',
+      });
+      return;
+    }
+    if (dataSend?.rock === '' || dataSend?.rock?.length === 0) {
+      CustomAlert({
+        message1: 'Espera ...',
+        message2: 'Debes elegir la piedra',
+      });
+      return;
+    }
+
+    if (
+      dataSend.size ||
+      dataSend.long ||
+      dataSend.initialName ||
+      dataSend.name
+    ) {
+      const haveSize =
+        dataSend?.size?.reduce(
+          (acc: number, item: any) => acc + (item.count || 0),
+          0,
+        ) > 0;
+      const haveLong =
+        dataSend?.long?.reduce(
+          (acc: number, item: any) => acc + (item.count || 0),
+          0,
+        ) > 0;
+      const haveInitial =
+        dataSend?.initialName?.reduce(
+          (acc: number, item: any) => acc + (item.count || 0),
+          0,
+        ) > 0;
+      const haveName =
+        dataSend?.name?.reduce(
+          (acc: number, item: any) => acc + (item.count || 0),
+          0,
+        ) > 0;
+
+      if (!haveSize && !haveLong && !haveInitial && !haveName) {
+        CustomAlert({
+          message1: 'Espera ...',
+          message2: 'Por favor, selecciona la cantidad que necesitas',
+        });
+        return;
+      }
+    }
+
+    setControlerView(2);
   };
 
   return (
@@ -191,6 +245,7 @@ const ViewNewOrder: FC<PropsComponenet> = ({
         <ColorSelect handleOptionPress={setColor} optionValue={color} />
         <RockSelect handleOptionPress={setRock} optionValue={rock} />
         <SizeSelect
+        showLong={showLong}
           setTotalPiecesInSize={setTotalPiecesInSize}
           totalPiecesInSize={totalPiecesInSize}
           stateGlobalSize={stateGlobalSize}
@@ -211,7 +266,7 @@ const ViewNewOrder: FC<PropsComponenet> = ({
 
         {showInitialName && (
           <InitialNameSelect
-          showName={showName}
+            showName={showName}
             showLong={showLong}
             setStateGlobalInitial={setStateGlobalInitial}
             stateGlobalInitial={stateGlobalInitial}
@@ -224,6 +279,8 @@ const ViewNewOrder: FC<PropsComponenet> = ({
 
         {showName && (
           <NameSelect
+            setShowNameNA={setShowNameNA}
+            showNameNA={showNameNA}
             setStateGlobalName={setStateGlobalName}
             stateGlobalName={stateGlobalName}
             setTotalPiecesInName={setTotalPiecesInName}
@@ -253,12 +310,7 @@ const ViewNewOrder: FC<PropsComponenet> = ({
               <IconImage size={60} source={Icons.general.trash} />
             </Pressable>
           )}
-          <CustomBotton
-            title="Ver resumen"
-            onClick={() => {
-              setControlerView(2);
-            }}
-          />
+          <CustomBotton title="Ver resumen" onClick={handlePrevSubmit} />
         </View>
       </View>
     </View>

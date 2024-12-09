@@ -37,7 +37,9 @@ const ColorSelect: FC<PropsSelect> = ({
           style={styles.containerInput}
           onPress={() => setIsActiveModal(!isActiveModal)}>
           <View style={styles.input}>
-            <Text style={styles.textValue}>{optionValue}</Text>
+            <View style={styles.containerTextInput}>
+              <Text style={styles.textValue}>{optionValue}</Text>
+            </View>
             <View style={styles.arrowContainer}>
               <IconImage size={15} source={Icons.general.arrowDown} />
             </View>
@@ -131,11 +133,12 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: Colors.black,
-    padding: Responsive(12),
+    paddingHorizontal: Responsive(10),
     fontSize: Responsive(16),
     width: Responsive(200),
     height: Responsive(40),
   },
+  containerTextInput: {height: '100%', justifyContent: 'center'},
   arrowContainer: {
     position: 'absolute',
     right: Responsive(8),

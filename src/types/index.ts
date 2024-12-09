@@ -21,6 +21,9 @@ export interface RootStackProps extends ParamListBase {
         orderId?: string;
       }
     | undefined;
+  DetailOrder: {
+    orderId?: string;
+  };
 }
 
 export interface IconImageProps {

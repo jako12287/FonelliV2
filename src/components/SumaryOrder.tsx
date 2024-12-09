@@ -14,53 +14,38 @@ interface PropsComponenet {
   setControlerView: (data: number) => void;
   dataSend: any;
   showLong: boolean;
-  showInitialName: boolean;
-  showName: boolean;
   handleDataUpdate: () => void;
   orderId: string;
+  setModel: (data: string) => void;
+  setCaratage: (data: string) => void;
+  setColor: (data: string) => void;
+  setRock: (data: string) => void;
+  setStateGlobalSize: any;
+  setStateGlobalInitial: any;
+  setStateGlobalLong: any;
+  setStateGlobalName: any;
+  setObservations: any;
+  setTotalPieces: any;
 }
 const SumaryOrder: FC<PropsComponenet> = ({
   setControlerView,
   dataSend,
   showLong,
-  showInitialName,
-  showName,
   handleDataUpdate,
   orderId,
+  setModel,
+  setCaratage,
+  setColor,
+  setRock,
+  setStateGlobalSize,
+  setStateGlobalInitial,
+  setStateGlobalLong,
+  setStateGlobalName,
+  setObservations,
+  setTotalPieces,
 }) => {
   const [loadind, setLoading] = useState<boolean>(true);
-
-  const totalPiecesCalc = () => {
-    let total = 0;
-    if (showLong) {
-      total += dataSend?.long?.reduce(
-        (acc: number, curr: any) => acc + curr.count,
-        0,
-      );
-    }
-    if (!showLong) {
-      total += dataSend?.size?.reduce(
-        (acc: number, curr: any) => acc + curr.count,
-        0,
-      );
-    }
-    if (showLong && showInitialName) {
-      total += dataSend?.initialName?.reduce(
-        (acc: number, curr: any) => acc + curr.count,
-        0,
-      );
-    }
-    if (showLong && showName) {
-      total += dataSend?.name?.reduce(
-        (acc: number, curr: any) => acc + curr.count,
-        0,
-      );
-    }
-    return total;
-  };
-
   useEffect(() => {
-    console.log('dataSend', dataSend);
     setTimeout(() => {
       setLoading(false);
     }, 800);
@@ -69,29 +54,34 @@ const SumaryOrder: FC<PropsComponenet> = ({
   const createOrEdit = async (data: any) => {
     try {
       if (orderId !== '') {
-        console.log('Editando orden con ID:', orderId);
         return await editOrder(orderId, data);
       } else {
-        console.log('Creando nueva orden');
         return await createOrder(data);
       }
     } catch (error: any) {
       console.error('Error en createOrEdit:', error.message || error);
-      throw error; // Vuelve a lanzar el error para manejarlo en `onSubmit`
+      throw error;
     }
   };
 
   const onSubmit = async () => {
     setLoading(true);
     const data = {
-      totalPieces: dataSend?.totalPieces || totalPiecesCalc(),
       ...dataSend,
     };
-    console.log('data', data);
     try {
       await createOrEdit(data);
       handleDataUpdate();
       setControlerView(3);
+      setModel('');
+      setCaratage('');
+      setColor('');
+      setRock('');
+      setStateGlobalSize([{count: 0, name: '4'}]);
+      setStateGlobalInitial([{count: 0, name: 'A'}]);
+      setStateGlobalLong([{count: 0, name: '18'}]);
+      setStateGlobalName([{name: 'name1', value: '', count: 0}]);
+      setObservations(''), setTotalPieces('1');
     } catch (error) {
       console.log('Error al crear la orden:', error);
     } finally {
@@ -101,7 +91,7 @@ const SumaryOrder: FC<PropsComponenet> = ({
 
   if (loadind) {
     return (
-      <View style={[styles.container, styles.containerExtension]}>
+      <View style={[styles.container]}>
         <Loader />
       </View>
     );
@@ -117,163 +107,143 @@ const SumaryOrder: FC<PropsComponenet> = ({
         </View>
         <View>
           <View style={styles.containerData}>
-            <Text style={styles.textLabel}>Modelo</Text>
-            <Text style={styles.textData}>{dataSend?.model}</Text>
-          </View>
-
-          <View style={styles.containerData}>
-            <Text style={styles.textLabel}>Kilataje</Text>
-            <Text style={styles.textData}>{dataSend?.caratage} KILATES</Text>
-          </View>
-
-          <View style={styles.containerData}>
-            <Text style={styles.textLabel}>Color</Text>
-            <Text style={styles.textData}>{dataSend?.color}</Text>
-          </View>
-
-          <View style={styles.containerData}>
-            <Text style={styles.textLabel}>Piedra</Text>
-            <Text style={styles.textData}>
-              {dataSend?.rock === 'N/A' ? 'NO APLICA' : dataSend?.rock}
-            </Text>
-          </View>
-
-          <View style={styles.containerData}>
-            <Text style={styles.textLabel}>Talla</Text>
-            {/* <View style={[styles.containerSize]}>
-            <Text style={styles.textData}>
-              {!dataSend?.size ||
-                (!dataSend?.size?.filter((el: any) => el?.count).length &&
-                  'NO APLICA')}
-            </Text>
-            {dataSend?.size &&
-              dataSend?.size
-                .filter((el: any) => el.count)
-                .map((item: any) => (
-                  <View style={styles.containerSizeText}>
-                    <Text style={[styles.textData]}>{item.name}</Text>
-                    <Text style={[styles.textData]}>{item.count}</Text>
-                    <Text style={[styles.textData]}>piezas</Text>
-                  </View>
-                ))}
-          </View> */}
-            <View style={[styles.containerInitials, {flexWrap: 'wrap'}]}>
-              {dataSend?.size?.length > 0 &&
-              dataSend?.size?.some((el: any) => el.count > 0) ? (
-                dataSend.size
-                  .filter((el: any) => el.count > 0)
-                  .map((el: any) => (
-                    <View
-                      key={el.name}
-                      style={[styles.copnstainerIntInitial, {width: 80}]}>
-                      <Text style={styles.textData}>{el.name}</Text>
-                      <Text style={styles.textData}>{el.count} piezas</Text>
-                    </View>
-                  ))
-              ) : (
-                <Text>NO APLICA</Text>
-              )}
+            <View style={styles.containerTitle}>
+              <Text style={styles.textLabel}>Modelo</Text>
+            </View>
+            <View style={styles.containerGroupItem}>
+              <Text style={styles.textData}>{dataSend?.model}</Text>
             </View>
           </View>
 
           <View style={styles.containerData}>
-            <Text style={styles.textLabel}>Largo</Text>
-            {/* <View style={{flexWrap: 'wrap', gap: 20}}>
-            {!dataSend?.long
-              ? 'NO APLICA'
-              : dataSend?.long
-                  ?.filter((el: any) => el.count > 0)
-                  .map((el: any) => (
-                    <View
-                      style={[
-                        styles.copnstainerIntInitial,
-                        {flexWrap: 'wrap', width: 50},
-                      ]}>
-                      <Text
-                        style={[
-                          styles.textData,
-                          {flexDirection: 'row', width: 60},
-                        ]}>
-                        {el.name} cm
-                      </Text>
-                      <Text style={[styles.textData, {width: 70}]}>
-                        {el.count} piezas
-                      </Text>
-                    </View>
-                  ))}
-          </View> */}
-            <View
-              style={[styles.containerInitials, {width: 60, flexWrap: 'wrap'}]}>
-              {showLong &&
-              dataSend?.long?.length > 0 &&
-              dataSend?.long?.some((el: any) => el.count > 0) ? (
-                dataSend.long
-                  .filter((el: any) => el.count > 0)
-                  .map((el: any) => (
-                    <View
-                      key={el.name}
-                      style={[
-                        styles.copnstainerIntInitial,
-                        {width: 90, flexWrap: 'wrap'},
-                      ]}>
-                      <Text style={styles.textData}>{el.name}</Text>
-                      <Text style={styles.textData}>{el.count} piezas</Text>
-                    </View>
-                  ))
-              ) : (
-                <Text>NO APLICA</Text>
-              )}
+            <View style={styles.containerTitle}>
+              <Text style={styles.textLabel}>Kilataje</Text>
+            </View>
+            <View style={styles.containerGroupItem}>
+              <Text style={styles.textData}>{dataSend?.caratage} KILATES</Text>
             </View>
           </View>
 
           <View style={styles.containerData}>
-            <Text style={styles.textLabel}>Inicial</Text>
-            <View style={styles.containerInitials}>
-              {dataSend?.initialName?.length > 0 &&
-              dataSend?.initialName?.some((el: any) => el.count > 0) ? (
-                dataSend.initialName
-                  .filter((el: any) => el.count > 0)
-                  .map((el: any) => (
-                    <View key={el.name} style={styles.copnstainerIntInitial}>
-                      <Text style={styles.textData}>{el.name}</Text>
-                      <Text style={styles.textData}>{el.count}</Text>
-                    </View>
-                  ))
-              ) : (
-                <Text>NO APLICA</Text>
-              )}
+            <View style={styles.containerTitle}>
+              <Text style={styles.textLabel}>Color</Text>
+            </View>
+            <View style={styles.containerGroupItem}>
+              <Text style={styles.textData}>{dataSend?.color}</Text>
             </View>
           </View>
 
           <View style={styles.containerData}>
-            <Text style={styles.textLabel}>Nombres</Text>
-            <View style={styles.containerInitials}>
-              {dataSend?.name?.length > 0 &&
-              dataSend?.name?.some((el: any) => el.count > 0) ? (
-                dataSend.name
-                  .filter((el: any) => el.count > 0)
-                  .map((el: any) => (
-                    <View
-                      key={el.name}
-                      style={[
-                        styles.copnstainerIntInitial,
-                        {width: 80, flexWrap: 'wrap'},
-                      ]}>
-                      <Text style={styles.textData}>{el.value}</Text>
-                      <Text style={styles.textData}>{el.count} piezas</Text>
-                    </View>
-                  ))
-              ) : (
-                <Text>NO APLICA</Text>
-              )}
+            <View style={styles.containerTitle}>
+              <Text style={styles.textLabel}>Piedra</Text>
+            </View>
+            <View style={styles.containerGroupItem}>
+              <Text style={styles.textData}>
+                {dataSend?.rock === 'N/A' ? 'NO APLICA' : dataSend?.rock}
+              </Text>
             </View>
           </View>
 
+          {dataSend?.size?.length > 0 && (
+            <View style={styles.containerGroup}>
+              <View style={[styles.containerTitle, styles.alingCenter]}>
+                <Text style={styles.textLabel}>Talla</Text>
+              </View>
+              <View style={styles.containerGroupItem}>
+                {dataSend?.size?.some((el: any) => el.count > 0) ? (
+                  dataSend.size
+                    .filter((el: any) => el.count > 0)
+                    .map((el: any) => (
+                      <View
+                        key={el.name}
+                        // style={[styles.copnstainerIntInitial, styles.wrap80]}
+                        style={styles.containerItem}>
+                        <Text style={styles.textData}>{el.name}</Text>
+                        <Text style={styles.textData}>{el.count} piezas</Text>
+                      </View>
+                    ))
+                ) : (
+                  <Text>NO APLICA</Text>
+                )}
+              </View>
+            </View>
+          )}
+
+          {dataSend?.long?.length > 0 && (
+            <View style={[styles.containerGroup]}>
+              <View style={[styles.containerTitle, styles.alingCenter]}>
+                <Text style={styles.textLabel}>Largo</Text>
+              </View>
+              <View style={[styles.containerGroupItem]}>
+                {showLong && dataSend?.long?.some((el: any) => el.count > 0) ? (
+                  dataSend.long
+                    .filter((el: any) => el.count > 0)
+                    .map((el: any) => (
+                      <View key={el.name} style={styles.containerItem}>
+                        <Text style={styles.textData}>{el.name}</Text>
+                        <Text style={styles.textData}>{el.count} piezas</Text>
+                      </View>
+                    ))
+                ) : (
+                  <Text>NO APLICA</Text>
+                )}
+              </View>
+            </View>
+          )}
+
+          {dataSend?.initialName?.length > 0 && (
+            <View style={styles.containerData}>
+              <View style={styles.containerTitle}>
+                <Text style={styles.textLabel}>Inicial</Text>
+              </View>
+              <View style={styles.containerGroupItem}>
+                {dataSend?.initialName?.some((el: any) => el.count > 0) ? (
+                  dataSend.initialName
+                    .filter((el: any) => el.count > 0)
+                    .map((el: any) => (
+                      <View key={el.name} style={styles.containerItem}>
+                        <Text style={styles.textData}>{el.name}</Text>
+                        <Text style={styles.textData}>{el.count}</Text>
+                      </View>
+                    ))
+                ) : (
+                  <Text>NO APLICA</Text>
+                )}
+              </View>
+            </View>
+          )}
+
+          {dataSend?.name?.length > 0 && (
+            <View style={styles.containerData}>
+              <View style={styles.containerTitle}>
+                <Text style={styles.textLabel}>Nombres</Text>
+              </View>
+              <View style={styles.containerGroupItem}>
+                {dataSend?.name?.some((el: any) => el.count > 0) ? (
+                  dataSend.name
+                    .filter((el: any) => el.count > 0)
+                    .map((el: any) => (
+                      <View key={el.name} style={styles.containerItem}>
+                        <Text style={styles.textData}>{el.value}</Text>
+                        <Text style={styles.textData}>{el.count} piezas</Text>
+                      </View>
+                    ))
+                ) : (
+                  <Text>NO APLICA</Text>
+                )}
+              </View>
+            </View>
+          )}
+
           <View style={styles.containerData}>
-            <Text style={styles.textLabel}>TOTAL</Text>
-            <Text style={styles.textTotal}>
-              {dataSend?.totalPieces || totalPiecesCalc()} PIEZAS
-            </Text>
+            <View style={styles.containerTitle}>
+              <Text style={styles.textLabel}>TOTAL</Text>
+            </View>
+            <View style={styles.containerGroupItem}>
+              <Text style={styles.textTotal}>
+                {dataSend?.totalPieces} PIEZAS
+              </Text>
+            </View>
           </View>
 
           <View style={styles.containerData}>
@@ -349,34 +319,41 @@ const styles = StyleSheet.create({
   containerBtn: {
     marginTop: Responsive(30),
     width: '100%',
+    height: Responsive(100),
     justifyContent: 'center',
     alignItems: 'center',
   },
-  containerExtension: {height: Responsive(600), justifyContent: 'center'},
-  containerSize: {
-    width: Responsive(300),
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-    gap: Responsive(5),
-  },
-  containerSizeText: {
-    flexDirection: 'row',
-    gap: Responsive(20),
-    paddingEnd: Responsive(40),
-  },
-  containerInitials: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: Responsive(15),
-    width: '50%',
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-  },
+
   copnstainerIntInitial: {
-    // borderColor: Colors.gray_shadow,
-    // borderWidth: Responsive(2),
     width: Responsive(20),
     justifyContent: 'center',
     alignItems: 'center',
   },
+  wrap80: {
+    flexWrap: 'wrap',
+    width: '80%',
+  },
+  containerGroup: {
+    flexDirection: 'row',
+  },
+  containerTitle: {
+    justifyContent: 'center',
+    width: Responsive(100),
+  },
+  containerGroupItem: {
+    width: Responsive(300),
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingHorizontal: Responsive(1),
+    paddingVertical: Responsive(5),
+    gap: Responsive(5),
+    flexWrap: 'wrap',
+  },
+  containerItem: {
+    borderWidth: 1,
+    borderColor: 'transparent',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  alingCenter: {alignItems: 'center'},
 });

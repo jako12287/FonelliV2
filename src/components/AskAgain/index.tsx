@@ -10,12 +10,12 @@ import {fonts} from '../../theme/fonts';
 interface PropsComponet {
   isComponentForAppreciation?: boolean;
   setControlerView?: (data: number) => void;
-  setCount?: any;
+  reloadView?: any;
 }
 const AskAgain: FC<PropsComponet> = ({
   isComponentForAppreciation = false,
   setControlerView = () => {},
-  setCount = ()=>{},
+  reloadView = () => {},
 }) => {
   const navigation = useCustomNavigation();
   return (
@@ -27,8 +27,8 @@ const AskAgain: FC<PropsComponet> = ({
         <Pressable
           onPress={() => {
             if (isComponentForAppreciation) {
+              reloadView();
               setControlerView(1);
-              setCount((prevCount: any) => prevCount + 1);
             } else {
               navigation.navigate('NewOrder');
             }

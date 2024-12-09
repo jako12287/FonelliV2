@@ -28,7 +28,6 @@ const NewOrder = ({route}: NewOrderProps) => {
   //   }
   // };
 
-  console.log('orderId: orderId -> orderId', orderId);
   useEffect(() => {
     if (orderId) {
       getDataEdit();
@@ -62,7 +61,7 @@ const NewOrder = ({route}: NewOrderProps) => {
   const [stateGlobalLong, setStateGlobalLong] = useState<any[]>([
     {count: 0, name: '18'},
   ]);
-  const [stateGlobalName, setStateGlobalName] = useState([
+  const [stateGlobalName, setStateGlobalName] = useState<any[]>([
     {name: 'name1', value: '', count: 0},
   ]);
 
@@ -70,6 +69,7 @@ const NewOrder = ({route}: NewOrderProps) => {
   const [showLong, setShowLong] = useState<boolean>(false);
   const [showInitialName, setShowInitialName] = useState<boolean>(false);
   const [showName, setShowName] = useState<boolean>(false);
+  const [showNameNA, setShowNameNA] = useState<boolean>(true);
   const [showPieceTotal, setShowPieceTotal] = useState<boolean>(false);
 
   const [_, setCount] = useState(0);
@@ -78,10 +78,10 @@ const NewOrder = ({route}: NewOrderProps) => {
     setCount(prevCount => prevCount + 1);
   };
 
-  useEffect(() => {
-    reloadView();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   reloadView();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [count]);
   useEffect(() => {
     const getUser = async () => {
       const response = await AsyncStorage.getItem('@USER');
@@ -94,6 +94,32 @@ const NewOrder = ({route}: NewOrderProps) => {
     getUser();
   }, []);
 
+  const determineTotalPieces = () => {
+    if (showLong) {
+      if (showInitialName && showName && showPieceTotal) {
+        return totalPieces;
+      }
+      if (showInitialName && showName) {
+        return totalPiecesInName.toString();
+      }
+      if (showInitialName) {
+        return totalPiecesInInitial.toString();
+      }
+      return totalPiecesInLong.toString();
+    } else {
+      if (showName && showPieceTotal) {
+        return totalPiecesInSize.toString();
+      }
+      if (showName) {
+        return totalPiecesInSize.toString();
+      }
+      if (showInitialName) {
+        return totalPiecesInSize.toString();
+      }
+      return totalPiecesInSize.toString();
+    }
+  };
+
   const orderCurrent: any = {
     userId,
     model,
@@ -105,20 +131,20 @@ const NewOrder = ({route}: NewOrderProps) => {
   if (!showLong) {
     orderCurrent.size = stateGlobalSize;
   }
-  if (showLong) {
+  if (showLong && stateGlobalLong?.length > 0) {
     orderCurrent.long = stateGlobalLong;
   }
-  if (!showInitialName) {
+  if (showInitialName && stateGlobalInitial.length > 0) {
     orderCurrent.initialName = stateGlobalInitial;
   }
-  if (!showName) {
-    orderCurrent.initialName = stateGlobalInitial;
-  }
-  if (showName) {
+
+  if (showName && !showNameNA) {
     orderCurrent.name = stateGlobalName;
   }
   if (showPieceTotal) {
     orderCurrent.totalPieces = totalPieces;
+  } else if (!showPieceTotal) {
+    orderCurrent.totalPieces = determineTotalPieces();
   }
 
   const getDataEdit = async () => {
@@ -167,20 +193,20 @@ const NewOrder = ({route}: NewOrderProps) => {
       }
     }
   };
-  console.log('orderCurrent', orderCurrent);
   useEffect(() => {
     if (!showLong) {
       setShowInitialName(false);
       setShowName(false);
+      setShowPieceTotal(false);
     }
   }, [showLong]);
-  console.log('sholong', showLong);
-  console.log('shoinitial', showInitialName);
-  console.log('showName', showName);
+
   return (
     <View style={styles.container}>
       {controlerView === 1 && (
         <ViewNewOrder
+          setShowNameNA={setShowNameNA}
+          showNameNA={showNameNA}
           orderId={orderId}
           showPieceTotal={showPieceTotal}
           setShowPieceTotal={setShowPieceTotal}
@@ -219,14 +245,25 @@ const NewOrder = ({route}: NewOrderProps) => {
           setRock={setRock}
           rock={rock}
           setTotalPieces={setTotalPieces}
-          totalPieces={totalPieces}
+          determineTotalPieces={determineTotalPieces}
+          dataSend={orderCurrent}
+
+          // totalPieces={totalPieces}
         />
       )}
       {controlerView === 2 && (
         <SumaryOrder
+          setObservations={setObservations}
+          setTotalPieces={setTotalPieces}
+          setCaratage={setCaratage}
+          setColor={setColor}
+          setRock={setRock}
+          setStateGlobalInitial={setStateGlobalInitial}
+          setStateGlobalLong={setStateGlobalLong}
+          setStateGlobalName={setStateGlobalName}
+          setStateGlobalSize={setStateGlobalSize}
+          setModel={setModel}
           handleDataUpdate={reloadView}
-          showInitialName={showInitialName}
-          showName={showName}
           showLong={showLong}
           setControlerView={setControlerView}
           dataSend={orderCurrent}
@@ -236,7 +273,7 @@ const NewOrder = ({route}: NewOrderProps) => {
       {controlerView === 3 && (
         <AppreciationView
           setControlerView={setControlerView}
-          setCount={setCount}
+          reloadView={reloadView}
         />
       )}
     </View>

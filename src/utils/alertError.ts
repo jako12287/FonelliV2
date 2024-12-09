@@ -1,9 +1,17 @@
 import {Alert} from 'react-native';
 
-export const CustomAlert = () => {
+type PropsAlert = {
+  message1?: string;
+  message2?: string;
+};
+
+export const CustomAlert = ({
+  message1 = 'Error en el inicio de sesión',
+  message2 = 'Por favor, verifica tus credenciales o inténtalo nuevamente.',
+}: PropsAlert) => {
   return Alert.alert(
-    'Error en el inicio de sesión',
-    'Por favor, verifica tus credenciales o inténtalo nuevamente.',
+    message1,
+    message2,
     [
       {
         text: 'OK',

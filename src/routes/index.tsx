@@ -8,6 +8,7 @@ import LoginScreen from '../views/login';
 import MenuScreen from '../views/menu';
 import ChangePassword from '../views/chagePassword';
 import NewOrderScreen from '../views/newOrder';
+import DetailOrderScreen from '../views/detailOrder';
 import OrderHistoryScreen from '../views/orderHistory';
 import CatalogScreen from '../views/catalog';
 import SuccessScreen from '../views/success';
@@ -29,6 +30,7 @@ const Router = () => {
       <Stack.Screen name="Menu" component={MenuScreen} />
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
       <Stack.Screen name="NewOrder" component={NewOrderScreen} />
+      <Stack.Screen name="DetailOrder" component={DetailOrderScreen} />
       <Stack.Screen name="OrderHistory" component={OrderHistoryScreen} />
       <Stack.Screen name="Catalog" component={CatalogScreen} />
       <Stack.Screen name="Success" component={SuccessScreen} />

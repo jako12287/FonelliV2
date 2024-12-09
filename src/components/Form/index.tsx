@@ -71,7 +71,11 @@ const Form = () => {
         navigation.navigate('Menu');
       }
     } catch (error) {
-      CustomAlert();
+      CustomAlert({
+        message1: 'Error en el inicio de sesión',
+        message2:
+          'Por favor, verifica tus credenciales o inténtalo nuevamente.',
+      });
       console.error('Error on login:', error);
     } finally {
       setIsLoading(false);
@@ -95,7 +99,6 @@ const Form = () => {
           placeholder=""
           errors={errors}
           defaultValue={''}
-          secureTextEntry
         />
       </View>
       {isLoading ? (

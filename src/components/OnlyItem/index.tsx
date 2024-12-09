@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: Colors.black,
-    padding: Responsive(12),
+    paddingHorizontal: Responsive(10),
     fontSize: Responsive(16),
     width: Responsive(200),
     height: Responsive(40),

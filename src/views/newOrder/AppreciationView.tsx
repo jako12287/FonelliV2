@@ -7,11 +7,13 @@ import {Colors} from '../../theme/colors';
 
 interface PropsComponenet {
   setControlerView: (data: number) => void;
-  setCount: any;
+  // setCount: any;
+  reloadView: any;
 }
 const AppreciationView: FC<PropsComponenet> = ({
   setControlerView,
-  setCount,
+  // setCount,
+  reloadView,
 }) => {
   return (
     <View style={styles.container}>
@@ -30,9 +32,9 @@ const AppreciationView: FC<PropsComponenet> = ({
       </View>
       <View>
         <AskAgain
-          isComponentForAppreciation
+          isComponentForAppreciation={true}
           setControlerView={setControlerView}
-          setCount={setCount}
+          reloadView={reloadView}
         />
       </View>
     </View>

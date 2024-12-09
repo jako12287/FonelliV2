@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {
   FlatList,
   Modal,
@@ -23,6 +23,7 @@ interface PropsSelect {
   stateGlobalSize: any;
   setTotalPiecesInSize: (data: number) => void;
   totalPiecesInSize: number;
+  showLong: boolean;
 }
 
 const SizeSelect: FC<PropsSelect> = ({
@@ -31,6 +32,7 @@ const SizeSelect: FC<PropsSelect> = ({
   stateGlobalSize,
   setTotalPiecesInSize,
   totalPiecesInSize,
+  showLong,
 }) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
   const [isNa, setIsNa] = useState<boolean>(false);
@@ -53,6 +55,14 @@ const SizeSelect: FC<PropsSelect> = ({
     });
   };
 
+  useEffect(() => {
+    if (showLong) {
+      setIsNa(!isNa);
+      setDisabled(!isNa);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <View style={styles.container}>
@@ -63,9 +73,11 @@ const SizeSelect: FC<PropsSelect> = ({
           style={styles.containerInput}
           onPress={() => setIsActiveModal(!isActiveModal)}>
           <View style={styles.input}>
-            <Text style={styles.textValue}>
-              {disabled ? 'N/A' : 'Seleccionado'}
-            </Text>
+            <View style={styles.containerTextInput}>
+              <Text style={styles.textValue}>
+                {disabled ? 'N/A' : 'Seleccionado'}
+              </Text>
+            </View>
             <View style={styles.arrowContainer}>
               <IconImage size={15} source={Icons.general.arrowDown} />
             </View>
@@ -175,11 +187,13 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: Colors.black,
-    padding: Responsive(12),
+    paddingHorizontal: Responsive(10),
     fontSize: Responsive(16),
     width: Responsive(200),
     height: Responsive(40),
   },
+  containerTextInput: {height: '100%', justifyContent: 'center'},
+
   arrowContainer: {
     position: 'absolute',
     right: Responsive(8),

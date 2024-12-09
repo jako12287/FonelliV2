@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.2,
     borderColor: '#000',
     borderRadius: Responsive(0),
-    padding: Responsive(12),
+    paddingHorizontal:Responsive(5),
     fontSize: Responsive(16),
     backgroundColor: '#FFFFFF',
     width: Responsive(150),

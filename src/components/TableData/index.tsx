@@ -17,9 +17,8 @@ import {getOrdersByUserId} from '../../api';
 import moment from 'moment';
 import 'moment/locale/es';
 import {ScrollView} from 'react-native-gesture-handler';
-import { stateType } from '../../types';
+import {stateType} from '../../types';
 moment.locale('es');
-
 
 const TableData = () => {
   const formattedDate = (date: any) => {
@@ -67,6 +66,10 @@ const TableData = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
+
+  const handleDetailOrder = (orderId: string) => {
+    navigation.navigate('DetailOrder', {orderId});
+  };
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -88,15 +91,19 @@ const TableData = () => {
 
         {/* Rows */}
         {Data.map((item: any) => (
-          <View key={item._id} style={styles.containerBodyTable}>
-            <View style={[styles.containerItem, {width: widthCell}]}>
-              <Text style={styles.textCell}>
-                {formattedDate(item?.createdAt)}
-              </Text>
-            </View>
-            <View style={[styles.containerItem, {width: widthCell}]}>
-              <Text style={styles.textCell}>{item?.totalPieces} piezas</Text>
-            </View>
+          <View key={item.id} style={styles.containerBodyTable}>
+            <Pressable onPress={() => handleDetailOrder(item.id)}>
+              <View style={[styles.containerItem, {width: widthCell}]}>
+                <Text style={styles.textCell}>
+                  {formattedDate(item?.createdAt)}
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable onPress={() => handleDetailOrder(item.id)}>
+              <View style={[styles.containerItem, {width: widthCell}]}>
+                <Text style={styles.textCell}>{item?.totalPieces} piezas</Text>
+              </View>
+            </Pressable>
             <View
               style={[
                 styles.containerItem,
@@ -110,7 +117,9 @@ const TableData = () => {
                 },
               ]}>
               <Text style={[styles.textCell]}>
-                {item?.status === stateType.PENDING ? 'SOLICITADO' : 'CAPTURADO'}
+                {item?.status === stateType.PENDING
+                  ? 'SOLICITADO'
+                  : 'CAPTURADO'}
               </Text>
             </View>
             <View style={[styles.containerItem, {width: widthCell}]}>

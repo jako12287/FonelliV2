@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
   FlatList,
   Modal,
@@ -9,11 +9,11 @@ import {
   View,
 } from 'react-native';
 import Responsive from '../../utils/responsive';
-import {Colors} from '../../theme/colors';
+import { Colors } from '../../theme/colors';
 import IconImage from '../../utils/iconImage';
-import {Icons} from '../../assets/icons';
-import {optionsLong} from '../../utils/optionsSelects';
-import {fonts} from '../../theme/fonts';
+import { Icons } from '../../assets/icons';
+import { optionsLong } from '../../utils/optionsSelects';
+import { fonts } from '../../theme/fonts';
 import Count from '../Count';
 import CustomBotton from '../CustomBotton';
 
@@ -41,7 +41,7 @@ const LongSelect: FC<PropsSelect> = ({
   const handleSaveData = (data: any) => {
     setStateGlobalLong((prev: any) => {
       const updatedState = prev.map((item: any) =>
-        item.name === data.name ? {...item, count: data.count} : item,
+        item.name === data.name ? { ...item, count: data.count } : item,
       );
       if (!updatedState.some((item: any) => item.name === data.name)) {
         updatedState.push(data);
@@ -55,6 +55,14 @@ const LongSelect: FC<PropsSelect> = ({
     });
   };
 
+  useEffect(() => {
+    if (showInitialName) {
+      setIsNa(!isNa);
+      setDisabled(!isNa);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <View style={styles.container}>
@@ -65,9 +73,12 @@ const LongSelect: FC<PropsSelect> = ({
           style={styles.containerInput}
           onPress={() => setIsActiveModal(!isActiveModal)}>
           <View style={styles.input}>
-            <Text style={styles.textValue}>
-              {disabled ? 'N/A' : 'Seleccionado'}
-            </Text>
+            <View style={styles.containerTextInput}>
+
+              <Text style={styles.textValue}>
+                {disabled ? 'N/A' : 'Seleccionado'}
+              </Text>
+            </View>
             <View style={styles.arrowContainer}>
               <IconImage size={15} source={Icons.general.arrowDown} />
             </View>
@@ -93,7 +104,8 @@ const LongSelect: FC<PropsSelect> = ({
                   onPress={() => {
                     setIsNa(!isNa);
                     setDisabled(!isNa);
-                    setShowInitialName(!showInitialName);
+                    setShowInitialName(!isNa);
+                    !showInitialName && setStateGlobalLong([]);
                   }}>
                   {isNa && <IconImage size={30} source={Icons.general.check} />}
                 </Pressable>
@@ -102,7 +114,7 @@ const LongSelect: FC<PropsSelect> = ({
                 data={optionsLong}
                 keyExtractor={item => item.value}
                 style={styles.flatList}
-                renderItem={({item}) => (
+                renderItem={({ item }) => (
                   <View style={styles.option}>
                     <Text
                       style={
@@ -124,19 +136,19 @@ const LongSelect: FC<PropsSelect> = ({
               <Text
                 style={[
                   styles.textDown,
-                  disabled && {color: Colors.gray_shadow},
+                  disabled && { color: Colors.gray_shadow },
                 ]}>
                 TOTAL
               </Text>
               <View
                 style={[
                   styles.totalBox,
-                  disabled && {borderColor: Colors.gray_shadow},
+                  disabled && { borderColor: Colors.gray_shadow },
                 ]}>
                 <Text
                   style={[
                     styles.textDown,
-                    disabled && {color: Colors.gray_shadow},
+                    disabled && { color: Colors.gray_shadow },
                   ]}>
                   {totalPiecesInLong} piezas
                 </Text>
@@ -179,10 +191,14 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: Colors.black,
-    padding: Responsive(12),
+    paddingHorizontal: Responsive(10),
     fontSize: Responsive(16),
     width: Responsive(200),
     height: Responsive(40),
+  },
+  containerTextInput: {
+    height: '100%',
+    justifyContent: 'center',
   },
   arrowContainer: {
     position: 'absolute',
@@ -277,7 +293,7 @@ const styles = StyleSheet.create({
     height: Responsive(30),
     marginRight: Responsive(10),
   },
-  contentFlatList: {maxHeight: 200},
+  contentFlatList: { maxHeight: 200 },
   containerBtnUp: {
     flexDirection: 'row',
     alignContent: 'center',

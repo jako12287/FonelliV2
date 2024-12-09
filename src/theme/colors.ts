@@ -11,7 +11,7 @@ export const Colors = {
   gray_shadow: '#CCCCCC',
   gary_text: '#545454',
   gray_table_bg: '#191919',
-  pending_state: '#FFDE59',
+  pending_state: '#24A4CC',
   download_state: '#FFBD59',
   transparent: 'transparent',
 };

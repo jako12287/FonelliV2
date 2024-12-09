@@ -26,6 +26,8 @@ interface PropsSelect {
   showLong: boolean;
   totalPiecesInSize: any;
   setShowPieceTotal: any;
+  setShowNameNA: (data: boolean) => void;
+  showNameNA: boolean;
 }
 
 const NameSelect: FC<PropsSelect> = ({
@@ -36,6 +38,8 @@ const NameSelect: FC<PropsSelect> = ({
   showLong,
   totalPiecesInSize,
   setShowPieceTotal,
+  setShowNameNA,
+  showNameNA,
 }) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
   const [isNa, setIsNa] = useState<boolean>(false);
@@ -108,6 +112,14 @@ const NameSelect: FC<PropsSelect> = ({
     }
   };
 
+  useEffect(() => {
+    if (showNameNA) {
+      setIsNa(!isNa);
+      setDisabled(!isNa);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <View style={styles.container}>
@@ -118,9 +130,11 @@ const NameSelect: FC<PropsSelect> = ({
           style={styles.containerInput}
           onPress={() => setIsActiveModal(!isActiveModal)}>
           <View style={styles.input}>
-            <Text style={styles.textValue}>
-              {disabled ? 'N/A' : 'Seleccionado'}
-            </Text>
+            <View style={styles.containerTextInput}>
+              <Text style={styles.textValue}>
+                {disabled ? 'N/A' : 'Seleccionado'}
+              </Text>
+            </View>
             <View style={styles.arrowContainer}>
               <IconImage size={15} source={Icons.general.arrowDown} />
             </View>
@@ -148,6 +162,7 @@ const NameSelect: FC<PropsSelect> = ({
                       setIsNa(!isNa);
                       setDisabled(!isNa);
                       setShowPieceTotal(!isNa);
+                      setShowNameNA(!showNameNA);
                     }}>
                     {isNa && (
                       <IconImage size={30} source={Icons.general.check} />
@@ -300,11 +315,15 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: Colors.black,
-    padding: Responsive(12),
+    paddingHorizontal: Responsive(10),
     fontSize: Responsive(16),
     width: Responsive(200),
     height: Responsive(40),
     marginRight: Responsive(25),
+  },
+  containerTextInput: {
+    height: '100%',
+    justifyContent: 'center',
   },
   arrowContainer: {
     position: 'absolute',

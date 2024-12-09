@@ -41,9 +41,12 @@ const RockSelect: FC<PropsSelect> = ({
           style={styles.containerInput}
           onPress={() => setIsActiveModal(!isActiveModal)}>
           <View style={styles.input}>
+            <View style={styles.containerTextInput}>
+
             <Text style={styles.textValue}>
               {optionValue || 'Seleccione una opción'}
             </Text>
+            </View>
             <View style={styles.arrowContainer}>
               <IconImage size={15} source={Icons.general.arrowDown} />
             </View>
@@ -168,7 +171,7 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: Colors.black,
-    padding: Responsive(12),
+    paddingHorizontal: Responsive(10),
     fontSize: Responsive(16),
     width: Responsive(200),
     height: Responsive(40),
@@ -237,6 +240,7 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     color: Colors.title_color,
   },
+  containerTextInput: {height: '100%', justifyContent: 'center'},
   subTitle: {
     fontSize: Responsive(16),
     fontFamily: fonts.poppins_medium,
