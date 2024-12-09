@@ -88,8 +88,20 @@ const DetailOrder = ({route}: DetailOrderProps) => {
             <View style={styles.containerTitle}>
               <Text style={styles.textLabel}>Piedra</Text>
             </View>
-            <View style={styles.containerGroupItem}>
-              <Text style={styles.textData}>{Data?.rock}</Text>
+            <View style={[styles.containerGroupItem, {paddingRight:Responsive(20)}]}>
+            {Data?.rock ? (
+                Data.rock.map((el: any) => (
+                  <View
+                    key={el}
+                    // style={[styles.copnstainerIntInitial, styles.wrap80]}
+                    style={styles.containerItem}>
+                    <Text style={styles.textData}>{el}</Text>
+                  </View>
+                ))
+              ) : (
+                <Text>NO APLICA</Text>
+              )}
+              {/* <Text style={styles.textData}>{Data?.rock}</Text> */}
             </View>
           </View>
         )}

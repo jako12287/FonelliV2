@@ -31,8 +31,8 @@ interface PropsComponenet {
   caratage: string;
   setColor: (data: string) => void;
   color: string;
-  setRock: (data: string) => void;
-  rock: string;
+  setRock: any;
+  rock: any;
   setTotalPieces: (data: string) => void;
   // totalPieces: string;
   setObservations: (data: string) => void;
@@ -243,7 +243,7 @@ const ViewNewOrder: FC<PropsComponenet> = ({
           optionValue={caratage}
         />
         <ColorSelect handleOptionPress={setColor} optionValue={color} />
-        <RockSelect handleOptionPress={setRock} optionValue={rock} />
+        <RockSelect setRock={setRock} rock={rock} />
         <SizeSelect
         showLong={showLong}
           setTotalPiecesInSize={setTotalPiecesInSize}

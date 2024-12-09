@@ -19,7 +19,7 @@ interface PropsComponenet {
   setModel: (data: string) => void;
   setCaratage: (data: string) => void;
   setColor: (data: string) => void;
-  setRock: (data: string) => void;
+  setRock: any;
   setStateGlobalSize: any;
   setStateGlobalInitial: any;
   setStateGlobalLong: any;
@@ -76,12 +76,13 @@ const SumaryOrder: FC<PropsComponenet> = ({
       setModel('');
       setCaratage('');
       setColor('');
-      setRock('');
+      setRock([]);
       setStateGlobalSize([{count: 0, name: '4'}]);
       setStateGlobalInitial([{count: 0, name: 'A'}]);
       setStateGlobalLong([{count: 0, name: '18'}]);
       setStateGlobalName([{name: 'name1', value: '', count: 0}]);
-      setObservations(''), setTotalPieces('1');
+      setObservations('');
+      setTotalPieces('1');
     } catch (error) {
       console.log('Error al crear la orden:', error);
     } finally {
@@ -137,10 +138,22 @@ const SumaryOrder: FC<PropsComponenet> = ({
             <View style={styles.containerTitle}>
               <Text style={styles.textLabel}>Piedra</Text>
             </View>
-            <View style={styles.containerGroupItem}>
-              <Text style={styles.textData}>
+            <View style={[styles.containerGroupItem,{paddingRight:Responsive(20)}]}>
+              {/* <Text style={styles.textData}>
                 {dataSend?.rock === 'N/A' ? 'NO APLICA' : dataSend?.rock}
-              </Text>
+              </Text> */}
+              {dataSend?.rock ? (
+                dataSend.rock.map((el: any) => (
+                  <View
+                    key={el}
+                    // style={[styles.copnstainerIntInitial, styles.wrap80]}
+                    style={styles.containerItem}>
+                    <Text style={styles.textData}>{el}</Text>
+                  </View>
+                ))
+              ) : (
+                <Text>NO APLICA</Text>
+              )}
             </View>
           </View>
 

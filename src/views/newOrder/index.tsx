@@ -39,7 +39,7 @@ const NewOrder = ({route}: NewOrderProps) => {
   const [model, setModel] = useState<string>('');
   const [caratage, setCaratage] = useState<string>('');
   const [color, setColor] = useState<string>('');
-  const [rock, setRock] = useState<string>('');
+  const [rock, setRock] = useState<string[]>([]);
   const [totalPieces, setTotalPieces] = useState<string>('1');
   const [observations, setObservations] = useState<string>('');
   const [userId, setUserId] = useState<string>('');
@@ -125,9 +125,11 @@ const NewOrder = ({route}: NewOrderProps) => {
     model,
     caratage,
     color,
-    rock,
     observations,
   };
+  if (rock.length > 0 && rock[0] !== 'N/A') {
+    orderCurrent.rock = rock;
+  }
   if (!showLong) {
     orderCurrent.size = stateGlobalSize;
   }
@@ -156,7 +158,12 @@ const NewOrder = ({route}: NewOrderProps) => {
           setModel(response?.order?.model || '');
           setCaratage(response?.order?.caratage?.slice(0, 2) || '');
           setColor(response?.order?.color);
-          setRock(response?.order?.rock);
+          if (Array.isArray(response?.order?.rock)) {
+            setRock(response?.order?.rock);
+          } else {
+            console.error('El campo rock no es un array válido.');
+            setRock([]);
+          }
           if (Array.isArray(response?.order?.size)) {
             setStateGlobalSize(response.order.size);
           } else {

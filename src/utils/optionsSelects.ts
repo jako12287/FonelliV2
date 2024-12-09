@@ -102,10 +102,6 @@ export const optionsIniitals = [
 
 export const optionsMainRocks = [
   {
-    label: 'No aplica',
-    value: 'N/A',
-  },
-  {
     label: 'Zirconia',
     value: 'Zirconia',
   },
