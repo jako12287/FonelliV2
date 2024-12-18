@@ -16,6 +16,7 @@ import {optionSize} from '../../utils/optionsSelects';
 import {fonts} from '../../theme/fonts';
 import Count from '../Count';
 import CustomBotton from '../CustomBotton';
+import {PropsShow} from '../../types';
 
 interface PropsSelect {
   setShowLong: (value: boolean) => void;
@@ -23,7 +24,8 @@ interface PropsSelect {
   stateGlobalSize: any;
   setTotalPiecesInSize: (data: number) => void;
   totalPiecesInSize: number;
-  showLong: boolean;
+  setStateShow: any;
+  stateShow: PropsShow;
 }
 
 const SizeSelect: FC<PropsSelect> = ({
@@ -32,11 +34,12 @@ const SizeSelect: FC<PropsSelect> = ({
   stateGlobalSize,
   setTotalPiecesInSize,
   totalPiecesInSize,
-  showLong,
+  setStateShow,
+  stateShow,
 }) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
-  const [isNa, setIsNa] = useState<boolean>(false);
-  const [disabled, setDisabled] = useState<boolean>(false);
+  const [isNa, setIsNa] = useState<boolean>(true);
+  const [disabled, setDisabled] = useState<boolean>(true);
 
   const handleSaveData = (data: any) => {
     setStateGlobalSize((prev: any) => {
@@ -56,9 +59,14 @@ const SizeSelect: FC<PropsSelect> = ({
   };
 
   useEffect(() => {
-    if (showLong) {
-      setIsNa(!isNa);
-      setDisabled(!isNa);
+    if (
+      stateShow.size &&
+      !stateShow.long &&
+      !stateShow.initialName &&
+      !stateShow.name
+    ) {
+      setIsNa(false);
+      setDisabled(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -104,6 +112,23 @@ const SizeSelect: FC<PropsSelect> = ({
                     setIsNa(!isNa);
                     setDisabled(!isNa);
                     setShowLong(!isNa);
+                    if (!isNa) {
+                      setStateShow({
+                        size: true,
+                        long: true,
+                        initialName: true,
+                        name: true,
+                        pieceTotal: true,
+                      });
+                    } else if (isNa) {
+                      setStateShow({
+                        size: true,
+                        long: false,
+                        initialName: false,
+                        name: false,
+                        pieceTotal: false,
+                      });
+                    }
                   }}>
                   {isNa && <IconImage size={30} source={Icons.general.check} />}
                 </Pressable>

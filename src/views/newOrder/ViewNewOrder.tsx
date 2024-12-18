@@ -20,6 +20,8 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import 'moment/locale/es';
 import {deleteOrder} from '../../api';
 import {CustomAlert} from '../../utils/alertError';
+import {PropsShow} from '../../types';
+import {determineTotalPieces} from '../../utils/determinatePieces';
 moment.locale('es');
 
 interface PropsComponenet {
@@ -34,7 +36,7 @@ interface PropsComponenet {
   setRock: any;
   rock: any;
   setTotalPieces: (data: string) => void;
-  // totalPieces: string;
+  totalPieces: string;
   setObservations: (data: string) => void;
   observations: string;
   setTotalPiecesInSize: (data: number) => void;
@@ -60,12 +62,12 @@ interface PropsComponenet {
   setTotalPiecesInInitial: any;
   totalPiecesInInitial: any;
   setShowPieceTotal: any;
-  showPieceTotal: any;
   orderId: any;
   setShowNameNA: (data: boolean) => void;
   showNameNA: boolean;
-  determineTotalPieces: any;
   dataSend: any;
+  setStateShow: any;
+  stateShow: PropsShow;
 }
 const ViewNewOrder: FC<PropsComponenet> = ({
   setControlerView,
@@ -79,7 +81,7 @@ const ViewNewOrder: FC<PropsComponenet> = ({
   setRock,
   rock,
   setTotalPieces,
-  // totalPieces,
+  totalPieces,
   setObservations,
   observations,
   setTotalPiecesInSize,
@@ -93,7 +95,6 @@ const ViewNewOrder: FC<PropsComponenet> = ({
   setStateGlobalInitial,
   stateGlobalInitial,
   setShowLong,
-  showLong,
   setShowInitialName,
   showInitialName,
   setShowName,
@@ -105,17 +106,16 @@ const ViewNewOrder: FC<PropsComponenet> = ({
   setTotalPiecesInInitial,
   totalPiecesInInitial,
   setShowPieceTotal,
-  showPieceTotal,
   orderId,
   setShowNameNA,
   showNameNA,
-  determineTotalPieces,
   dataSend,
+  setStateShow,
+  stateShow,
 }) => {
   const navigation = useCustomNavigation();
   const formattedDate = moment(new Date()).format('DD-MMM-YYYY').toLowerCase();
-  const [editableTotalPiece, setEditableTotalPiece] = useState<boolean>(false);
-
+  const [editableTotalPiece, setEditableTotalPiece] = useState<boolean>(true);
   const handleDelete = () => {
     return Alert.alert(
       'Eliminar Orden',
@@ -140,12 +140,17 @@ const ViewNewOrder: FC<PropsComponenet> = ({
   };
 
   useEffect(() => {
-    if (showLong && showInitialName && showName && showPieceTotal) {
+    if (
+      stateShow.size &&
+      stateShow.long &&
+      stateShow.initialName &&
+      stateShow.name
+    ) {
       setEditableTotalPiece(true);
     } else {
       setEditableTotalPiece(false);
     }
-  }, [showLong, showInitialName, showName, showPieceTotal]);
+  }, [stateShow]);
 
   const handlePrevSubmit = () => {
     if (dataSend.model === '') {
@@ -179,40 +184,12 @@ const ViewNewOrder: FC<PropsComponenet> = ({
       return;
     }
 
-    if (
-      dataSend.size ||
-      dataSend.long ||
-      dataSend.initialName ||
-      dataSend.name
-    ) {
-      const haveSize =
-        dataSend?.size?.reduce(
-          (acc: number, item: any) => acc + (item.count || 0),
-          0,
-        ) > 0;
-      const haveLong =
-        dataSend?.long?.reduce(
-          (acc: number, item: any) => acc + (item.count || 0),
-          0,
-        ) > 0;
-      const haveInitial =
-        dataSend?.initialName?.reduce(
-          (acc: number, item: any) => acc + (item.count || 0),
-          0,
-        ) > 0;
-      const haveName =
-        dataSend?.name?.reduce(
-          (acc: number, item: any) => acc + (item.count || 0),
-          0,
-        ) > 0;
-
-      if (!haveSize && !haveLong && !haveInitial && !haveName) {
-        CustomAlert({
-          message1: 'Espera ...',
-          message2: 'Por favor, selecciona la cantidad que necesitas',
-        });
-        return;
-      }
+    if (dataSend.totalPieces === '0') {
+      CustomAlert({
+        message1: 'Espera ...',
+        message2: 'Debes ingresar la cantidad de piezas total',
+      });
+      return;
     }
 
     setControlerView(2);
@@ -244,17 +221,22 @@ const ViewNewOrder: FC<PropsComponenet> = ({
         />
         <ColorSelect handleOptionPress={setColor} optionValue={color} />
         <RockSelect setRock={setRock} rock={rock} />
-        <SizeSelect
-        showLong={showLong}
-          setTotalPiecesInSize={setTotalPiecesInSize}
-          totalPiecesInSize={totalPiecesInSize}
-          stateGlobalSize={stateGlobalSize}
-          setStateGlobalSize={setStateGlobalSize}
-          setShowLong={setShowLong}
-        />
+        {stateShow.size && (
+          <SizeSelect
+            stateShow={stateShow}
+            setStateShow={setStateShow}
+            setTotalPiecesInSize={setTotalPiecesInSize}
+            totalPiecesInSize={totalPiecesInSize}
+            stateGlobalSize={stateGlobalSize}
+            setStateGlobalSize={setStateGlobalSize}
+            setShowLong={setShowLong}
+          />
+        )}
 
-        {showLong && (
+        {stateShow.long && (
           <LongSelect
+            stateShow={stateShow}
+            setStateShow={setStateShow}
             showInitialName={showInitialName}
             setTotalPiecesInLong={setTotalPiecesInLong}
             totalPiecesInLong={totalPiecesInLong}
@@ -264,37 +246,51 @@ const ViewNewOrder: FC<PropsComponenet> = ({
           />
         )}
 
-        {showInitialName && (
+        {stateShow.initialName && (
           <InitialNameSelect
+            stateShow={stateShow}
+            setStateShow={setStateShow}
             showName={showName}
-            showLong={showLong}
             setStateGlobalInitial={setStateGlobalInitial}
             stateGlobalInitial={stateGlobalInitial}
             setShowName={setShowName}
-            totalPiecesInSize={totalPiecesInSize}
             setTotalPiecesInInitial={setTotalPiecesInInitial}
             totalPiecesInInitial={totalPiecesInInitial}
           />
         )}
 
-        {showName && (
+        {stateShow.name && (
           <NameSelect
+            stateShow={stateShow}
+            setStateShow={setStateShow}
             setShowNameNA={setShowNameNA}
             showNameNA={showNameNA}
             setStateGlobalName={setStateGlobalName}
             stateGlobalName={stateGlobalName}
             setTotalPiecesInName={setTotalPiecesInName}
             totalPiecesInName={totalPiecesInName}
-            showLong={showLong}
-            totalPiecesInSize={totalPiecesInSize}
             setShowPieceTotal={setShowPieceTotal}
           />
         )}
 
         <OnllyItem
           label="Piezas totales"
-          onChangeText={setTotalPieces}
-          valueText={determineTotalPieces()}
+          onChangeText={e => {
+            if (e.length > 1 && e[0] === '0') {
+              e = e.substring(1);
+            }
+            if (e.length <= 3) {
+              setTotalPieces(e);
+            }
+          }}
+          valueText={determineTotalPieces({
+            stateShow,
+            totalPieces,
+            totalPiecesInInitial,
+            totalPiecesInLong,
+            totalPiecesInName,
+            totalPiecesInSize,
+          })}
           editable={editableTotalPiece}
           keyboardTypeCustom="number-pad"
         />

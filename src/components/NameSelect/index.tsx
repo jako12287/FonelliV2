@@ -17,17 +17,18 @@ import {Icons} from '../../assets/icons';
 import {fonts} from '../../theme/fonts';
 import CustomBotton from '../CustomBotton';
 import Count from '../Count';
+import {PropsShow} from '../../types';
 
 interface PropsSelect {
   setStateGlobalName: any;
   stateGlobalName: any;
   setTotalPiecesInName: any;
   totalPiecesInName: any;
-  showLong: boolean;
-  totalPiecesInSize: any;
   setShowPieceTotal: any;
   setShowNameNA: (data: boolean) => void;
   showNameNA: boolean;
+  setStateShow: any;
+  stateShow: PropsShow;
 }
 
 const NameSelect: FC<PropsSelect> = ({
@@ -35,15 +36,15 @@ const NameSelect: FC<PropsSelect> = ({
   stateGlobalName,
   setTotalPiecesInName,
   totalPiecesInName,
-  showLong,
-  totalPiecesInSize,
   setShowPieceTotal,
   setShowNameNA,
   showNameNA,
+  setStateShow,
+  stateShow,
 }) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
-  const [isNa, setIsNa] = useState<boolean>(false);
-  const [disabled, setDisabled] = useState<boolean>(false);
+  const [isNa, setIsNa] = useState<boolean>(true);
+  const [disabled, setDisabled] = useState<boolean>(true);
 
   useEffect(() => {
     const totalCount: any = stateGlobalName?.reduce((sum: any, item: any) => {
@@ -113,9 +114,14 @@ const NameSelect: FC<PropsSelect> = ({
   };
 
   useEffect(() => {
-    if (showNameNA) {
-      setIsNa(!isNa);
-      setDisabled(!isNa);
+    if (
+      !stateShow.size &&
+      !stateShow.long &&
+      !stateShow.initialName &&
+      stateShow.name
+    ) {
+      setIsNa(false);
+      setDisabled(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -163,6 +169,23 @@ const NameSelect: FC<PropsSelect> = ({
                       setDisabled(!isNa);
                       setShowPieceTotal(!isNa);
                       setShowNameNA(!showNameNA);
+                      if (!isNa) {
+                        setStateShow({
+                          size: true,
+                          long: true,
+                          initialName: true,
+                          name: true,
+                          pieceTotal: true,
+                        });
+                      } else if (isNa) {
+                        setStateShow({
+                          size: false,
+                          long: false,
+                          initialName: false,
+                          name: true,
+                          pieceTotal: false,
+                        });
+                      }
                     }}>
                     {isNa && (
                       <IconImage size={30} source={Icons.general.check} />
@@ -244,24 +267,10 @@ const NameSelect: FC<PropsSelect> = ({
                     style={[
                       styles.textDown,
                       disabled && {color: Colors.gray_shadow},
-                      !disabled &&
-                        totalPiecesInName !== totalPiecesInSize && {
-                          color: Colors.error_color,
-                        },
                     ]}>
                     {totalPiecesInName} piezas
                   </Text>
                 </View>
-                {!showLong &&
-                  totalPiecesInName !== totalPiecesInSize &&
-                  !disabled && (
-                    <View style={styles.textErrorContainer}>
-                      <Text style={styles.textError}>
-                        Las cantidades deben coincidir por talla{' '}
-                        {totalPiecesInSize}
-                      </Text>
-                    </View>
-                  )}
               </View>
 
               <View style={styles.btnContainer}>

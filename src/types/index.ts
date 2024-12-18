@@ -68,3 +68,11 @@ export enum stateType {
   PENDING = 'PENDING',
   CAUGHT = 'CAUGHT',
 }
+
+export interface PropsShow {
+  size: boolean;
+  long: boolean;
+  initialName: boolean;
+  name: boolean;
+  pieceTotal: boolean;
+}

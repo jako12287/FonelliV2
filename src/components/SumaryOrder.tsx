@@ -9,6 +9,7 @@ import CustomBotton from './CustomBotton';
 import Loader from './Loader';
 import {ScrollView} from 'react-native-gesture-handler';
 import {createOrder, editOrder} from '../api';
+import {PropsShow} from '../types';
 
 interface PropsComponenet {
   setControlerView: (data: number) => void;
@@ -26,6 +27,7 @@ interface PropsComponenet {
   setStateGlobalName: any;
   setObservations: any;
   setTotalPieces: any;
+  stateShow: PropsShow;
 }
 const SumaryOrder: FC<PropsComponenet> = ({
   setControlerView,
@@ -43,6 +45,7 @@ const SumaryOrder: FC<PropsComponenet> = ({
   setStateGlobalName,
   setObservations,
   setTotalPieces,
+  stateShow,
 }) => {
   const [loadind, setLoading] = useState<boolean>(true);
   useEffect(() => {
@@ -69,6 +72,7 @@ const SumaryOrder: FC<PropsComponenet> = ({
     const data = {
       ...dataSend,
     };
+    console.log('data al enviar al back', data);
     try {
       await createOrEdit(data);
       handleDataUpdate();
@@ -97,6 +101,7 @@ const SumaryOrder: FC<PropsComponenet> = ({
       </View>
     );
   }
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -134,119 +139,122 @@ const SumaryOrder: FC<PropsComponenet> = ({
             </View>
           </View>
 
-          <View style={styles.containerData}>
-            <View style={styles.containerTitle}>
-              <Text style={styles.textLabel}>Piedra</Text>
-            </View>
-            <View style={[styles.containerGroupItem,{paddingRight:Responsive(20)}]}>
-              {/* <Text style={styles.textData}>
-                {dataSend?.rock === 'N/A' ? 'NO APLICA' : dataSend?.rock}
-              </Text> */}
-              {dataSend?.rock ? (
-                dataSend.rock.map((el: any) => (
-                  <View
-                    key={el}
-                    // style={[styles.copnstainerIntInitial, styles.wrap80]}
-                    style={styles.containerItem}>
-                    <Text style={styles.textData}>{el}</Text>
-                  </View>
-                ))
-              ) : (
-                <Text>NO APLICA</Text>
-              )}
-            </View>
-          </View>
-
-          {dataSend?.size?.length > 0 && (
-            <View style={styles.containerGroup}>
-              <View style={[styles.containerTitle, styles.alingCenter]}>
-                <Text style={styles.textLabel}>Talla</Text>
-              </View>
-              <View style={styles.containerGroupItem}>
-                {dataSend?.size?.some((el: any) => el.count > 0) ? (
-                  dataSend.size
-                    .filter((el: any) => el.count > 0)
-                    .map((el: any) => (
-                      <View
-                        key={el.name}
-                        // style={[styles.copnstainerIntInitial, styles.wrap80]}
-                        style={styles.containerItem}>
-                        <Text style={styles.textData}>{el.name}</Text>
-                        <Text style={styles.textData}>{el.count} piezas</Text>
-                      </View>
-                    ))
-                ) : (
-                  <Text>NO APLICA</Text>
-                )}
-              </View>
-            </View>
-          )}
-
-          {dataSend?.long?.length > 0 && (
-            <View style={[styles.containerGroup]}>
-              <View style={[styles.containerTitle, styles.alingCenter]}>
-                <Text style={styles.textLabel}>Largo</Text>
-              </View>
-              <View style={[styles.containerGroupItem]}>
-                {showLong && dataSend?.long?.some((el: any) => el.count > 0) ? (
-                  dataSend.long
-                    .filter((el: any) => el.count > 0)
-                    .map((el: any) => (
-                      <View key={el.name} style={styles.containerItem}>
-                        <Text style={styles.textData}>{el.name}</Text>
-                        <Text style={styles.textData}>{el.count} piezas</Text>
-                      </View>
-                    ))
-                ) : (
-                  <Text>NO APLICA</Text>
-                )}
-              </View>
-            </View>
-          )}
-
-          {dataSend?.initialName?.length > 0 && (
+          {dataSend?.rock && (
             <View style={styles.containerData}>
               <View style={styles.containerTitle}>
-                <Text style={styles.textLabel}>Inicial</Text>
+                <Text style={styles.textLabel}>Piedra</Text>
               </View>
-              <View style={styles.containerGroupItem}>
-                {dataSend?.initialName?.some((el: any) => el.count > 0) ? (
-                  dataSend.initialName
-                    .filter((el: any) => el.count > 0)
-                    .map((el: any) => (
-                      <View key={el.name} style={styles.containerItem}>
-                        <Text style={styles.textData}>{el.name}</Text>
-                        <Text style={styles.textData}>{el.count}</Text>
-                      </View>
-                    ))
-                ) : (
-                  <Text>NO APLICA</Text>
-                )}
+              <View
+                style={[
+                  styles.containerGroupItem,
+                  {paddingRight: Responsive(20)},
+                ]}>
+                {dataSend?.rock &&
+                  dataSend.rock.map((el: any) => (
+                    <View key={el} style={styles.containerItem}>
+                      <Text style={styles.textData}>{el}</Text>
+                    </View>
+                  ))}
               </View>
             </View>
           )}
 
-          {dataSend?.name?.length > 0 && (
-            <View style={styles.containerData}>
-              <View style={styles.containerTitle}>
-                <Text style={styles.textLabel}>Nombres</Text>
+          {stateShow.size &&
+            !stateShow.long &&
+            !stateShow.initialName &&
+            !stateShow.name && (
+              <View style={styles.containerGroup}>
+                <View style={[styles.containerTitle, styles.alingCenter]}>
+                  <Text style={styles.textLabel}>Talla</Text>
+                </View>
+                <View style={styles.containerGroupItem}>
+                  {dataSend?.size?.some((el: any) => el.count > 0) &&
+                    dataSend.size
+                      .filter((el: any) => el.count > 0)
+                      .map((el: any) => (
+                        <View key={el.name} style={styles.containerItem}>
+                          <Text style={styles.textData}>{el.name}</Text>
+                          <Text style={styles.textData}>
+                            {el.count} {el.count > 1 ? 'piezas' : 'pieza'}
+                          </Text>
+                        </View>
+                      ))}
+                </View>
               </View>
-              <View style={styles.containerGroupItem}>
-                {dataSend?.name?.some((el: any) => el.count > 0) ? (
-                  dataSend.name
-                    .filter((el: any) => el.count > 0)
-                    .map((el: any) => (
-                      <View key={el.name} style={styles.containerItem}>
-                        <Text style={styles.textData}>{el.value}</Text>
-                        <Text style={styles.textData}>{el.count} piezas</Text>
-                      </View>
-                    ))
-                ) : (
-                  <Text>NO APLICA</Text>
-                )}
+            )}
+
+          {!stateShow.size &&
+            stateShow.long &&
+            !stateShow.initialName &&
+            !stateShow.name && (
+              <View style={[styles.containerGroup]}>
+                <View style={[styles.containerTitle, styles.alingCenter]}>
+                  <Text style={styles.textLabel}>Largo</Text>
+                </View>
+                <View style={[styles.containerGroupItem]}>
+                  {showLong &&
+                    dataSend?.long?.some((el: any) => el.count > 0) &&
+                    dataSend.long
+                      .filter((el: any) => el.count > 0)
+                      .map((el: any) => (
+                        <View key={el.name} style={styles.containerItem}>
+                          <Text style={styles.textData}>{el.name} cm</Text>
+                          <Text style={styles.textData}>
+                            {el.count} {el.count > 1 ? 'piezas' : 'pieza'}
+                          </Text>
+                        </View>
+                      ))}
+                </View>
               </View>
-            </View>
-          )}
+            )}
+
+          {!stateShow.size &&
+            !stateShow.long &&
+            stateShow.initialName &&
+            !stateShow.name && (
+              <View style={styles.containerData}>
+                <View style={styles.containerTitle}>
+                  <Text style={styles.textLabel}>Inicial</Text>
+                </View>
+                <View style={styles.containerGroupItem}>
+                  {dataSend?.initialName?.some((el: any) => el.count > 0) &&
+                    dataSend.initialName
+                      .filter((el: any) => el.count > 0)
+                      .map((el: any) => (
+                        <View key={el.name} style={styles.containerItem}>
+                          <Text style={styles.textData}>{el.name}</Text>
+                          <Text style={styles.textData}>
+                            {el.count} {el.count > 1 ? 'piezas' : 'pieza'}
+                          </Text>
+                        </View>
+                      ))}
+                </View>
+              </View>
+            )}
+
+          {!stateShow.size &&
+            !stateShow.long &&
+            !stateShow.initialName &&
+            stateShow.name && (
+              <View style={styles.containerData}>
+                <View style={styles.containerTitle}>
+                  <Text style={styles.textLabel}>Nombres</Text>
+                </View>
+                <View style={styles.containerGroupItem}>
+                  {dataSend?.name?.some((el: any) => el.count > 0) &&
+                    dataSend.name
+                      .filter((el: any) => el.count > 0)
+                      .map((el: any) => (
+                        <View key={el.name} style={styles.containerItem}>
+                          <Text style={styles.textData}>{el.value}</Text>
+                          <Text style={styles.textData}>
+                            {el.count} {el.count > 1 ? 'piezas' : 'pieza'}
+                          </Text>
+                        </View>
+                      ))}
+                </View>
+              </View>
+            )}
 
           <View style={styles.containerData}>
             <View style={styles.containerTitle}>
@@ -254,7 +262,8 @@ const SumaryOrder: FC<PropsComponenet> = ({
             </View>
             <View style={styles.containerGroupItem}>
               <Text style={styles.textTotal}>
-                {dataSend?.totalPieces} PIEZAS
+                {dataSend?.totalPieces}{' '}
+                {dataSend?.totalPieces > 1 ? 'PIEZAS' : 'PIEZA'}
               </Text>
             </View>
           </View>

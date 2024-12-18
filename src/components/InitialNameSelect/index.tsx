@@ -16,31 +16,32 @@ import {optionIniitalName} from '../../utils/optionsSelects';
 import {fonts} from '../../theme/fonts';
 import Count from '../Count';
 import CustomBotton from '../CustomBotton';
+import {PropsShow} from '../../types';
 
 interface PropsSelect {
   setShowName: (value: boolean) => void;
   showName: boolean;
   setStateGlobalInitial: any;
   stateGlobalInitial: any;
-  totalPiecesInSize: number;
-  showLong: boolean;
   setTotalPiecesInInitial: any;
   totalPiecesInInitial: any;
+  setStateShow: any;
+  stateShow: PropsShow;
 }
 
 const InitialNameSelect: FC<PropsSelect> = ({
   setStateGlobalInitial,
   stateGlobalInitial,
-  totalPiecesInSize,
   setShowName,
   showName,
-  showLong,
   setTotalPiecesInInitial,
   totalPiecesInInitial,
+  setStateShow,
+  stateShow,
 }) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
-  const [isNa, setIsNa] = useState<boolean>(false);
-  const [disabled, setDisabled] = useState<boolean>(false);
+  const [isNa, setIsNa] = useState<boolean>(true);
+  const [disabled, setDisabled] = useState<boolean>(true);
 
   const handleSaveData = (data: any) => {
     setStateGlobalInitial((prev: any) => {
@@ -60,9 +61,14 @@ const InitialNameSelect: FC<PropsSelect> = ({
   };
 
   useEffect(() => {
-    if (showName) {
-      setIsNa(!isNa);
-      setDisabled(!isNa);
+    if (
+      !stateShow.size &&
+      !stateShow.long &&
+      stateShow.initialName &&
+      !stateShow.name
+    ) {
+      setIsNa(false);
+      setDisabled(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -109,6 +115,23 @@ const InitialNameSelect: FC<PropsSelect> = ({
                     setDisabled(!isNa);
                     setShowName(!showName);
                     !showName && setStateGlobalInitial([]);
+                    if (!isNa) {
+                      setStateShow({
+                        size: true,
+                        long: true,
+                        initialName: true,
+                        name: true,
+                        pieceTotal: true,
+                      });
+                    } else if (isNa) {
+                      setStateShow({
+                        size: false,
+                        long: false,
+                        initialName: true,
+                        name: false,
+                        pieceTotal: false,
+                      });
+                    }
                   }}>
                   {isNa && <IconImage size={30} source={Icons.general.check} />}
                 </Pressable>
@@ -149,43 +172,16 @@ const InitialNameSelect: FC<PropsSelect> = ({
                   style={[
                     styles.textDown,
                     disabled && {color: Colors.gray_shadow},
-                    !showLong &&
-                      !disabled &&
-                      totalPiecesInInitial !== totalPiecesInSize && {
-                        color: Colors.error_color,
-                      },
                   ]}>
                   {totalPiecesInInitial} piezas
                 </Text>
               </View>
-              {!showLong &&
-                totalPiecesInInitial !== totalPiecesInSize &&
-                !disabled && (
-                  <View style={styles.textErrorContainer}>
-                    <Text style={styles.textError}>
-                      Las cantidades deben coincidir por talla{' '}
-                      {totalPiecesInSize}
-                    </Text>
-                  </View>
-                )}
             </View>
             <View style={styles.btnContainer}>
-              {!showLong &&
-              !disabled &&
-              totalPiecesInInitial !== totalPiecesInSize ? (
-                <CustomBotton
-                  title="Guardar"
-                  onClick={() => {}}
-                  color={Colors.gray_shadow}
-                  colorBottonBG={Colors.gary_text}
-                  colorShadow={Colors.gary_text}
-                />
-              ) : (
-                <CustomBotton
-                  title="Guardar"
-                  onClick={() => setIsActiveModal(false)}
-                />
-              )}
+              <CustomBotton
+                title="Guardar"
+                onClick={() => setIsActiveModal(false)}
+              />
             </View>
           </View>
         </View>

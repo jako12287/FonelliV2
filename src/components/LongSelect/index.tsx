@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {
   FlatList,
   Modal,
@@ -9,13 +9,14 @@ import {
   View,
 } from 'react-native';
 import Responsive from '../../utils/responsive';
-import { Colors } from '../../theme/colors';
+import {Colors} from '../../theme/colors';
 import IconImage from '../../utils/iconImage';
-import { Icons } from '../../assets/icons';
-import { optionsLong } from '../../utils/optionsSelects';
-import { fonts } from '../../theme/fonts';
+import {Icons} from '../../assets/icons';
+import {optionsLong} from '../../utils/optionsSelects';
+import {fonts} from '../../theme/fonts';
 import Count from '../Count';
 import CustomBotton from '../CustomBotton';
+import {PropsShow} from '../../types';
 
 interface PropsSelect {
   setShowInitialName: (value: boolean) => void;
@@ -24,6 +25,8 @@ interface PropsSelect {
   setTotalPiecesInLong: (data: number) => void;
   totalPiecesInLong: number;
   showInitialName: boolean;
+  setStateShow: any;
+  stateShow: PropsShow;
 }
 
 const LongSelect: FC<PropsSelect> = ({
@@ -33,15 +36,17 @@ const LongSelect: FC<PropsSelect> = ({
   setTotalPiecesInLong,
   totalPiecesInLong,
   showInitialName,
+  setStateShow,
+  stateShow,
 }) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
-  const [isNa, setIsNa] = useState<boolean>(false);
-  const [disabled, setDisabled] = useState<boolean>(false);
+  const [isNa, setIsNa] = useState<boolean>(true);
+  const [disabled, setDisabled] = useState<boolean>(true);
 
   const handleSaveData = (data: any) => {
     setStateGlobalLong((prev: any) => {
       const updatedState = prev.map((item: any) =>
-        item.name === data.name ? { ...item, count: data.count } : item,
+        item.name === data.name ? {...item, count: data.count} : item,
       );
       if (!updatedState.some((item: any) => item.name === data.name)) {
         updatedState.push(data);
@@ -56,9 +61,14 @@ const LongSelect: FC<PropsSelect> = ({
   };
 
   useEffect(() => {
-    if (showInitialName) {
-      setIsNa(!isNa);
-      setDisabled(!isNa);
+    if (
+      !stateShow.size &&
+      stateShow.long &&
+      !stateShow.initialName &&
+      !stateShow.name
+    ) {
+      setIsNa(false);
+      setDisabled(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -74,7 +84,6 @@ const LongSelect: FC<PropsSelect> = ({
           onPress={() => setIsActiveModal(!isActiveModal)}>
           <View style={styles.input}>
             <View style={styles.containerTextInput}>
-
               <Text style={styles.textValue}>
                 {disabled ? 'N/A' : 'Seleccionado'}
               </Text>
@@ -106,6 +115,23 @@ const LongSelect: FC<PropsSelect> = ({
                     setDisabled(!isNa);
                     setShowInitialName(!isNa);
                     !showInitialName && setStateGlobalLong([]);
+                    if (!isNa) {
+                      setStateShow({
+                        size: true,
+                        long: true,
+                        initialName: true,
+                        name: true,
+                        pieceTotal: true,
+                      });
+                    } else if (isNa) {
+                      setStateShow({
+                        size: false,
+                        long: true,
+                        initialName: false,
+                        name: false,
+                        pieceTotal: false,
+                      });
+                    }
                   }}>
                   {isNa && <IconImage size={30} source={Icons.general.check} />}
                 </Pressable>
@@ -114,7 +140,7 @@ const LongSelect: FC<PropsSelect> = ({
                 data={optionsLong}
                 keyExtractor={item => item.value}
                 style={styles.flatList}
-                renderItem={({ item }) => (
+                renderItem={({item}) => (
                   <View style={styles.option}>
                     <Text
                       style={
@@ -136,19 +162,19 @@ const LongSelect: FC<PropsSelect> = ({
               <Text
                 style={[
                   styles.textDown,
-                  disabled && { color: Colors.gray_shadow },
+                  disabled && {color: Colors.gray_shadow},
                 ]}>
                 TOTAL
               </Text>
               <View
                 style={[
                   styles.totalBox,
-                  disabled && { borderColor: Colors.gray_shadow },
+                  disabled && {borderColor: Colors.gray_shadow},
                 ]}>
                 <Text
                   style={[
                     styles.textDown,
-                    disabled && { color: Colors.gray_shadow },
+                    disabled && {color: Colors.gray_shadow},
                   ]}>
                   {totalPiecesInLong} piezas
                 </Text>
@@ -293,7 +319,7 @@ const styles = StyleSheet.create({
     height: Responsive(30),
     marginRight: Responsive(10),
   },
-  contentFlatList: { maxHeight: 200 },
+  contentFlatList: {maxHeight: 200},
   containerBtnUp: {
     flexDirection: 'row',
     alignContent: 'center',

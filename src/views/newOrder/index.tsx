@@ -5,9 +5,10 @@ import {StyleSheet, View} from 'react-native';
 import SumaryOrder from '../../components/SumaryOrder';
 import AppreciationView from './AppreciationView';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {RootStackProps} from '../../types';
+import {PropsShow, RootStackProps} from '../../types';
 import {RouteProp} from '@react-navigation/native';
 import {setOrderById} from '../../api';
+import {determineTotalPieces} from '../../utils/determinatePieces';
 
 type NewOrderScreenRouteProp = RouteProp<RootStackProps, 'NewOrder'>;
 
@@ -40,7 +41,7 @@ const NewOrder = ({route}: NewOrderProps) => {
   const [caratage, setCaratage] = useState<string>('');
   const [color, setColor] = useState<string>('');
   const [rock, setRock] = useState<string[]>([]);
-  const [totalPieces, setTotalPieces] = useState<string>('1');
+  const [totalPieces, setTotalPieces] = useState<string>('0');
   const [observations, setObservations] = useState<string>('');
   const [userId, setUserId] = useState<string>('');
   const [userEmail, setUserEmail] = useState<string>('');
@@ -78,6 +79,15 @@ const NewOrder = ({route}: NewOrderProps) => {
     setCount(prevCount => prevCount + 1);
   };
 
+  // states news controller views
+  const [stateShow, setStateShow] = useState<PropsShow>({
+    size: true,
+    long: true,
+    initialName: true,
+    name: true,
+    pieceTotal: true,
+  });
+
   // useEffect(() => {
   //   reloadView();
   //   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -93,32 +103,6 @@ const NewOrder = ({route}: NewOrderProps) => {
     };
     getUser();
   }, []);
-
-  const determineTotalPieces = () => {
-    if (showLong) {
-      if (showInitialName && showName && showPieceTotal) {
-        return totalPieces;
-      }
-      if (showInitialName && showName) {
-        return totalPiecesInName.toString();
-      }
-      if (showInitialName) {
-        return totalPiecesInInitial.toString();
-      }
-      return totalPiecesInLong.toString();
-    } else {
-      if (showName && showPieceTotal) {
-        return totalPiecesInSize.toString();
-      }
-      if (showName) {
-        return totalPiecesInSize.toString();
-      }
-      if (showInitialName) {
-        return totalPiecesInSize.toString();
-      }
-      return totalPiecesInSize.toString();
-    }
-  };
 
   const orderCurrent: any = {
     userId,
@@ -136,17 +120,24 @@ const NewOrder = ({route}: NewOrderProps) => {
   if (showLong && stateGlobalLong?.length > 0) {
     orderCurrent.long = stateGlobalLong;
   }
-  if (showInitialName && stateGlobalInitial.length > 0) {
+  if (stateShow.initialName && stateGlobalInitial.length > 0) {
     orderCurrent.initialName = stateGlobalInitial;
   }
 
-  if (showName && !showNameNA) {
+  if (stateShow.name && !showNameNA) {
     orderCurrent.name = stateGlobalName;
   }
   if (showPieceTotal) {
     orderCurrent.totalPieces = totalPieces;
   } else if (!showPieceTotal) {
-    orderCurrent.totalPieces = determineTotalPieces();
+    orderCurrent.totalPieces = determineTotalPieces({
+      stateShow,
+      totalPieces,
+      totalPiecesInInitial,
+      totalPiecesInLong,
+      totalPiecesInName,
+      totalPiecesInSize,
+    });
   }
 
   const getDataEdit = async () => {
@@ -212,10 +203,12 @@ const NewOrder = ({route}: NewOrderProps) => {
     <View style={styles.container}>
       {controlerView === 1 && (
         <ViewNewOrder
+          totalPieces={totalPieces}
+          setStateShow={setStateShow}
+          stateShow={stateShow}
           setShowNameNA={setShowNameNA}
           showNameNA={showNameNA}
           orderId={orderId}
-          showPieceTotal={showPieceTotal}
           setShowPieceTotal={setShowPieceTotal}
           setTotalPiecesInInitial={setTotalPiecesInInitial}
           totalPiecesInInitial={totalPiecesInInitial}
@@ -252,7 +245,6 @@ const NewOrder = ({route}: NewOrderProps) => {
           setRock={setRock}
           rock={rock}
           setTotalPieces={setTotalPieces}
-          determineTotalPieces={determineTotalPieces}
           dataSend={orderCurrent}
 
           // totalPieces={totalPieces}
@@ -260,6 +252,7 @@ const NewOrder = ({route}: NewOrderProps) => {
       )}
       {controlerView === 2 && (
         <SumaryOrder
+        stateShow={stateShow}
           setObservations={setObservations}
           setTotalPieces={setTotalPieces}
           setCaratage={setCaratage}

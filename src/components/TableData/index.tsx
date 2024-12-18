@@ -48,7 +48,6 @@ const TableData = () => {
   const getData = async () => {
     try {
       const dataOrderUser = await getOrdersByUserId(userId);
-      console.log('TCL: getData -> dataOrderUser', dataOrderUser[0]);
       setData(dataOrderUser);
     } catch (error) {
       console.log('Error al obtener las órdenes:', error);

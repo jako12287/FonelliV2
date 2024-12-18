@@ -1,281 +1,3 @@
-// import React, {FC, useState} from 'react';
-// import {
-//   FlatList,
-//   Modal,
-//   Platform,
-//   Pressable,
-//   StyleSheet,
-//   Text,
-//   TouchableOpacity,
-//   View,
-// } from 'react-native';
-// import Responsive from '../../utils/responsive';
-// import {Colors} from '../../theme/colors';
-// import IconImage from '../../utils/iconImage';
-// import {Icons} from '../../assets/icons';
-// import {
-//   optionsMainRocks,
-//   optionsPreciousRocks,
-//   optionsSemiPreciousRocks,
-// } from '../../utils/optionsSelects';
-// import {fonts} from '../../theme/fonts';
-
-// interface PropsSelect {
-//   setRock: (data: string) => void;
-//   rock: string;
-// }
-
-// const RockSelect: FC<PropsSelect> = ({
-//   setRock = () => {},
-//   rock = '',
-// }) => {
-//   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
-
-//   return (
-//     <>
-//       <View style={styles.container}>
-//         <View style={styles.containerLabel}>
-//           <Text style={styles.label}>Piedra</Text>
-//         </View>
-//         <Pressable
-//           style={styles.containerInput}
-//           onPress={() => setIsActiveModal(!isActiveModal)}>
-//           <View style={styles.input}>
-//             <View style={styles.containerTextInput}>
-
-//             <Text style={styles.textValue}>
-//               {rock || 'Seleccione una opción'}
-//             </Text>
-//             </View>
-//             <View style={styles.arrowContainer}>
-//               <IconImage size={15} source={Icons.general.arrowDown} />
-//             </View>
-//           </View>
-//         </Pressable>
-//       </View>
-
-//       <Modal
-//         visible={isActiveModal}
-//         transparent={true}
-//         animationType="slide"
-//         onRequestClose={() => setIsActiveModal(false)}>
-//         <View style={styles.modalOverlay}>
-//           <View style={styles.modalContainer}>
-//             <View style={styles.containerBtnUp}>
-//               <Text style={styles.textTitle}>Piedra</Text>
-//               {/* <Pressable onPress={() => setIsActiveModal(!isActiveModal)}>
-//                 <Text style={styles.textTitle}>Guardar</Text>
-//               </Pressable> */}
-//             </View>
-//             <View>
-//               <FlatList
-//                 data={optionsMainRocks}
-//                 keyExtractor={item => item.value}
-//                 renderItem={({item}) => (
-//                   <View style={styles.option}>
-//                     <Text style={styles.optionText}>{item.label}</Text>
-//                     <Pressable
-//                       style={styles.boxSelect}
-//                       onPress={() => {
-//                         const newValue =
-//                           item.value === 'N/A' ? 'N/A' : item.value;
-//                         setRock(newValue);
-//                         setIsActiveModal(!isActiveModal);
-//                       }}>
-//                       {rock === item.value && (
-//                         <IconImage size={30} source={Icons.general.check} />
-//                       )}
-//                     </Pressable>
-//                   </View>
-//                 )}
-//               />
-//               <Text style={styles.subTitle}>Preciosas</Text>
-//               <FlatList
-//                 data={optionsPreciousRocks}
-//                 keyExtractor={item => item.value}
-//                 renderItem={({item}) => (
-//                   <TouchableOpacity style={styles.optionDown}>
-//                     <Text style={styles.optionText}>{item.label}</Text>
-//                     <Pressable
-//                       style={styles.boxSelect}
-//                       onPress={() => {
-//                         const newValue =
-//                           item.value === 'N/A' ? 'N/A' : item.value;
-//                         setRock(newValue);
-//                         setIsActiveModal(!isActiveModal);
-//                       }}>
-//                       {rock === item.value && (
-//                         <IconImage size={30} source={Icons.general.check} />
-//                       )}
-//                     </Pressable>
-//                   </TouchableOpacity>
-//                 )}
-//               />
-//               <Text style={styles.subTitle}>Semipreciosas</Text>
-//               <FlatList
-//                 data={optionsSemiPreciousRocks}
-//                 keyExtractor={item => item.value}
-//                 style={styles.contentFlatList}
-//                 renderItem={({item}) => (
-//                   <TouchableOpacity style={styles.optionDown}>
-//                     <Text style={styles.optionText}>{item.label}</Text>
-//                     <Pressable
-//                       style={styles.boxSelect}
-//                       onPress={() => {
-//                         const newValue =
-//                           item.value === 'N/A' ? 'N/A' : item.value;
-//                         setRock(newValue);
-//                         setIsActiveModal(!isActiveModal);
-//                       }}>
-//                       {rock === item.value && (
-//                         <IconImage size={30} source={Icons.general.check} />
-//                       )}
-//                     </Pressable>
-//                   </TouchableOpacity>
-//                 )}
-//               />
-//             </View>
-//             <View style={styles.containerTextDown}>
-//               <Text style={styles.textDown}>
-//                 *Seleccione solo una piedra para el modelo elegido.
-//               </Text>
-//             </View>
-//           </View>
-//         </View>
-//       </Modal>
-//     </>
-//   );
-// };
-
-// export default RockSelect;
-// const styles = StyleSheet.create({
-//   container: {
-//     flexDirection: 'row',
-//     justifyContent: 'flex-start',
-//     alignItems: 'center',
-//     gap: Responsive(15),
-//   },
-//   label: {
-//     fontSize: Responsive(18),
-//     marginBottom: 5,
-//     color: Colors.black,
-//     fontWeight: '700',
-//   },
-//   containerLabel: {
-//     width: '40%',
-//   },
-//   containerInput: {
-//     width: '60%',
-//     position: 'relative',
-//   },
-//   input: {
-//     borderWidth: 1,
-//     borderColor: Colors.black,
-//     paddingHorizontal: Responsive(10),
-//     fontSize: Responsive(16),
-//     width: Responsive(200),
-//     height: Responsive(40),
-//   },
-//   arrowContainer: {
-//     position: 'absolute',
-//     right: Responsive(8),
-//     top: Responsive(12),
-//   },
-//   modalOverlay: {
-//     flex: 1,
-//     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-//   modalContainer: {
-//     width: '100%',
-//     backgroundColor: 'white',
-//     borderRadius: Responsive(10),
-//     padding: Responsive(20),
-//     height: '100%',
-//     gap: Responsive(25),
-
-//     paddingTop: Platform.OS === 'ios' ? Responsive(50) : Responsive(10),
-//   },
-//   option: {
-//     padding: Responsive(5),
-//     marginBottom: Responsive(15),
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//     alignItems: 'center',
-//     paddingRight: Responsive(80),
-//   },
-//   optionDown: {
-//     padding: Responsive(5),
-//     marginLeft: Responsive(20),
-//     marginBottom: Responsive(15),
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//     alignItems: 'center',
-//     paddingRight: Responsive(40),
-//   },
-//   optionText: {
-//     fontSize: Responsive(16),
-//     color: Colors.black,
-//     fontWeight: '500',
-//   },
-//   closeButton: {
-//     padding: Responsive(10),
-//     alignItems: 'center',
-//     marginTop: Responsive(10),
-//     backgroundColor: '#1E3A8A',
-//     borderRadius: Responsive(5),
-//   },
-//   closeButtonText: {
-//     fontSize: Responsive(16),
-//     color: '#fff',
-//   },
-//   textValue: {
-//     fontSize: Responsive(14),
-//     color: Colors.black,
-//   },
-//   textTitle: {
-//     fontSize: Responsive(24),
-//     fontFamily: fonts.poppins_bold,
-//     fontWeight: '900',
-//     color: Colors.title_color,
-//   },
-//   containerTextInput: {height: '100%', justifyContent: 'center'},
-//   subTitle: {
-//     fontSize: Responsive(16),
-//     fontFamily: fonts.poppins_medium,
-//     fontWeight: '500',
-//     color: Colors.black,
-//     marginTop: Responsive(10),
-//     marginBottom: Responsive(10),
-//     marginLeft: Responsive(10),
-//   },
-//   textDown: {
-//     fontSize: Responsive(16),
-//     fontFamily: fonts.poppins_medium,
-//     color: Colors.black,
-//     lineHeight: Responsive(30),
-//   },
-//   containerTextDown: {
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     paddingHorizontal: Responsive(30),
-//   },
-//   boxSelect: {
-//     borderWidth: 1,
-//     borderColor: Colors.black,
-//     width: Responsive(30),
-//     height: Responsive(30),
-//   },
-//   contentFlatList: {maxHeight: 200},
-//   containerBtnUp: {
-//     flexDirection: 'row',
-//     alignContent: 'center',
-//     justifyContent: 'space-between',
-//     width: '90%',
-//   },
-// });
-
 import React, {FC, useState} from 'react';
 import {
   FlatList,
@@ -307,15 +29,35 @@ const RockSelect: FC<PropsSelect> = ({setRock = () => {}, rock = []}) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
   const [selectedOptions, setSelectedOptions] = useState<string[]>(rock);
 
+  // const toggleSelection = (value: string) => {
+  //   if (value === 'N/A') {
+  //     setSelectedOptions(['N/A']);
+  //   } else {
+  //     const updatedOptions = selectedOptions.includes('N/A')
+  //       ? [value]
+  //       : selectedOptions.includes(value)
+  //       ? selectedOptions.filter(option => option !== value)
+  //       : [...selectedOptions, value];
+  //     setSelectedOptions(updatedOptions);
+  //   }
+  // };
+
   const toggleSelection = (value: string) => {
     if (value === 'N/A') {
+      // Si se selecciona "N/A", se elimina cualquier otra opción.
       setSelectedOptions(['N/A']);
     } else {
-      const updatedOptions = selectedOptions.includes('N/A')
-        ? [value] // Reemplaza "N/A" por el nuevo valor
-        : selectedOptions.includes(value)
-        ? selectedOptions.filter(option => option !== value)
-        : [...selectedOptions, value];
+      let updatedOptions = selectedOptions.includes(value)
+        ? selectedOptions.filter(option => option !== value) // Si ya está seleccionado, se elimina.
+        : [...selectedOptions.filter(option => option !== 'N/A'), value]; // Si no está seleccionado, se agrega y se elimina "N/A".
+
+      // Lógica específica para Diamante y Zirconia.
+      if (value === 'Diamante') {
+        updatedOptions = updatedOptions.filter(option => option !== 'Zirconia');
+      } else if (value === 'Zirconia') {
+        updatedOptions = updatedOptions.filter(option => option !== 'Diamante');
+      }
+
       setSelectedOptions(updatedOptions);
     }
   };
