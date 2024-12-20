@@ -39,6 +39,7 @@ const DetailOrder = ({route}: DetailOrderProps) => {
     }
   };
 
+  console.log('datos detalles', Data.size);
   useEffect(() => {
     getDataOrder();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -88,112 +89,158 @@ const DetailOrder = ({route}: DetailOrderProps) => {
             <View style={styles.containerTitle}>
               <Text style={styles.textLabel}>Piedra</Text>
             </View>
-            <View style={[styles.containerGroupItem, {paddingRight:Responsive(20)}]}>
-            {Data?.rock ? (
+            <View
+              style={[
+                styles.containerGroupItem,
+                {paddingRight: Responsive(20)},
+              ]}>
+              {Data?.rock &&
                 Data.rock.map((el: any) => (
-                  <View
-                    key={el}
-                    // style={[styles.copnstainerIntInitial, styles.wrap80]}
-                    style={styles.containerItem}>
+                  <View key={el} style={styles.containerItem}>
                     <Text style={styles.textData}>{el}</Text>
                   </View>
+                ))}
+            </View>
+          </View>
+        )}
+
+        {Data?.size?.some((el: any) => el.count > 0) && (
+          <View
+            style={{
+              marginTop: Responsive(20),
+            }}>
+            <View style={styles.containerLabelConditional}>
+              <Text style={[styles.textLabel, styles.textCenter]}>Talla</Text>
+            </View>
+            {Data?.size?.some((el: any) => el.count > 0) &&
+              Data.size
+                .filter((el: any) => el.count > 0)
+                .map((el: any) => (
+                  <View key={el.name} style={styles.containerPieceConditional}>
+                    <Text style={styles.textNameConditional}>{el.name}</Text>
+                    <Text style={styles.textCountConditional}>
+                      {el.count} {el.count > 1 ? 'piezas' : 'pieza'}
+                    </Text>
+                  </View>
                 ))
-              ) : (
-                <Text>NO APLICA</Text>
-              )}
-              {/* <Text style={styles.textData}>{Data?.rock}</Text> */}
-            </View>
+                .reduce((acc: any, curr: any, index: any) => {
+                  if (index % 4 === 0) {
+                    acc.push([curr]);
+                  } else {
+                    acc[acc.length - 1].push(curr);
+                  }
+                  return acc;
+                }, [])
+                .map((row: any, index: any) => (
+                  <View key={index} style={styles.rowConditional}>
+                    {row}
+                  </View>
+                ))}
           </View>
         )}
 
-        {Data?.size?.length > 0 && (
-          <View style={styles.containerGroup}>
-            <View style={[styles.containerTitle, styles.alingCenter]}>
-              <Text style={styles.textLabel}>Talla</Text>
+        {Data?.long?.some((el: any) => el.count > 0) && (
+          <View
+            style={{
+              marginTop: Responsive(20),
+            }}>
+            <View style={styles.containerLabelConditional}>
+              <Text style={[styles.textLabel, styles.textCenter]}>Largo</Text>
             </View>
-            <View style={styles.containerGroupItem}>
-              {Data?.size?.some((el: any) => el.count > 0) ? (
-                Data.size
-                  .filter((el: any) => el.count > 0)
-                  .map((el: any) => (
-                    <View
-                      key={el.name}
-                      // style={[styles.copnstainerIntInitial, styles.wrap80]}
-                      style={styles.containerItem}>
-                      <Text style={styles.textData}>{el.name}</Text>
-                      <Text style={styles.textData}>{el.count} piezas</Text>
-                    </View>
-                  ))
-              ) : (
-                <Text>NO APLICA</Text>
-              )}
-            </View>
+            {Data?.long?.some((el: any) => el.count > 0) &&
+              Data.long
+                .filter((el: any) => el.count > 0)
+                .map((el: any) => (
+                  <View key={el.name} style={styles.containerPieceConditional}>
+                    <Text style={styles.textNameConditional}>{el.name} cm</Text>
+                    <Text style={styles.textCountConditional}>
+                      {el.count} {el.count > 1 ? 'piezas' : 'pieza'}
+                    </Text>
+                  </View>
+                ))
+                .reduce((acc: any, curr: any, index: any) => {
+                  if (index % 4 === 0) {
+                    acc.push([curr]);
+                  } else {
+                    acc[acc.length - 1].push(curr);
+                  }
+                  return acc;
+                }, [])
+                .map((row: any, index: any) => (
+                  <View key={index} style={styles.rowConditional}>
+                    {row}
+                  </View>
+                ))}
           </View>
         )}
 
-        {Data?.long?.length > 0 && (
-          <View style={[styles.containerGroup]}>
-            <View style={[styles.containerTitle, styles.alingCenter]}>
-              <Text style={styles.textLabel}>Largo</Text>
-            </View>
-            <View style={[styles.containerGroupItem]}>
-              {Data?.long?.some((el: any) => el.count > 0) ? (
-                Data.long
-                  .filter((el: any) => el.count > 0)
-                  .map((el: any) => (
-                    <View key={el.name} style={styles.containerItem}>
-                      <Text style={styles.textData}>{el.name}</Text>
-                      <Text style={styles.textData}>{el.count} piezas</Text>
-                    </View>
-                  ))
-              ) : (
-                <Text>NO APLICA</Text>
-              )}
-            </View>
-          </View>
-        )}
-
-        {Data?.initialName?.length > 0 && (
-          <View style={styles.containerData}>
-            <View style={styles.containerTitle}>
+        {Data?.initialName?.some((el: any) => el.count > 0) && (
+          <View
+            style={{
+              marginTop: Responsive(20),
+            }}>
+            <View style={styles.containerLabelConditional}>
               <Text style={styles.textLabel}>Inicial</Text>
             </View>
-            <View style={styles.containerGroupItem}>
-              {Data?.initialName?.some((el: any) => el.count > 0) ? (
-                Data.initialName
-                  .filter((el: any) => el.count > 0)
-                  .map((el: any) => (
-                    <View key={el.name} style={styles.containerItem}>
-                      <Text style={styles.textData}>{el.name}</Text>
-                      <Text style={styles.textData}>{el.count}</Text>
-                    </View>
-                  ))
-              ) : (
-                <Text>NO APLICA</Text>
-              )}
-            </View>
+            {Data?.initialName?.some((el: any) => el.count > 0) &&
+              Data.initialName
+                .filter((el: any) => el.count > 0)
+                .map((el: any) => (
+                  <View key={el.name} style={styles.containerPieceConditional}>
+                    <Text style={styles.textNameConditional}>{el.name}</Text>
+                    <Text style={styles.textCountConditional}>
+                      {el.count} {el.count > 1 ? 'piezas' : 'pieza'}
+                    </Text>
+                  </View>
+                ))
+                .reduce((acc: any, curr: any, index: any) => {
+                  if (index % 4 === 0) {
+                    acc.push([curr]);
+                  } else {
+                    acc[acc.length - 1].push(curr);
+                  }
+                  return acc;
+                }, [])
+                .map((row: any, index: any) => (
+                  <View key={index} style={styles.rowConditional}>
+                    {row}
+                  </View>
+                ))}
           </View>
         )}
 
-        {Data?.name?.length > 0 && (
-          <View style={styles.containerData}>
-            <View style={styles.containerTitle}>
-              <Text style={styles.textLabel}>Nombres</Text>
+        {Data?.name?.some((el: any) => el.count > 0) && (
+          <View
+            style={{
+              marginTop: Responsive(20),
+            }}>
+            <View style={styles.containerLabelConditional}>
+              <Text style={[styles.textLabel, styles.textCenter]}>Nombres</Text>
             </View>
-            <View style={styles.containerGroupItem}>
-              {Data?.name?.some((el: any) => el.count > 0) ? (
-                Data.name
-                  .filter((el: any) => el.count > 0)
-                  .map((el: any) => (
-                    <View key={el.name} style={styles.containerItem}>
-                      <Text style={styles.textData}>{el.value}</Text>
-                      <Text style={styles.textData}>{el.count} piezas</Text>
-                    </View>
-                  ))
-              ) : (
-                <Text>NO APLICA</Text>
-              )}
-            </View>
+            {Data?.name?.some((el: any) => el.count > 0) &&
+              Data.name
+                .filter((el: any) => el.count > 0)
+                .map((el: any) => (
+                  <View key={el.name} style={styles.containerPieceConditional}>
+                    <Text style={styles.textNameConditional}>{el.value}</Text>
+                    <Text style={styles.textCountConditional}>
+                      {el.count} {el.count > 1 ? 'piezas' : 'pieza'}
+                    </Text>
+                  </View>
+                ))
+                .reduce((acc: any, curr: any, index: any) => {
+                  if (index % 4 === 0) {
+                    acc.push([curr]);
+                  } else {
+                    acc[acc.length - 1].push(curr);
+                  }
+                  return acc;
+                }, [])
+                .map((row: any, index: any) => (
+                  <View key={index} style={styles.rowConditional}>
+                    {row}
+                  </View>
+                ))}
           </View>
         )}
 
@@ -305,4 +352,29 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  containerLabelConditional: {
+    alignItems: 'center',
+    marginBottom: Responsive(10),
+  },
+  containerPieceConditional: {
+    width: '25%',
+    alignItems: 'center',
+    marginBottom: Responsive(10),
+  },
+  textCenter: {textAlign: 'center'},
+  textNameConditional: {
+    fontSize: Responsive(12),
+    fontFamily: fonts.poppins_medium,
+    color: Colors.black,
+    textAlign: 'center',
+  },
+  textCountConditional: {
+    fontSize: Responsive(12),
+    fontFamily: fonts.poppins_medium,
+    color: Colors.black,
+    textAlign: 'center',
+    borderRadius: Responsive(5),
+    paddingHorizontal: Responsive(10),
+  },
+  rowConditional: {flexDirection: 'row', flexWrap: 'wrap'},
 });

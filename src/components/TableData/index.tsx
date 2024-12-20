@@ -93,9 +93,10 @@ const TableData = () => {
           <View key={item.id} style={styles.containerBodyTable}>
             <Pressable onPress={() => handleDetailOrder(item.id)}>
               <View style={[styles.containerItem, {width: widthCell}]}>
-                <Text style={styles.textCell}>
+                <Text style={[styles.textCell]}>
                   {formattedDate(item?.createdAt)}
                 </Text>
+                <View style={styles.underLine} />
               </View>
             </Pressable>
             <Pressable onPress={() => handleDetailOrder(item.id)}>
@@ -103,24 +104,26 @@ const TableData = () => {
                 <Text style={styles.textCell}>{item?.totalPieces} piezas</Text>
               </View>
             </Pressable>
-            <View
-              style={[
-                styles.containerItem,
-                {
-                  width: widthCell,
+            <Pressable onPress={() => handleDetailOrder(item.id)}>
+              <View
+                style={[
+                  styles.containerItem,
+                  {
+                    width: widthCell,
 
-                  backgroundColor:
-                    item?.status === stateType.PENDING
-                      ? Colors.pending_state
-                      : Colors.light_green,
-                },
-              ]}>
-              <Text style={[styles.textCell]}>
-                {item?.status === stateType.PENDING
-                  ? 'SOLICITADO'
-                  : 'CAPTURADO'}
-              </Text>
-            </View>
+                    backgroundColor:
+                      item?.status === stateType.PENDING
+                        ? Colors.pending_state
+                        : Colors.cath_state,
+                  },
+                ]}>
+                <Text style={[styles.textCell]}>
+                  {item?.status === stateType.PENDING
+                    ? 'SOLICITADO'
+                    : 'CAPTURADO'}
+                </Text>
+              </View>
+            </Pressable>
             <View style={[styles.containerItem, {width: widthCell}]}>
               {item?.folio ? (
                 <Text style={styles.textCell}>{item?.folio || 'N/A'}</Text>
@@ -184,5 +187,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: Responsive(40),
+  },
+  underLine: {
+    borderTopWidth: 1,
+    borderColor: 'blue',
+    height: 10,
+    width: Responsive(70),
   },
 });

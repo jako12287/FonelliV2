@@ -14,7 +14,6 @@ import {PropsShow} from '../types';
 interface PropsComponenet {
   setControlerView: (data: number) => void;
   dataSend: any;
-  showLong: boolean;
   handleDataUpdate: () => void;
   orderId: string;
   setModel: (data: string) => void;
@@ -32,7 +31,6 @@ interface PropsComponenet {
 const SumaryOrder: FC<PropsComponenet> = ({
   setControlerView,
   dataSend,
-  showLong,
   handleDataUpdate,
   orderId,
   setModel,
@@ -102,6 +100,8 @@ const SumaryOrder: FC<PropsComponenet> = ({
     );
   }
 
+  console.log('dataSend.long', dataSend.long);
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -163,48 +163,86 @@ const SumaryOrder: FC<PropsComponenet> = ({
             !stateShow.long &&
             !stateShow.initialName &&
             !stateShow.name && (
-              <View style={styles.containerGroup}>
-                <View style={[styles.containerTitle, styles.alingCenter]}>
-                  <Text style={styles.textLabel}>Talla</Text>
+              <View
+                style={{
+                  marginTop: Responsive(20),
+                }}>
+                <View style={styles.containerLabelConditional}>
+                  <Text style={[styles.textLabel, styles.textCenter]}>
+                    Talla
+                  </Text>
                 </View>
-                <View style={styles.containerGroupItem}>
-                  {dataSend?.size?.some((el: any) => el.count > 0) &&
-                    dataSend.size
-                      .filter((el: any) => el.count > 0)
-                      .map((el: any) => (
-                        <View key={el.name} style={styles.containerItem}>
-                          <Text style={styles.textData}>{el.name}</Text>
-                          <Text style={styles.textData}>
-                            {el.count} {el.count > 1 ? 'piezas' : 'pieza'}
-                          </Text>
-                        </View>
-                      ))}
-                </View>
+                {dataSend?.size?.some((el: any) => el.count > 0) &&
+                  dataSend.size
+                    .filter((el: any) => el.count > 0)
+                    .map((el: any) => (
+                      <View
+                        key={el.name}
+                        style={styles.containerPieceConditional}>
+                        <Text style={styles.textNameConditional}>
+                          {el.name}
+                        </Text>
+                        <Text style={styles.textCountConditional}>
+                          {el.count} {el.count > 1 ? 'piezas' : 'pieza'}
+                        </Text>
+                      </View>
+                    ))
+                    .reduce((acc: any, curr: any, index: any) => {
+                      if (index % 4 === 0) {
+                        acc.push([curr]);
+                      } else {
+                        acc[acc.length - 1].push(curr);
+                      }
+                      return acc;
+                    }, [])
+                    .map((row: any, index: any) => (
+                      <View key={index} style={styles.rowConditional}>
+                        {row}
+                      </View>
+                    ))}
               </View>
             )}
-
           {!stateShow.size &&
             stateShow.long &&
             !stateShow.initialName &&
             !stateShow.name && (
-              <View style={[styles.containerGroup]}>
-                <View style={[styles.containerTitle, styles.alingCenter]}>
-                  <Text style={styles.textLabel}>Largo</Text>
+              <View
+                style={{
+                  marginTop: Responsive(20),
+                }}>
+                <View style={styles.containerLabelConditional}>
+                  <Text style={[styles.textLabel, styles.textCenter]}>
+                    Largo
+                  </Text>
                 </View>
-                <View style={[styles.containerGroupItem]}>
-                  {showLong &&
-                    dataSend?.long?.some((el: any) => el.count > 0) &&
-                    dataSend.long
-                      .filter((el: any) => el.count > 0)
-                      .map((el: any) => (
-                        <View key={el.name} style={styles.containerItem}>
-                          <Text style={styles.textData}>{el.name} cm</Text>
-                          <Text style={styles.textData}>
-                            {el.count} {el.count > 1 ? 'piezas' : 'pieza'}
-                          </Text>
-                        </View>
-                      ))}
-                </View>
+                {dataSend?.long?.some((el: any) => el.count > 0) &&
+                  dataSend.long
+                    .filter((el: any) => el.count > 0)
+                    .map((el: any) => (
+                      <View
+                        key={el.name}
+                        style={styles.containerPieceConditional}>
+                        <Text style={styles.textNameConditional}>
+                          {el.name} cm
+                        </Text>
+                        <Text style={styles.textCountConditional}>
+                          {el.count} {el.count > 1 ? 'piezas' : 'pieza'}
+                        </Text>
+                      </View>
+                    ))
+                    .reduce((acc: any, curr: any, index: any) => {
+                      if (index % 4 === 0) {
+                        acc.push([curr]);
+                      } else {
+                        acc[acc.length - 1].push(curr);
+                      }
+                      return acc;
+                    }, [])
+                    .map((row: any, index: any) => (
+                      <View key={index} style={styles.rowConditional}>
+                        {row}
+                      </View>
+                    ))}
               </View>
             )}
 
@@ -212,27 +250,45 @@ const SumaryOrder: FC<PropsComponenet> = ({
             !stateShow.long &&
             stateShow.initialName &&
             !stateShow.name && (
-              <View style={styles.containerData}>
-                <View style={styles.containerTitle}>
+              <View
+                style={{
+                  marginTop: Responsive(20),
+                }}>
+                <View style={styles.containerLabelConditional}>
                   <Text style={styles.textLabel}>Inicial</Text>
                 </View>
-                <View style={styles.containerGroupItem}>
-                  {dataSend?.initialName?.some((el: any) => el.count > 0) &&
-                    dataSend.initialName
-                      .filter((el: any) => el.count > 0)
-                      .map((el: any) => (
-                        <View key={el.name} style={styles.containerItem}>
-                          <Text style={styles.textData}>{el.name}</Text>
-                          <Text style={styles.textData}>
-                            {el.count} {el.count > 1 ? 'piezas' : 'pieza'}
-                          </Text>
-                        </View>
-                      ))}
-                </View>
+                {dataSend?.initialName?.some((el: any) => el.count > 0) &&
+                  dataSend.initialName
+                    .filter((el: any) => el.count > 0)
+                    .map((el: any) => (
+                      <View
+                        key={el.name}
+                        style={styles.containerPieceConditional}>
+                        <Text style={styles.textNameConditional}>
+                          {el.name}
+                        </Text>
+                        <Text style={styles.textCountConditional}>
+                          {el.count} {el.count > 1 ? 'piezas' : 'pieza'}
+                        </Text>
+                      </View>
+                    ))
+                    .reduce((acc: any, curr: any, index: any) => {
+                      if (index % 4 === 0) {
+                        acc.push([curr]);
+                      } else {
+                        acc[acc.length - 1].push(curr);
+                      }
+                      return acc;
+                    }, [])
+                    .map((row: any, index: any) => (
+                      <View key={index} style={styles.rowConditional}>
+                        {row}
+                      </View>
+                    ))}
               </View>
             )}
 
-          {!stateShow.size &&
+          {/* {!stateShow.size &&
             !stateShow.long &&
             !stateShow.initialName &&
             stateShow.name && (
@@ -253,6 +309,49 @@ const SumaryOrder: FC<PropsComponenet> = ({
                         </View>
                       ))}
                 </View>
+              </View>
+            )} */}
+          {!stateShow.size &&
+            !stateShow.long &&
+            !stateShow.initialName &&
+            stateShow.name && (
+              <View
+                style={{
+                  marginTop: Responsive(20),
+                }}>
+                <View style={styles.containerLabelConditional}>
+                  <Text style={[styles.textLabel, styles.textCenter]}>
+                    Nombres
+                  </Text>
+                </View>
+                {dataSend?.name?.some((el: any) => el.count > 0) &&
+                  dataSend.name
+                    .filter((el: any) => el.count > 0)
+                    .map((el: any) => (
+                      <View
+                        key={el.name}
+                        style={styles.containerPieceConditional}>
+                        <Text style={styles.textNameConditional}>
+                          {el.value}
+                        </Text>
+                        <Text style={styles.textCountConditional}>
+                          {el.count} {el.count > 1 ? 'piezas' : 'pieza'}
+                        </Text>
+                      </View>
+                    ))
+                    .reduce((acc: any, curr: any, index: any) => {
+                      if (index % 4 === 0) {
+                        acc.push([curr]);
+                      } else {
+                        acc[acc.length - 1].push(curr);
+                      }
+                      return acc;
+                    }, [])
+                    .map((row: any, index: any) => (
+                      <View key={index} style={styles.rowConditional}>
+                        {row}
+                      </View>
+                    ))}
               </View>
             )}
 
@@ -378,4 +477,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   alingCenter: {alignItems: 'center'},
+  containerLabelConditional: {
+    alignItems: 'center',
+    marginBottom: Responsive(10),
+  },
+  containerPieceConditional: {
+    width: '25%',
+    alignItems: 'center',
+    marginBottom: Responsive(10),
+  },
+  textCenter: {textAlign: 'center'},
+  textNameConditional: {
+    fontSize: Responsive(12),
+    fontFamily: fonts.poppins_medium,
+    color: Colors.black,
+    textAlign: 'center',
+  },
+  textCountConditional: {
+    fontSize: Responsive(12),
+    fontFamily: fonts.poppins_medium,
+    color: Colors.black,
+    textAlign: 'center',
+    borderRadius: Responsive(5),
+    paddingHorizontal: Responsive(10),
+  },
+  rowConditional: {flexDirection: 'row', flexWrap: 'wrap'},
 });

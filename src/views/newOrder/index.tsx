@@ -110,6 +110,7 @@ const NewOrder = ({route}: NewOrderProps) => {
     caratage,
     color,
     observations,
+    email: userEmail,
   };
   if (rock.length > 0 && rock[0] !== 'N/A') {
     orderCurrent.rock = rock;
@@ -117,7 +118,7 @@ const NewOrder = ({route}: NewOrderProps) => {
   if (!showLong) {
     orderCurrent.size = stateGlobalSize;
   }
-  if (showLong && stateGlobalLong?.length > 0) {
+  if (stateShow.long && stateGlobalLong?.length > 0) {
     orderCurrent.long = stateGlobalLong;
   }
   if (stateShow.initialName && stateGlobalInitial.length > 0) {
@@ -139,7 +140,6 @@ const NewOrder = ({route}: NewOrderProps) => {
       totalPiecesInSize,
     });
   }
-
   const getDataEdit = async () => {
     if (orderId) {
       try {
@@ -246,13 +246,11 @@ const NewOrder = ({route}: NewOrderProps) => {
           rock={rock}
           setTotalPieces={setTotalPieces}
           dataSend={orderCurrent}
-
-          // totalPieces={totalPieces}
         />
       )}
       {controlerView === 2 && (
         <SumaryOrder
-        stateShow={stateShow}
+          stateShow={stateShow}
           setObservations={setObservations}
           setTotalPieces={setTotalPieces}
           setCaratage={setCaratage}
@@ -264,7 +262,6 @@ const NewOrder = ({route}: NewOrderProps) => {
           setStateGlobalSize={setStateGlobalSize}
           setModel={setModel}
           handleDataUpdate={reloadView}
-          showLong={showLong}
           setControlerView={setControlerView}
           dataSend={orderCurrent}
           orderId={orderId || ''}
