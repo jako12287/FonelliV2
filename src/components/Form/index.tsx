@@ -63,7 +63,7 @@ const Form = () => {
 
       if (result?.token) {
         dispatch(login(result) as never);
-        if (!result?.user?.verify && result?.user?._id) {
+        if (!result?.user?.verify && result?.user?._id && result?.user?.changePass === 0) {
           reset();
           navigation.navigate('ChangePassword', {_id: result?.user?._id});
           return;
@@ -99,6 +99,7 @@ const Form = () => {
           placeholder=""
           errors={errors}
           defaultValue={''}
+          secureTextEntry
         />
       </View>
       {isLoading ? (

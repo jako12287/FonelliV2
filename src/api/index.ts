@@ -3,8 +3,8 @@ import axios from 'axios';
 import {RoutesApi} from '../types';
 
 // const BASE_URI = 'https://fonelllibackenfirebase.onrender.com';
-const BASE_URI = 'http://192.168.2.6:3000';
-// const BASE_URI = 'https://fonellibackend.onrender.com';
+// const BASE_URI = 'http://192.168.2.6:3000';
+const BASE_URI = 'https://fonellibackend.onrender.com';
 
 type PropsCredential = {
   email: string;

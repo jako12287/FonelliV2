@@ -57,7 +57,7 @@ const FormChange: FC<PropsForm> = ({_id}) => {
       }
       return;
     } catch (error) {
-      CustomAlert();
+      CustomAlert({});
       console.error('Error on login:', error);
     } finally {
       setIsLoading(false);
