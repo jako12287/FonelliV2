@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "881976711903",
+    "firebase_url": "https://fonelli-app-default-rtdb.firebaseio.com",
+    "project_id": "fonelli-app",
+    "storage_bucket": "fonelli-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:881976711903:android:b21514c8bae8c779d7276a",
+        "android_client_info": {
+          "package_name": "com.fonelli.joyas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwfYo0_q58Wze2T8TnBEML_h4rSqjtKnQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

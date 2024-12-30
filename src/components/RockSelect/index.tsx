@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {
   FlatList,
   Modal,
@@ -41,6 +41,13 @@ const RockSelect: FC<PropsSelect> = ({setRock = () => {}, rock = []}) => {
   //     setSelectedOptions(updatedOptions);
   //   }
   // };
+
+  useEffect(() => {
+    if (rock.length > 0) {
+      setSelectedOptions(rock);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rock]);
 
   const toggleSelection = (value: string) => {
     if (value === 'N/A') {

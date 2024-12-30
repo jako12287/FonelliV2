@@ -1,9 +1,11 @@
 import {configureStore} from '@reduxjs/toolkit';
 import authReducer from './slices/authReducer';
+import refetchRealTiemSlice from './slices/refecthRealTime';
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
+    refetchRealTiemSlice,
   },
 });
 

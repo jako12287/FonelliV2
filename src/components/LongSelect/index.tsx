@@ -27,6 +27,8 @@ interface PropsSelect {
   showInitialName: boolean;
   setStateShow: any;
   stateShow: PropsShow;
+  orderId: string;
+  dataEdit: any;
 }
 
 const LongSelect: FC<PropsSelect> = ({
@@ -37,7 +39,9 @@ const LongSelect: FC<PropsSelect> = ({
   totalPiecesInLong,
   showInitialName,
   setStateShow,
-  stateShow,
+  // stateShow,
+  // orderId,
+  dataEdit,
 }) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
   const [isNa, setIsNa] = useState<boolean>(true);
@@ -61,17 +65,19 @@ const LongSelect: FC<PropsSelect> = ({
   };
 
   useEffect(() => {
-    if (
-      !stateShow.size &&
-      stateShow.long &&
-      !stateShow.initialName &&
-      !stateShow.name
-    ) {
+    if (dataEdit?.long) {
       setIsNa(false);
       setDisabled(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dataEdit]);
+  //  useEffect(() => {
+  //      if (stateShow.long && orderId) {
+  //        setIsNa(false);
+  //        setDisabled(false);
+  //      }
+  //      // eslint-disable-next-line react-hooks/exhaustive-deps
+  //    }, [orderId]);
 
   return (
     <>

@@ -70,7 +70,8 @@ const SumaryOrder: FC<PropsComponenet> = ({
     const data = {
       ...dataSend,
     };
-    console.log('data al enviar al back', data);
+
+    console.log('data send en sumary', dataSend);
     try {
       await createOrEdit(data);
       handleDataUpdate();
@@ -99,8 +100,6 @@ const SumaryOrder: FC<PropsComponenet> = ({
       </View>
     );
   }
-
-  console.log('dataSend.long', dataSend.long);
 
   return (
     <View style={styles.container}>

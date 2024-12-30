@@ -12,13 +12,23 @@ import {useDispatch} from 'react-redux';
 import {login} from '../../redux/slices/authReducer';
 import {useCustomNavigation} from '../../hooks/useCustomNavigation';
 import {CustomAlert, CustomAlertGlobal} from '../../utils/alertError';
-import {loginApi} from '../../api';
+import {loginApi, saveTokenToDatabase} from '../../api';
 import Loader from '../Loader';
 import {userType} from '../../types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import messaging from '@react-native-firebase/messaging';
 
 const Schema = yup.object().shape({
-  email: yup.string().required('Ingresa el usuario').email('Correo  inválido'),
+  email: yup
+    .string()
+    .required('Ingresa el usuario')
+    .test(
+      'is-email-or-number',
+      'Ingresa un valor',
+      value =>
+        /^[0-9]+$/.test(value || '') || // Validar número
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value || ''), // Validar correo
+    ),
   password: yup.string().required('Ingresa la contraseña'),
 });
 
@@ -41,8 +51,11 @@ const Form = () => {
       email: data.email.toLowerCase(),
       password: data.password,
     };
+
     try {
       const result = await loginApi(dataSend);
+
+      // Manejo de errores de login
       if (
         result.message === 'Revisa las credenciales.' ||
         result.message === 'Contraseña incorrecta.'
@@ -54,20 +67,49 @@ const Form = () => {
       if (result?.user) {
         await AsyncStorage.setItem('@USER', JSON.stringify(result.user));
       }
+
       if (result?.user?.type !== userType.CUSTOMER) {
         CustomAlertGlobal(
           'Tu cuenta no tiene acceso al aplicativo. Si crees que esto es un error, por favor contacta a soporte',
         );
         return;
       }
+      try {
+        const authStatus = await messaging().requestPermission();
+        const enabled =
+          authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+          authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+        if (enabled) {
+          const tokenN = await messaging().getToken();
+
+          // Guarda el token en la base de datos
+          await saveTokenToDatabase(result?.user?._id, tokenN);
+        }
+      } catch (error) {
+        console.error(
+          'Error al solicitar permisos o al obtener el token de FCM:',
+          error,
+        );
+      }
 
       if (result?.token) {
         dispatch(login(result) as never);
-        if (!result?.user?.verify && result?.user?._id && result?.user?.changePass === 0) {
+
+        // Redirige a la pantalla de cambio de contraseña si es necesario
+        if (
+          !result?.user?.verify &&
+          result?.user?._id &&
+          result?.user?.changePass === 0
+        ) {
           reset();
           navigation.navigate('ChangePassword', {_id: result?.user?._id});
           return;
         }
+
+        // Solicita permisos de notificación y obtiene el token
+
+        // Navega al menú
         navigation.navigate('Menu');
       }
     } catch (error) {
@@ -81,6 +123,7 @@ const Form = () => {
       setIsLoading(false);
     }
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.containerForm}>
@@ -117,6 +160,7 @@ const Form = () => {
 };
 
 export default Form;
+
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',

@@ -29,7 +29,6 @@ const DetailOrder = ({route}: DetailOrderProps) => {
     if (orderId) {
       try {
         const response = await setOrderById(orderId);
-        console.log('TCL: en detalles -> response', response);
         setData(response?.order);
       } catch (error) {
         console.error('Error en detalles de orden', error);
@@ -39,7 +38,6 @@ const DetailOrder = ({route}: DetailOrderProps) => {
     }
   };
 
-  console.log('datos detalles', Data.size);
   useEffect(() => {
     getDataOrder();
     // eslint-disable-next-line react-hooks/exhaustive-deps

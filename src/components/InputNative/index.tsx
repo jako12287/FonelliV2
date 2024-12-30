@@ -36,7 +36,6 @@ const CustomInput = ({
     defaultValue,
   });
 
-
   return (
     <>
       <View style={styles.container}>
@@ -76,12 +75,13 @@ const styles = StyleSheet.create({
     borderWidth: 0.2,
     borderColor: '#000',
     borderRadius: Responsive(0),
-    paddingHorizontal:Responsive(5),
+    paddingHorizontal: Responsive(5),
     fontSize: Responsive(16),
     backgroundColor: '#FFFFFF',
     width: Responsive(150),
     height: Responsive(40),
     zIndex: 2,
+    color: '#000',
   },
   shadow: {
     position: 'absolute',

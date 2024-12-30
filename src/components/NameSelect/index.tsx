@@ -29,6 +29,8 @@ interface PropsSelect {
   showNameNA: boolean;
   setStateShow: any;
   stateShow: PropsShow;
+  orderId: string;
+  dataEdit: any;
 }
 
 const NameSelect: FC<PropsSelect> = ({
@@ -40,7 +42,9 @@ const NameSelect: FC<PropsSelect> = ({
   setShowNameNA,
   showNameNA,
   setStateShow,
-  stateShow,
+  // stateShow,
+  // orderId,
+  dataEdit,
 }) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
   const [isNa, setIsNa] = useState<boolean>(true);
@@ -114,17 +118,20 @@ const NameSelect: FC<PropsSelect> = ({
   };
 
   useEffect(() => {
-    if (
-      !stateShow.size &&
-      !stateShow.long &&
-      !stateShow.initialName &&
-      stateShow.name
-    ) {
+    if (dataEdit?.name) {
       setIsNa(false);
       setDisabled(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dataEdit]);
+
+  // useEffect(() => {
+  //   if (stateShow.name && orderId) {
+  //     setIsNa(false);
+  //     setDisabled(false);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [orderId]);
 
   return (
     <>
@@ -285,7 +292,7 @@ const NameSelect: FC<PropsSelect> = ({
                 <Text style={styles.textDown}>Ejemplo:</Text>
                 <Text style={styles.textNameExample}>Alana Pérez</Text>
                 <Text style={styles.textCaution}>
-                  *Máximo 3 palabras x nombre
+                  * Minimo 3 letras x nombre
                 </Text>
               </View>
             </ScrollView>

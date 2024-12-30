@@ -4,37 +4,45 @@ import Responsive from '../../utils/responsive';
 import {fonts} from '../../theme/fonts';
 import {Colors} from '../../theme/colors';
 import {useCustomNavigation} from '../../hooks/useCustomNavigation';
-import {useDispatch} from 'react-redux';
-import {loadUserData} from '../../redux/slices/authReducer';
+// import {useDispatch} from 'react-redux';
+// import {loadUserData} from '../../redux/slices/authReducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getVerifyStatusServer} from '../../utils/statusServer';
 
 const Splash = () => {
   const scaleValue = useRef(new Animated.Value(1)).current;
   const navigation = useCustomNavigation();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  // const [token, setToken] = useState<string | null>(null);
+  const clearAsyncStorage = async () => {
+    try {
+      await AsyncStorage.clear();
+    } catch (error) {
+      console.log('Error al limpiar AsyncStorage', error);
+    }
+  };
+
 
   useEffect(() => {
+    clearAsyncStorage();
     getVerifyStatusServer();
   }, []);
 
   const loaderToken = async () => {
-    // navigation.navigate('Courtesy');
-    try {
-      const tokenLocal = await AsyncStorage.getItem('@TOKEN');
-      setTimeout(async () => {
-        if (tokenLocal) {
-          await dispatch(loadUserData() as never);
-          navigation.navigate('Menu');
-        } else {
-          navigation.navigate('Courtesy');
-        }
-      }, 3000);
-    } catch (error) {
-      console.log('error a acceder al token', error);
-    }
+    navigation.navigate('Courtesy');
+    // try {
+    //   const tokenLocal = await AsyncStorage.getItem('@TOKEN');
+    //   setTimeout(async () => {
+    //     if (tokenLocal) {
+    //       await dispatch(loadUserData() as never);
+    //       navigation.navigate('Menu');
+    //     } else {
+    //       navigation.navigate('Courtesy');
+    //     }
+    //   }, 3000);
+    // } catch (error) {
+    //   console.log('error a acceder al token', error);
+    // }
   };
 
   useEffect(() => {

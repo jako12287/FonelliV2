@@ -56,6 +56,7 @@ export enum RoutesApi {
   GET_ORDER_BY_ID_NO_USER = '/orders',
   EDIT_ORDER = '/orders',
   DELETE_ORDER = '/orders',
+  SAVE_TOKEN_NOTIFICATION = '/api/save-token'
 }
 
 export enum userType {
@@ -75,4 +76,11 @@ export interface PropsShow {
   initialName: boolean;
   name: boolean;
   pieceTotal: boolean;
+}
+
+export interface PropsIsNaIsDisabled {
+  size: boolean;
+  long: boolean;
+  initialName: boolean;
+  name: boolean;
 }

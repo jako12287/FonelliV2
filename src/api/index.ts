@@ -105,10 +105,6 @@ export const getOrdersByUserId = async (userId: string) => {
 };
 
 export const setOrderById = async (orderId: string) => {
-  console.log(
-    'ruta de ordenes by id',
-    `${BASE_URI}${RoutesApi.GET_ORDER_BY_ID_NO_USER}/${orderId}`,
-  );
   try {
     const response = await axios.get(
       `${BASE_URI}${RoutesApi.GET_ORDER_BY_ID_NO_USER}/${orderId}`,
@@ -157,5 +153,21 @@ export const deleteOrder = async (orderId: string) => {
     console.error('Error al eliminar la orden:', errorMessage);
 
     throw new Error(errorMessage);
+  }
+};
+
+export const saveTokenToDatabase = async (userId: any, token: any) => {
+  try {
+    if (!userId || !token) {
+      console.error('El userId y token son necesarios');
+      return;
+    }
+
+    await axios.post(`${BASE_URI}${RoutesApi.SAVE_TOKEN_NOTIFICATION}`, {
+      userId,
+      token,
+    });
+  } catch (error) {
+    console.error('Error al guardar el token:', error);
   }
 };

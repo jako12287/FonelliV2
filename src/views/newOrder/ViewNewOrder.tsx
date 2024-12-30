@@ -26,7 +26,6 @@ moment.locale('es');
 
 interface PropsComponenet {
   setControlerView: (data: number) => void;
-  userEmail: string;
   setModel: (data: string) => void;
   model: string;
   setCaratage: (data: string) => void;
@@ -68,10 +67,11 @@ interface PropsComponenet {
   dataSend: any;
   setStateShow: any;
   stateShow: PropsShow;
+  dataEdit: any;
+  userNumberCustomer: string;
 }
 const ViewNewOrder: FC<PropsComponenet> = ({
   setControlerView,
-  userEmail,
   setModel,
   model,
   setCaratage,
@@ -112,6 +112,8 @@ const ViewNewOrder: FC<PropsComponenet> = ({
   dataSend,
   setStateShow,
   stateShow,
+  dataEdit,
+  userNumberCustomer,
 }) => {
   const navigation = useCustomNavigation();
   const formattedDate = moment(new Date()).format('DD-MMM-YYYY').toLowerCase();
@@ -184,7 +186,7 @@ const ViewNewOrder: FC<PropsComponenet> = ({
       return;
     }
 
-    if (dataSend.totalPieces === '0') {
+    if (dataSend.totalPieces === '0' || dataSend.totalPieces === '') {
       CustomAlert({
         message1: 'Espera ...',
         message2: 'Debes ingresar la cantidad de piezas total',
@@ -204,7 +206,7 @@ const ViewNewOrder: FC<PropsComponenet> = ({
         </View>
         <View style={styles.containerLabel}>
           <Text style={styles.labelText}>Cliente</Text>
-          <Text style={styles.textTitle}>{userEmail}</Text>
+          <Text style={styles.textTitle}>{userNumberCustomer}</Text>
         </View>
       </View>
 
@@ -223,6 +225,7 @@ const ViewNewOrder: FC<PropsComponenet> = ({
         <RockSelect setRock={setRock} rock={rock} />
         {stateShow.size && (
           <SizeSelect
+            dataEdit={dataEdit}
             stateShow={stateShow}
             setStateShow={setStateShow}
             setTotalPiecesInSize={setTotalPiecesInSize}
@@ -230,11 +233,13 @@ const ViewNewOrder: FC<PropsComponenet> = ({
             stateGlobalSize={stateGlobalSize}
             setStateGlobalSize={setStateGlobalSize}
             setShowLong={setShowLong}
+            orderId={orderId}
           />
         )}
 
         {stateShow.long && (
           <LongSelect
+            dataEdit={dataEdit}
             stateShow={stateShow}
             setStateShow={setStateShow}
             showInitialName={showInitialName}
@@ -243,11 +248,13 @@ const ViewNewOrder: FC<PropsComponenet> = ({
             stateGlobalLong={stateGlobalLong}
             setStateGlobalLong={setStateGlobalLong}
             setShowInitialName={setShowInitialName}
+            orderId={orderId}
           />
         )}
 
         {stateShow.initialName && (
           <InitialNameSelect
+            dataEdit={dataEdit}
             stateShow={stateShow}
             setStateShow={setStateShow}
             showName={showName}
@@ -256,11 +263,13 @@ const ViewNewOrder: FC<PropsComponenet> = ({
             setShowName={setShowName}
             setTotalPiecesInInitial={setTotalPiecesInInitial}
             totalPiecesInInitial={totalPiecesInInitial}
+            orderId={orderId}
           />
         )}
 
         {stateShow.name && (
           <NameSelect
+            dataEdit={dataEdit}
             stateShow={stateShow}
             setStateShow={setStateShow}
             setShowNameNA={setShowNameNA}
@@ -270,6 +279,7 @@ const ViewNewOrder: FC<PropsComponenet> = ({
             setTotalPiecesInName={setTotalPiecesInName}
             totalPiecesInName={totalPiecesInName}
             setShowPieceTotal={setShowPieceTotal}
+            orderId={orderId}
           />
         )}
 

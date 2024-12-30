@@ -18,9 +18,18 @@ import moment from 'moment';
 import 'moment/locale/es';
 import {ScrollView} from 'react-native-gesture-handler';
 import {stateType} from '../../types';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../redux/store';
+import {setRefetch} from '../../redux/slices/refecthRealTime';
+import Loader from '../Loader';
 moment.locale('es');
 
 const TableData = () => {
+  const dispatch = useDispatch();
+  const refetchRealTime = useSelector(
+    (state: RootState) => state.refetchRealTiemSlice.refetch,
+  );
+
   const formattedDate = (date: any) => {
     return moment(date).format('DD-MMM-YYYY').toLowerCase();
   };
@@ -30,6 +39,7 @@ const TableData = () => {
 
   const [userId, setUserId] = useState<string>('');
   const [Data, setData] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const getUserID = async () => {
     try {
@@ -46,11 +56,14 @@ const TableData = () => {
   };
 
   const getData = async () => {
+    setIsLoading(true);
     try {
       const dataOrderUser = await getOrdersByUserId(userId);
       setData(dataOrderUser);
     } catch (error) {
       console.log('Error al obtener las órdenes:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -69,6 +82,18 @@ const TableData = () => {
   const handleDetailOrder = (orderId: string) => {
     navigation.navigate('DetailOrder', {orderId});
   };
+
+  useEffect(() => {
+    if (refetchRealTime) {
+      getData();
+      dispatch(setRefetch(false));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refetchRealTime]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -90,13 +115,13 @@ const TableData = () => {
 
         {/* Rows */}
         {Data.map((item: any) => (
-          <View key={item.id} style={styles.containerBodyTable}>
+          <View key={item.id.toString()} style={styles.containerBodyTable}>
             <Pressable onPress={() => handleDetailOrder(item.id)}>
               <View style={[styles.containerItem, {width: widthCell}]}>
                 <Text style={[styles.textCell]}>
                   {formattedDate(item?.createdAt)}
                 </Text>
-                <View style={styles.underLine} />
+                {/* <View style={styles.underLine} /> */}
               </View>
             </Pressable>
             <Pressable onPress={() => handleDetailOrder(item.id)}>
@@ -126,7 +151,10 @@ const TableData = () => {
             </Pressable>
             <View style={[styles.containerItem, {width: widthCell}]}>
               {item?.folio ? (
-                <Text style={styles.textCell}>{item?.folio || 'N/A'}</Text>
+                <Pressable onPress={() => handleDetailOrder(item.id)}>
+                  <Text style={styles.textCell}>{item?.folio || 'N/A'}</Text>
+                  <View style={styles.underLine} />
+                </Pressable>
               ) : (
                 <Pressable
                   onPress={() =>

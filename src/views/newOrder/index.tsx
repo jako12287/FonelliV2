@@ -45,6 +45,10 @@ const NewOrder = ({route}: NewOrderProps) => {
   const [observations, setObservations] = useState<string>('');
   const [userId, setUserId] = useState<string>('');
   const [userEmail, setUserEmail] = useState<string>('');
+  const [userNumberCustomer, setUserNumberCustomer] = useState<string>('');
+
+  //dataEdit
+  const [dataEdit, setDataEdit] = useState<any>({});
 
   //main state size componen
   const [totalPiecesInSize, setTotalPiecesInSize] = useState<number>(0);
@@ -99,6 +103,7 @@ const NewOrder = ({route}: NewOrderProps) => {
         const user = JSON.parse(response);
         setUserEmail(`${user.email}`);
         setUserId(`${user._id}`);
+        setUserNumberCustomer(`${user.customerNumber}`);
       }
     };
     getUser();
@@ -111,22 +116,35 @@ const NewOrder = ({route}: NewOrderProps) => {
     color,
     observations,
     email: userEmail,
+    customerNumber: userNumberCustomer,
   };
   if (rock.length > 0 && rock[0] !== 'N/A') {
     orderCurrent.rock = rock;
   }
   if (!showLong) {
     orderCurrent.size = stateGlobalSize;
+    delete orderCurrent.long;
+    delete orderCurrent.initialName;
+    delete orderCurrent.name;
   }
   if (stateShow.long && stateGlobalLong?.length > 0) {
     orderCurrent.long = stateGlobalLong;
+    delete orderCurrent.initialName;
+    delete orderCurrent.name;
+    delete orderCurrent.size;
   }
   if (stateShow.initialName && stateGlobalInitial.length > 0) {
     orderCurrent.initialName = stateGlobalInitial;
+    delete orderCurrent.long;
+    delete orderCurrent.name;
+    delete orderCurrent.size;
   }
 
   if (stateShow.name && !showNameNA) {
     orderCurrent.name = stateGlobalName;
+    delete orderCurrent.long;
+    delete orderCurrent.initialName;
+    delete orderCurrent.size;
   }
   if (showPieceTotal) {
     orderCurrent.totalPieces = totalPieces;
@@ -140,15 +158,20 @@ const NewOrder = ({route}: NewOrderProps) => {
       totalPiecesInSize,
     });
   }
+
+  console.log('current actual', orderCurrent);
   const getDataEdit = async () => {
     if (orderId) {
       try {
         const response = await setOrderById(orderId);
+        setDataEdit(response?.order);
+        console.log('TCL: getDataEdit -> response', response);
 
         if (response?.order) {
           setModel(response?.order?.model || '');
           setCaratage(response?.order?.caratage?.slice(0, 2) || '');
           setColor(response?.order?.color);
+
           if (Array.isArray(response?.order?.rock)) {
             setRock(response?.order?.rock);
           } else {
@@ -156,30 +179,60 @@ const NewOrder = ({route}: NewOrderProps) => {
             setRock([]);
           }
           if (Array.isArray(response?.order?.size)) {
+            setStateShow({
+              size: true,
+              long: false,
+              initialName: false,
+              name: false,
+              pieceTotal: false,
+            });
             setStateGlobalSize(response.order.size);
           } else {
             console.error('El campo size no es un array válido.');
             setStateGlobalSize([]);
           }
+
           if (Array.isArray(response?.order?.initialName)) {
+            setStateShow({
+              size: false,
+              long: false,
+              initialName: true,
+              name: false,
+              pieceTotal: false,
+            });
             setStateGlobalInitial(response?.order?.initialName);
           } else {
             console.error('El campo size no es un array válido.');
             setStateGlobalInitial([]);
           }
           if (Array.isArray(response?.order?.long)) {
+            setStateShow({
+              size: false,
+              long: true,
+              initialName: false,
+              name: false,
+              pieceTotal: false,
+            });
             setStateGlobalLong(response?.order?.long);
           } else {
             console.error('El campo size no es un array válido.');
             setStateGlobalLong([]);
           }
           if (Array.isArray(response?.order?.name)) {
+            setStateShow({
+              size: false,
+              long: false,
+              initialName: false,
+              name: true,
+              pieceTotal: false,
+            });
             setStateGlobalName(response?.order?.name);
           } else {
             console.error('El campo size no es un array válido.');
             setStateGlobalName([]);
           }
           if (response?.order?.totalPieces) {
+            console.log('totalPieces', response?.order?.totalPieces);
             setTotalPieces(response?.order?.totalPieces?.toString() || '1');
           } else {
             setTotalPieces('0');
@@ -203,6 +256,8 @@ const NewOrder = ({route}: NewOrderProps) => {
     <View style={styles.container}>
       {controlerView === 1 && (
         <ViewNewOrder
+          userNumberCustomer={userNumberCustomer}
+          dataEdit={dataEdit}
           totalPieces={totalPieces}
           setStateShow={setStateShow}
           stateShow={stateShow}
@@ -233,7 +288,6 @@ const NewOrder = ({route}: NewOrderProps) => {
           setTotalPiecesInSize={setTotalPiecesInSize}
           totalPiecesInSize={totalPiecesInSize}
           setControlerView={setControlerView}
-          userEmail={userEmail}
           setCaratage={setCaratage}
           caratage={caratage}
           setColor={setColor}

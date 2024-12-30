@@ -26,6 +26,8 @@ interface PropsSelect {
   totalPiecesInSize: number;
   setStateShow: any;
   stateShow: PropsShow;
+  orderId: string;
+  dataEdit: any;
 }
 
 const SizeSelect: FC<PropsSelect> = ({
@@ -35,7 +37,9 @@ const SizeSelect: FC<PropsSelect> = ({
   setTotalPiecesInSize,
   totalPiecesInSize,
   setStateShow,
-  stateShow,
+  // stateShow,
+  // orderId,
+  dataEdit,
 }) => {
   const [isActiveModal, setIsActiveModal] = useState<boolean>(false);
   const [isNa, setIsNa] = useState<boolean>(true);
@@ -59,17 +63,19 @@ const SizeSelect: FC<PropsSelect> = ({
   };
 
   useEffect(() => {
-    if (
-      stateShow.size &&
-      !stateShow.long &&
-      !stateShow.initialName &&
-      !stateShow.name
-    ) {
+    if (dataEdit?.size) {
       setIsNa(false);
       setDisabled(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dataEdit]);
+  // useEffect(() => {
+  //   if (stateShow.size && orderId) {
+  //     setIsNa(false);
+  //     setDisabled(false);
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [orderId]);
 
   return (
     <>
