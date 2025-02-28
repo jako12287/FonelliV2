@@ -1,5 +1,14 @@
 import React, {FC, useEffect, useState} from 'react';
-import {Alert, Pressable, StyleSheet, Text, View} from 'react-native';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import InputControlOff from '../../components/InputControlOff';
 import CaratageSelect from '../../components/CaratageSelect';
 import ColorSelect from '../../components/ColorSelect';
@@ -198,128 +207,133 @@ const ViewNewOrder: FC<PropsComponenet> = ({
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.containerText}>
-        <View style={styles.containerLabel}>
-          <Text style={styles.labelText}>Fecha</Text>
-          <Text style={styles.textTitle}>{formattedDate}</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <ScrollView>
+        <View style={styles.container}>
+          <View style={styles.containerText}>
+            <View style={styles.containerLabel}>
+              <Text style={styles.labelText}>Fecha</Text>
+              <Text style={styles.textTitle}>{formattedDate}</Text>
+            </View>
+            <View style={styles.containerLabel}>
+              <Text style={styles.labelText}>Cliente</Text>
+              <Text style={styles.textTitle}>{userNumberCustomer}</Text>
+            </View>
+          </View>
+
+          <View style={styles.containerForm}>
+            <InputControlOff
+              label="Modelo"
+              onChangeName={setModel}
+              selectValueName={model}
+              placeholder=""
+            />
+            <CaratageSelect
+              handleOptionPress={setCaratage}
+              optionValue={caratage}
+            />
+            <ColorSelect handleOptionPress={setColor} optionValue={color} />
+            <RockSelect setRock={setRock} rock={rock} />
+            {stateShow.size && (
+              <SizeSelect
+                dataEdit={dataEdit}
+                stateShow={stateShow}
+                setStateShow={setStateShow}
+                setTotalPiecesInSize={setTotalPiecesInSize}
+                totalPiecesInSize={totalPiecesInSize}
+                stateGlobalSize={stateGlobalSize}
+                setStateGlobalSize={setStateGlobalSize}
+                setShowLong={setShowLong}
+                orderId={orderId}
+              />
+            )}
+
+            {stateShow.long && (
+              <LongSelect
+                dataEdit={dataEdit}
+                stateShow={stateShow}
+                setStateShow={setStateShow}
+                showInitialName={showInitialName}
+                setTotalPiecesInLong={setTotalPiecesInLong}
+                totalPiecesInLong={totalPiecesInLong}
+                stateGlobalLong={stateGlobalLong}
+                setStateGlobalLong={setStateGlobalLong}
+                setShowInitialName={setShowInitialName}
+                orderId={orderId}
+              />
+            )}
+
+            {stateShow.initialName && (
+              <InitialNameSelect
+                dataEdit={dataEdit}
+                stateShow={stateShow}
+                setStateShow={setStateShow}
+                showName={showName}
+                setStateGlobalInitial={setStateGlobalInitial}
+                stateGlobalInitial={stateGlobalInitial}
+                setShowName={setShowName}
+                setTotalPiecesInInitial={setTotalPiecesInInitial}
+                totalPiecesInInitial={totalPiecesInInitial}
+                orderId={orderId}
+              />
+            )}
+
+            {stateShow.name && (
+              <NameSelect
+                dataEdit={dataEdit}
+                stateShow={stateShow}
+                setStateShow={setStateShow}
+                setShowNameNA={setShowNameNA}
+                showNameNA={showNameNA}
+                setStateGlobalName={setStateGlobalName}
+                stateGlobalName={stateGlobalName}
+                setTotalPiecesInName={setTotalPiecesInName}
+                totalPiecesInName={totalPiecesInName}
+                setShowPieceTotal={setShowPieceTotal}
+                orderId={orderId}
+              />
+            )}
+
+            <OnllyItem
+              label="Piezas totales"
+              onChangeText={e => {
+                if (e.length > 1 && e[0] === '0') {
+                  e = e.substring(1);
+                }
+                if (e.length <= 3) {
+                  setTotalPieces(e);
+                }
+              }}
+              valueText={determineTotalPieces({
+                stateShow,
+                totalPieces,
+                totalPiecesInInitial,
+                totalPiecesInLong,
+                totalPiecesInName,
+                totalPiecesInSize,
+              })}
+              editable={editableTotalPiece}
+              keyboardTypeCustom="number-pad"
+            />
+            <OnllyItem
+              label="Observaciones"
+              onChangeText={setObservations}
+              valueText={observations}
+              editable={true}
+            />
+            <View style={styles.containerBtnActions}>
+              {orderId && (
+                <Pressable onPress={handleDelete}>
+                  <IconImage size={60} source={Icons.general.trash} />
+                </Pressable>
+              )}
+              <CustomBotton title="Ver resumen" onClick={handlePrevSubmit} />
+            </View>
+          </View>
         </View>
-        <View style={styles.containerLabel}>
-          <Text style={styles.labelText}>Cliente</Text>
-          <Text style={styles.textTitle}>{userNumberCustomer}</Text>
-        </View>
-      </View>
-
-      <View style={styles.containerForm}>
-        <InputControlOff
-          label="Modelo"
-          onChangeName={setModel}
-          selectValueName={model}
-          placeholder=""
-        />
-        <CaratageSelect
-          handleOptionPress={setCaratage}
-          optionValue={caratage}
-        />
-        <ColorSelect handleOptionPress={setColor} optionValue={color} />
-        <RockSelect setRock={setRock} rock={rock} />
-        {stateShow.size && (
-          <SizeSelect
-            dataEdit={dataEdit}
-            stateShow={stateShow}
-            setStateShow={setStateShow}
-            setTotalPiecesInSize={setTotalPiecesInSize}
-            totalPiecesInSize={totalPiecesInSize}
-            stateGlobalSize={stateGlobalSize}
-            setStateGlobalSize={setStateGlobalSize}
-            setShowLong={setShowLong}
-            orderId={orderId}
-          />
-        )}
-
-        {stateShow.long && (
-          <LongSelect
-            dataEdit={dataEdit}
-            stateShow={stateShow}
-            setStateShow={setStateShow}
-            showInitialName={showInitialName}
-            setTotalPiecesInLong={setTotalPiecesInLong}
-            totalPiecesInLong={totalPiecesInLong}
-            stateGlobalLong={stateGlobalLong}
-            setStateGlobalLong={setStateGlobalLong}
-            setShowInitialName={setShowInitialName}
-            orderId={orderId}
-          />
-        )}
-
-        {stateShow.initialName && (
-          <InitialNameSelect
-            dataEdit={dataEdit}
-            stateShow={stateShow}
-            setStateShow={setStateShow}
-            showName={showName}
-            setStateGlobalInitial={setStateGlobalInitial}
-            stateGlobalInitial={stateGlobalInitial}
-            setShowName={setShowName}
-            setTotalPiecesInInitial={setTotalPiecesInInitial}
-            totalPiecesInInitial={totalPiecesInInitial}
-            orderId={orderId}
-          />
-        )}
-
-        {stateShow.name && (
-          <NameSelect
-            dataEdit={dataEdit}
-            stateShow={stateShow}
-            setStateShow={setStateShow}
-            setShowNameNA={setShowNameNA}
-            showNameNA={showNameNA}
-            setStateGlobalName={setStateGlobalName}
-            stateGlobalName={stateGlobalName}
-            setTotalPiecesInName={setTotalPiecesInName}
-            totalPiecesInName={totalPiecesInName}
-            setShowPieceTotal={setShowPieceTotal}
-            orderId={orderId}
-          />
-        )}
-
-        <OnllyItem
-          label="Piezas totales"
-          onChangeText={e => {
-            if (e.length > 1 && e[0] === '0') {
-              e = e.substring(1);
-            }
-            if (e.length <= 3) {
-              setTotalPieces(e);
-            }
-          }}
-          valueText={determineTotalPieces({
-            stateShow,
-            totalPieces,
-            totalPiecesInInitial,
-            totalPiecesInLong,
-            totalPiecesInName,
-            totalPiecesInSize,
-          })}
-          editable={editableTotalPiece}
-          keyboardTypeCustom="number-pad"
-        />
-        <OnllyItem
-          label="Observaciones"
-          onChangeText={setObservations}
-          valueText={observations}
-          editable={true}
-        />
-        <View style={styles.containerBtnActions}>
-          {orderId && (
-            <Pressable onPress={handleDelete}>
-              <IconImage size={60} source={Icons.general.trash} />
-            </Pressable>
-          )}
-          <CustomBotton title="Ver resumen" onClick={handlePrevSubmit} />
-        </View>
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -327,6 +341,7 @@ export default ViewNewOrder;
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: Responsive(20),
+    paddingBottom: Responsive(50),
   },
   containerText: {
     gap: Responsive(10),

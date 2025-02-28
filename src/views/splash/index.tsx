@@ -1,54 +1,37 @@
-import React, {useEffect, useRef} from 'react';
-import {Animated, StyleSheet, View, Easing, Text} from 'react-native';
-import Responsive from '../../utils/responsive';
-import {fonts} from '../../theme/fonts';
-import {Colors} from '../../theme/colors';
-import {useCustomNavigation} from '../../hooks/useCustomNavigation';
-// import {useDispatch} from 'react-redux';
-// import {loadUserData} from '../../redux/slices/authReducer';
+import React, { useEffect, useRef } from 'react';
+import { Animated, StyleSheet, View, Easing, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {getVerifyStatusServer} from '../../utils/statusServer';
+import { useCustomNavigation } from '../../hooks/useCustomNavigation';
+import { logout } from '../../redux/slices/authReducer';
+import Responsive from '../../utils/responsive';
+import { fonts } from '../../theme/fonts';
+import { Colors } from '../../theme/colors';
 
 const Splash = () => {
   const scaleValue = useRef(new Animated.Value(1)).current;
   const navigation = useCustomNavigation();
-  // const dispatch = useDispatch();
-
-  const clearAsyncStorage = async () => {
-    try {
-      await AsyncStorage.clear();
-    } catch (error) {
-      console.log('Error al limpiar AsyncStorage', error);
-    }
-  };
-
 
   useEffect(() => {
+    const clearAsyncStorage = async () => {
+      try {
+        await AsyncStorage.clear();
+      } catch (error) {
+        console.log('Error al limpiar AsyncStorage', error);
+      }
+    };
+
     clearAsyncStorage();
-    getVerifyStatusServer();
-  }, []);
+    logout();
 
-  const loaderToken = async () => {
-    navigation.navigate('Courtesy');
-    // try {
-    //   const tokenLocal = await AsyncStorage.getItem('@TOKEN');
-    //   setTimeout(async () => {
-    //     if (tokenLocal) {
-    //       await dispatch(loadUserData() as never);
-    //       navigation.navigate('Menu');
-    //     } else {
-    //       navigation.navigate('Courtesy');
-    //     }
-    //   }, 3000);
-    // } catch (error) {
-    //   console.log('error a acceder al token', error);
-    // }
-  };
+    const timeout = setTimeout(() => {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Courtesy' }],
+      });
+    }, 2500);
 
-  useEffect(() => {
-    loaderToken();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    return () => clearTimeout(timeout);
+  }, [navigation]);
 
   useEffect(() => {
     const animatePulse = () => {
@@ -77,7 +60,7 @@ const Splash = () => {
     <View style={styles.container}>
       <Animated.Image
         source={require('../../assets/images/SplashLogo.png')}
-        style={[styles.image, {transform: [{scale: scaleValue}]}]}
+        style={[styles.image, { transform: [{ scale: scaleValue }] }]}
       />
       <View style={styles.containerText}>
         <Text style={styles.text}>FONELLI</Text>

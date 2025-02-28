@@ -1,5 +1,15 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import {Colors} from '../../theme/colors';
 import Responsive from '../../utils/responsive';
 import {fonts} from '../../theme/fonts';
@@ -7,28 +17,41 @@ import Form from '../../components/Form';
 
 const Login = () => {
   return (
-    <View style={styles.container}>
-      <View style={styles.containerLogo}>
-        <Image
-          source={require('../../assets/images/SplashLogo.png')}
-          style={styles.image}
-        />
-        <View style={styles.containerText}>
-          <Text style={styles.textWelcome}>Bienvenido</Text>
-          <Text style={styles.textComplement}>a</Text>
-          <Text style={styles.textFonelli}>FONELLI</Text>
-        </View>
-      </View>
-      <View style={styles.containerItem}>
-        <Form />
-      </View>
-    </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContainer}
+          keyboardShouldPersistTaps="handled">
+          <View style={styles.container}>
+            <View style={styles.containerLogo}>
+              <Image
+                source={require('../../assets/images/SplashLogo.png')}
+                style={styles.image}
+              />
+              <View style={styles.containerText}>
+                <Text style={styles.textWelcome}>Bienvenido</Text>
+                <Text style={styles.textComplement}>a</Text>
+                <Text style={styles.textFonelli}>FONELLI</Text>
+              </View>
+            </View>
+            <View style={styles.containerItem}>
+              <Form />
+            </View>
+          </View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
 export default Login;
+
 const styles = StyleSheet.create({
   container: {flex: 1},
+  scrollContainer: {flexGrow: 1}, // Permite scroll cuando el teclado aparece
   containerItem: {
     flex: 1.3,
   },

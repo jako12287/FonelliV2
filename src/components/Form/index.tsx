@@ -16,8 +16,7 @@ import {loginApi, saveTokenToDatabase} from '../../api';
 import Loader from '../Loader';
 import {userType} from '../../types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import messaging from '@react-native-firebase/messaging';
-
+// import messaging from '@react-native-firebase/messaging';
 const Schema = yup.object().shape({
   email: yup
     .string()
@@ -74,24 +73,24 @@ const Form = () => {
         );
         return;
       }
-      try {
-        const authStatus = await messaging().requestPermission();
-        const enabled =
-          authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-          authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+      // try {
+      //   const authStatus = await messaging().requestPermission();
+      //   const enabled =
+      //     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      //     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-        if (enabled) {
-          const tokenN = await messaging().getToken();
+      //   if (enabled) {
+      //     const tokenN = await messaging().getToken();
 
-          // Guarda el token en la base de datos
-          await saveTokenToDatabase(result?.user?._id, tokenN);
-        }
-      } catch (error) {
-        console.error(
-          'Error al solicitar permisos o al obtener el token de FCM:',
-          error,
-        );
-      }
+      //     // Guarda el token en la base de datos
+      //     await saveTokenToDatabase(result?.user?._id, tokenN);
+      //   }
+      // } catch (error) {
+      //   console.error(
+      //     'Error al solicitar permisos o al obtener el token de FCM:',
+      //     error,
+      //   );
+      // }
 
       if (result?.token) {
         dispatch(login(result) as never);
